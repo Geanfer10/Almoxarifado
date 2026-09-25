@@ -128,8 +128,10 @@ button{font:inherit;color:inherit}
 /* Ficha do item */
 .fundo{position:fixed;inset:0;background:rgba(10,20,15,.55);z-index:50;display:flex;justify-content:flex-end}
 .ficha{width:min(460px,100%);height:100%;background:var(--surface);overflow:auto;display:flex;flex-direction:column}
-.ficha-foto{background:#1b221e;height:52vh;min-height:240px;flex:none;max-width:100%;display:grid;place-items:center;color:#AEB9B3;text-align:center;font-size:13px;position:relative}
-.ficha-foto img{width:100%;height:100%;object-fit:contain}
+.ficha-foto{background:#1b221e;height:46vh;min-height:220px;flex:none;max-width:100%;display:grid;place-items:center;color:#AEB9B3;text-align:center;font-size:13px;position:relative;overflow:hidden}
+.ficha-foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.ficha-foto a{position:absolute;inset:0;cursor:zoom-in}
+.dica-foto{position:absolute;left:10px;bottom:10px;background:rgba(0,0,0,.55);color:#fff;font-size:12px;padding:3px 8px;border-radius:4px;pointer-events:none}
 .ficha-foto code{font:600 12px var(--mono);background:rgba(255,255,255,.1);padding:2px 6px;border-radius:3px;color:#fff}
 .fechar{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.55);color:#fff;border:0;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:18px}
 .ficha-corpo{padding:18px 20px 24px;display:flex;flex-direction:column;gap:14px}
@@ -377,7 +379,7 @@ function abrirFicha(cod){
   const st = status(i);
   let pctMin = 33;
   fundo.innerHTML = `<aside class="ficha" role="dialog" aria-label="Item ${i.c}">
-    <div class="ficha-foto">${i.f ? `<img src="${foto(i)}" alt="${esc(i.d)}">`
+    <div class="ficha-foto">${i.f ? `<a href="${foto(i)}" target="_blank" rel="noopener" aria-label="Abrir foto ampliada"><img src="${foto(i)}" alt="${esc(i.d)}"></a><span class="dica-foto">Clique na foto para ampliar</span>`
       : `<div>${IC_CAMERA.replace('<svg','<svg width="40" height="40"')}<p>Sem foto cadastrada.<br>Para incluir, salve a imagem como <code>fotos/${i.c}.jpg</code></p></div>`}
       <button class="fechar" data-fechar aria-label="Fechar">✕</button></div>
     <div class="ficha-corpo">
