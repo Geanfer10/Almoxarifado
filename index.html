@@ -58,11 +58,11 @@ button{font:inherit;color:inherit}
 .kpis b{font:700 18px/1.1 var(--mono);font-variant-numeric:tabular-nums}
 
 .layout{display:grid;grid-template-columns:260px minmax(0,1fr);gap:0;min-height:calc(100% - 70px)}
-/* Mapa de rua */
+/* Mapa de estantes */
 .mapa{border-right:1px solid var(--line);background:var(--surface);padding:16px;display:flex;flex-direction:column;gap:18px;
   position:sticky;top:70px;align-self:start;max-height:calc(100vh - 70px);overflow:auto}
 .grupo h3{margin:0 0 8px;font:600 12px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
-.rua{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.estantes{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .est{border:1px solid var(--line);background:var(--bg);border-radius:6px;padding:6px 4px 5px;cursor:pointer;text-align:center;
   display:flex;flex-direction:column;align-items:center;gap:1px}
 .est b{font:700 22px/1 var(--cond)}
@@ -91,7 +91,7 @@ button{font:inherit;color:inherit}
 .aviso{font-size:13px;color:var(--ink-2);background:var(--muted-bg);border-radius:6px;padding:8px 12px}
 .aviso b{color:var(--ink)}
 
-/* Níveis como a rua real: tábua de madeira + trilho verde com etiquetas */
+/* Níveis como a estante real: tábua de madeira + trilho verde com etiquetas */
 .niveis{display:flex;flex-direction:column;gap:22px}
 .nivel{border-radius:8px;overflow:hidden;box-shadow:var(--shadow);background:var(--surface)}
 .nivel-cab{display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(--shelf);color:var(--shelf-ink)}
