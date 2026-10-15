@@ -1,40 +1,20 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Almoxarifado Goiás Verde</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
 <style>
-:root{
-  --bg:#F2F4F0; --surface:#FFFFFF; --ink:#1A2420; --ink-2:#56655E; --line:#DCE2DB;
-  --shelf:#2F6B3C; --shelf-2:#3E8250; --label:#FFFFFF; --label-ink:#141A17; --shelf-ink:#FFFFFF; --accent:#1E9350; --muted-bg:#EEF1EC;
-  --chart:#18201C; --chart-ink:#E6ECE8; --chart-2:#9AA8A1;
-  --red:#C8372D; --red-soft:#FBE9E7; --amber:#B87400; --amber-soft:#FFF3DC; --blue:#2E6FD9; --blue-soft:#E6EFFC; --green-soft:#E3F2E8;
-  --shadow:0 1px 2px rgba(20,40,28,.08),0 2px 8px rgba(20,40,28,.06);
-  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
-  --sans:"Barlow",system-ui,"Segoe UI",Arial,sans-serif;
-  --cond:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    color-scheme:dark;
-    --bg:#111714; --surface:#19211D; --ink:#E6ECE8; --ink-2:#9AA8A1; --line:#2A3530;
-    --shelf:#24512F; --shelf-2:#2F6A3D; --label:#F4F6F2; --accent:#45B874; --muted-bg:#202A25; --chart:#131A16;
-    --red:#E5574C; --red-soft:#3A1D1A; --amber:#E0A030; --amber-soft:#3A2D12; --blue:#5B92EA; --blue-soft:#1A2640; --green-soft:#1D3526;
-    --shadow:0 1px 2px rgba(0,0,0,.4);
-  }
-}
-:root[data-theme="dark"]{
-  color-scheme:dark;
-  --bg:#111714; --surface:#19211D; --ink:#E6ECE8; --ink-2:#9AA8A1; --line:#2A3530;
-  --shelf:#24512F; --shelf-2:#2F6A3D; --label:#F4F6F2; --accent:#45B874; --muted-bg:#202A25; --chart:#131A16;
-  --red:#E5574C; --red-soft:#3A1D1A; --amber:#E0A030; --amber-soft:#3A2D12; --blue:#5B92EA; --blue-soft:#1A2640; --green-soft:#1D3526;
-  --shadow:0 1px 2px rgba(0,0,0,.4);
+:root{ color-scheme:light;
+  --bg:#EEF1EE; --surface:#FFFFFF; --surface-2:#F6F8F6; --ink:#16201A; --ink-2:#56635B; --ink-3:#86928B; --line:#DFE5E0; --line-2:#EBEFEC;
+  --side:#103A25; --side-2:#174A31; --side-ink:#CFE2D6; --side-ink-2:#8FB09B;
+  --shelf:#1F5A35; --shelf-2:#2A6B42; --label:#FFFFFF; --label-ink:#141A17; --shelf-ink:#FFFFFF; --accent:#1D7A44; --accent-ink:#FFFFFF; --muted-bg:#F2F5F2;
+  --chart:#F6F8F6; --chart-ink:#16201A; --chart-2:#86928B;
+  --red:#C3362C; --red-soft:#FBE8E6; --amber:#A86A12; --amber-soft:#FBF0DB; --blue:#2C67A8; --blue-soft:#E5EEF8; --green-soft:#E2F1E7;
+  --shadow:0 1px 2px rgba(16,40,26,.06),0 1px 1px rgba(16,40,26,.04);
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  --sans:"IBM Plex Sans",system-ui,"Segoe UI",Arial,sans-serif;
+  --cond:"IBM Plex Sans Condensed","Arial Narrow",system-ui,sans-serif;
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -62,9 +42,17 @@ button,select,input{font:inherit;color:inherit}
 .pagina{padding-block:18px 48px;padding-inline:20px;display:flex;flex-direction:column;gap:18px;max-width:1500px;margin:0 auto}
 .aviso{display:flex;gap:10px;align-items:flex-start;background:var(--amber-soft);border:1px solid color-mix(in srgb,var(--amber) 35%,transparent);border-radius:8px;padding:10px 14px;font-size:13.5px}
 .aviso b{color:var(--ink)}
-.info-dados{background:var(--muted-bg);border-color:var(--line);font-size:13px;color:var(--ink-2)}
 .filtros{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .filtros label{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);margin-right:4px}
+.busca-aba{position:relative;flex:1 1 320px;max-width:560px}
+.busca-aba input{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px 34px 9px 34px;background:var(--surface);color:var(--ink);font-size:14px}
+.busca-aba input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.busca-aba svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--ink-2)}
+.busca-aba input::-webkit-search-cancel-button{display:none}
+.busca-aba button{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;color:var(--ink-2);font-size:16px;cursor:pointer;padding:4px 6px}
+.busca-linha{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.busca-linha .nota{margin:0;font-size:12.5px;color:var(--ink-2)}
+.parada li.achou{background:var(--amber-soft);border-radius:4px}
 .chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 11px;font-size:13px;cursor:pointer}
 .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
 
@@ -261,6 +249,254 @@ td.loc span{white-space:nowrap;font:700 12px var(--mono);background:var(--shelf)
 .ficha-topo.sem-foto-grande{grid-template-columns:minmax(0,1fr)}
 .thumb{position:relative}
 .thumb .nft{position:absolute;right:3px;bottom:3px;background:rgba(0,0,0,.7);color:#fff;font:700 10px/1 var(--mono);padding:2px 4px;border-radius:3px}
+/* Pedidos */
+td.forn{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12.5px}
+td.item{max-width:260px}
+td.item b{font-family:var(--mono);display:block;font-size:13px}
+td.item span{display:block;font-size:12px;color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px}
+.forn-lista{max-height:560px;overflow:auto}
+.forn-lista button{grid-template-columns:minmax(0,1fr) auto}
+.forn-lista button[aria-pressed="true"]{background:var(--green-soft)}
+.forn-lista .nome{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.forn-lista .barra{display:flex;height:6px;border-radius:3px;overflow:hidden;margin-top:5px;background:var(--muted-bg)}
+.forn-lista .barra i{display:block;height:100%}
+.forn-lista small{font-size:11.5px;color:var(--ink-2)}
+.forn-lista .v{font:700 14px var(--mono);text-align:right}
+.filtro-ativo{display:inline-flex;align-items:center;gap:6px;background:var(--green-soft);color:var(--accent);border-radius:999px;padding:3px 6px 3px 12px;font-size:13px;font-weight:600}
+.filtro-ativo button{border:0;background:var(--accent);color:#fff;border-radius:50%;width:20px;height:20px;cursor:pointer;line-height:1}
+/* Situação dos pedidos */
+.sit-ped{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:0 16px 10px}
+.sit-ped div{background:var(--muted-bg);border-radius:6px;padding:8px 10px;border-left:4px solid var(--k)}
+.sit-ped small{display:block;font:600 10.5px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.sit-ped b{font:700 20px var(--mono)}
+.pd-bloco{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.pd-bloco h3{margin:0;font:700 15px var(--cond);text-transform:uppercase;letter-spacing:.03em;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pd-item-cab{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+.pd-item-cab .cd{font:700 18px var(--mono)}
+.pd-item-cab .ds{font-size:13.5px;font-weight:600;text-transform:uppercase;margin-top:2px}
+.pd-barra{height:10px;border-radius:5px;background:var(--muted-bg);overflow:hidden;display:flex}
+.pd-barra i{display:block;height:100%;background:var(--accent)}
+.pd-dados{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px 14px;font-size:13px}
+.pd-dados small{display:block;font:600 10.5px var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2)}
+.pd-dados b{font-weight:600}
+.pd-tab{width:100%;border-collapse:collapse;font-size:12.5px}
+.pd-tab td,.pd-tab th{padding:6px 6px;border-top:1px solid var(--line);text-align:left;vertical-align:top}
+.pd-tab th{position:static;background:none;font-size:10.5px;padding-top:0;border-top:0}
+.pd-tab tr[data-pedit]{cursor:pointer}
+.pd-tab tr[data-pedit]:hover{background:var(--muted-bg)}
+.pd-tab tr.sel{background:var(--green-soft)}
+.pd-tab .num{text-align:right;font-family:var(--mono);white-space:nowrap}
+.pd-acoes{display:flex;gap:8px;flex-wrap:wrap}
+.parada li[data-ped]{cursor:pointer}
+.parada li[data-ped]:hover{background:var(--muted-bg);border-radius:4px}
+.modo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.modo button{background:var(--surface);border:2px solid transparent;border-radius:10px;box-shadow:var(--shadow);padding:12px 16px;cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:6px;color:var(--ink);position:relative;overflow:hidden}
+.modo button::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--k)}
+.modo button:hover{border-color:color-mix(in srgb,var(--k) 40%,transparent)}
+.modo button[aria-pressed="true"]{border-color:var(--k);background:color-mix(in srgb,var(--k) 9%,var(--surface))}
+.modo .t{font:700 13px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--k);display:flex;align-items:center;gap:8px}
+.modo .t em{font-style:normal;font-weight:600;font-size:11px;letter-spacing:.04em;text-transform:none;color:var(--ink-2)}
+.modo .nums{display:flex;gap:26px;flex-wrap:wrap}
+.modo .nums b{font:700 30px/1 var(--mono);font-variant-numeric:tabular-nums;display:block}
+.modo .nums small{font-size:12.5px;color:var(--ink-2)}
+.modo .marca{position:absolute;top:10px;right:12px;font:700 11px var(--sans);color:var(--k);opacity:0}
+.modo button[aria-pressed="true"] .marca{opacity:1}
+@media (max-width:640px){ .modo{gap:8px} .modo button{padding:10px 10px 10px 14px} .modo .t em,.modo .marca{display:none} .modo .nums b{font-size:22px} .modo .nums{gap:12px;flex-wrap:nowrap} .modo .nums small{font-size:11px} }
+.prog{display:flex;align-items:center;gap:6px;font:500 12px var(--mono)}
+.prog i{display:block;width:60px;height:6px;border-radius:3px;background:linear-gradient(90deg,var(--accent) var(--p),var(--muted-bg) var(--p))}
+.p-frete-r{background:var(--blue-soft);color:var(--blue)} .p-frete-e{background:var(--muted-bg);color:var(--ink-2)}
+/* Rota do motorista */
+.rota-grade{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}
+.rota-card{position:relative}
+.paradas{display:flex;flex-direction:column;gap:10px;padding:0 12px 14px;max-height:900px;overflow:auto}
+.parada{border:1px solid var(--line);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:8px;background:var(--surface)}
+.parada.na-rota{border-color:var(--accent);box-shadow:0 0 0 2px var(--green-soft)}
+.parada-cab{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap}
+.parada-cab .nome{font-weight:700;font-size:14.5px;flex:1 1 220px}
+.parada-cab .nome small{display:block;font-weight:500;font-size:12.5px;color:var(--ink-2);margin-top:2px}
+.parada ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px}
+.parada li{display:grid;grid-template-columns:84px minmax(0,1fr) auto;gap:8px;font-size:12.5px;align-items:baseline}
+.parada li .pd{font:600 11.5px var(--mono);color:var(--ink-2);white-space:nowrap}
+.parada li .ds{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.parada li .ds b{font-family:var(--mono)}
+.parada li .qt{font:700 12.5px var(--mono);white-space:nowrap}
+.btn{border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:6px;padding:7px 12px;font-weight:600;font-size:13px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;justify-content:center}
+.btn.sec{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.btn.na{background:var(--green-soft);color:var(--accent)}
+.btn:disabled{opacity:.5;cursor:default}
+.btn.wpp{background:#1FA855;border-color:#1FA855}
+.btn.maps{background:#2E6FD9;border-color:#2E6FD9}
+.rota-campos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:0 16px 12px}
+.rota-campos label{display:flex;flex-direction:column;gap:3px;font:600 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.colar{display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line);padding-top:10px}
+.colar b{font-size:13px}
+.colar textarea{width:100%;min-height:72px;border:1px solid var(--line);border-radius:6px;padding:8px;font:12.5px var(--mono);background:var(--surface);color:var(--ink);resize:vertical}
+.rota-campos input{font:500 14px var(--sans);text-transform:none;letter-spacing:0;border:1px solid var(--line);border-radius:6px;padding:7px 8px;background:var(--bg);color:var(--ink);min-width:0}
+.rota-lista{margin:0;padding:0 16px;list-style:none;display:flex;flex-direction:column;gap:6px;counter-reset:p}
+.rota-lista li{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:10px;align-items:center;background:var(--muted-bg);border-radius:6px;padding:8px 10px;counter-increment:p}
+.rota-lista li::before{content:counter(p);width:26px;height:26px;border-radius:50%;background:var(--shelf);color:#fff;display:grid;place-items:center;font:700 13px var(--mono)}
+.rota-lista li > span:first-of-type{min-width:0}
+.rota-lista .n{display:block;font-weight:700;font-size:13.5px;overflow-wrap:anywhere;line-height:1.3}
+.rota-lista small{display:block;font-size:12px;color:var(--ink-2)}
+.rota-lista .mv{display:flex;gap:2px}
+.rota-lista .mv button{border:1px solid var(--line);background:var(--surface);border-radius:4px;width:28px;height:28px;cursor:pointer;font-size:13px}
+.rota-lista .vazia{display:block;background:none;text-align:center;color:var(--ink-2);font-size:13px;padding:18px}
+.rota-lista .vazia::before{display:none}
+.rota-acoes,.rota-envio{display:flex;flex-wrap:wrap;gap:8px;padding:12px 16px 0}
+.rota-envio{padding-bottom:4px}
+.rota-envio .btn{flex:1 1 160px}
+.rota-envio .nota{flex-basis:100%}
+.previa{padding:10px 16px 16px}
+.previa summary{cursor:pointer;font-size:13px;color:var(--ink-2)}
+.previa pre{white-space:pre-wrap;font:12.5px/1.45 var(--mono);background:var(--muted-bg);border-radius:6px;padding:10px;max-height:320px;overflow:auto}
+@media (max-width:1100px){ .rota-card{position:static} .rota-grade{grid-template-columns:1fr} }
+@media (max-width:640px){ .rota-campos{grid-template-columns:1fr} .sit-ped{grid-template-columns:1fr 1fr 1fr} }
+/* Rota: urgência, van e retorno */
+.tag-u{font:700 10.5px var(--sans);letter-spacing:.03em;text-transform:uppercase;padding:1px 6px;border-radius:3px;white-space:nowrap}
+.tag-u.urg{background:var(--red);color:#fff} .tag-u.imp{background:var(--amber-soft);color:var(--amber)} .tag-u.vol{background:var(--muted-bg);color:var(--ink-2)}
+.tag-u.tent{background:#F1E8DF;color:#7A5B3E}
+.parada.tem-urg{border-left:5px solid var(--red)}
+.parada-tags{display:flex;flex-wrap:wrap;gap:6px}
+.rota-alerta{padding:0 16px}
+.rota-alerta .alerta{margin-bottom:10px}
+.rota-lista .st{font:700 11px var(--sans);padding:2px 7px;border-radius:999px;margin-left:6px}
+.st-ok{background:var(--green-soft);color:var(--accent)} .st-parcial{background:var(--amber-soft);color:var(--amber)} .st-nao{background:var(--red-soft);color:var(--red)} .st-pend{background:var(--muted-bg);color:var(--ink-2)} .st-sem{background:var(--muted-bg);color:var(--ink-2)}
+.hr-det .st,.hr-rota .st{font:700 11px var(--sans);padding:2px 7px;border-radius:999px}
+.retorno,.historico{padding:0 16px 16px;display:flex;flex-direction:column;gap:10px}
+.retorno-resumo{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.retorno-resumo div{background:var(--muted-bg);border-radius:6px;padding:8px 10px}
+.retorno-resumo small{display:block;font:600 10.5px var(--sans);text-transform:uppercase;letter-spacing:.06em;color:var(--ink-2)}
+.retorno-resumo b{font:700 18px var(--mono)}
+.hist-item{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;border-top:1px solid var(--line);padding-top:8px;font-size:13px}
+.hist-item b{font-family:var(--mono)}
+.hist-item > span:last-child{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.hist-item .st{font:700 11px var(--sans);padding:2px 7px;border-radius:999px}
+/* Visão do motorista (celular) */
+.motorista-fundo{justify-content:center;align-items:stretch}
+.mot{width:min(520px,100%);height:100%;background:var(--bg);overflow:auto;display:flex;flex-direction:column}
+.mot-topo{background:var(--shelf);color:#fff;padding:14px 16px;position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:10px}
+.mot-topo b{font:700 20px var(--cond);text-transform:uppercase;letter-spacing:.03em}
+.mot-topo span{font-size:12.5px;opacity:.85;display:block}
+.mot-topo button{margin-left:auto;background:rgba(255,255,255,.15);color:#fff;border:0;border-radius:50%;width:36px;height:36px;font-size:18px;cursor:pointer}
+.mot-lista{padding:12px;display:flex;flex-direction:column;gap:12px}
+.mot-parada{background:var(--surface);border-radius:10px;box-shadow:var(--shadow);padding:14px;display:flex;flex-direction:column;gap:10px;border-left:6px solid var(--line)}
+.mot-parada.ok{border-left-color:var(--accent)} .mot-parada.parcial{border-left-color:var(--amber)} .mot-parada.nao{border-left-color:var(--red)}
+.mot-parada h3{margin:0;font:700 17px var(--sans);display:flex;gap:8px;align-items:baseline}
+.mot-parada h3 em{font:700 15px var(--mono);font-style:normal;background:var(--shelf);color:#fff;border-radius:50%;width:28px;height:28px;display:inline-grid;place-items:center;flex:none}
+.mot-info{font-size:13.5px;color:var(--ink-2);display:flex;flex-wrap:wrap;gap:4px 14px}
+.mot-info a{color:var(--blue);font-weight:600}
+.mot-parada ul{margin:0;padding-left:18px;font-size:14px;display:flex;flex-direction:column;gap:3px}
+.mot-botoes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mot-botoes button{border:2px solid var(--line);background:var(--surface);border-radius:8px;padding:12px 4px;font-weight:700;font-size:14px;cursor:pointer;color:var(--ink)}
+.mot-botoes button[aria-pressed="true"][data-retst="ok"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.mot-botoes button[aria-pressed="true"][data-retst="parcial"]{background:var(--amber);border-color:var(--amber);color:#fff}
+.mot-botoes button[aria-pressed="true"][data-retst="nao"]{background:var(--red);border-color:var(--red);color:#fff}
+.mot-parada textarea{width:100%;border:1px solid var(--line);border-radius:6px;padding:8px;font:14px var(--sans);background:var(--bg);color:var(--ink);resize:vertical;min-height:40px}
+.form-cfg{margin:0 16px 12px;border:1px dashed var(--line);border-radius:8px;padding:10px 12px;font-size:13px}
+.form-cfg summary{cursor:pointer;font-weight:700;display:flex;align-items:center;gap:8px}
+.form-cfg .st-form{font:700 11px var(--sans);padding:2px 8px;border-radius:999px}
+.form-cfg .st-form.ok{background:var(--green-soft);color:var(--accent)}
+.form-cfg .st-form.nao{background:var(--muted-bg);color:var(--ink-2)}
+.form-cfg ol{margin:8px 0;padding-left:20px;display:flex;flex-direction:column;gap:4px;color:var(--ink-2)}
+.form-cfg code{font:600 12px var(--mono);background:var(--muted-bg);padding:1px 5px;border-radius:4px;color:var(--ink)}
+.form-cfg textarea{width:100%;min-height:64px;border:1px solid var(--line);border-radius:6px;padding:8px;font:12px var(--mono);background:var(--surface);color:var(--ink);resize:vertical}
+.form-cfg .acoes{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;align-items:center}
+.mot-form{display:block;text-align:center;background:var(--blue);color:#fff;border-radius:8px;padding:13px 10px;font-weight:700;font-size:15px;text-decoration:none}
+.mot-feito{display:flex;align-items:center;justify-content:space-between;gap:10px;border-radius:8px;padding:10px 12px;font-size:14px;font-weight:700}
+.mot-feito.ok{background:var(--green-soft);color:var(--accent)}
+.mot-feito.parcial{background:var(--amber-soft);color:#8a5a00}
+.mot-feito.nao{background:color-mix(in srgb,var(--red) 12%,var(--surface));color:var(--red)}
+.mot-feito small{display:block;font-weight:500;color:var(--ink-2);font-size:12.5px}
+.mot-feito button{border:1px solid currentColor;background:none;color:inherit;border-radius:6px;padding:6px 10px;font-weight:700;cursor:pointer}
+.fs-fundo{z-index:70;justify-content:center;align-items:flex-start;overflow:auto}
+.fs{width:min(480px,100%);min-height:100%;background:#F3F2F1;display:flex;flex-direction:column}
+.fs-topo{background:#0F6CBD;color:#fff;padding:18px 18px 16px;position:relative}
+.fs-topo b{display:block;font:700 19px var(--sans)}
+.fs-topo span{font-size:13px;opacity:.9}
+.fs-topo button{position:absolute;top:12px;right:12px;background:rgba(255,255,255,.18);color:#fff;border:0;border-radius:50%;width:32px;height:32px;font-size:15px;cursor:pointer}
+.fs-corpo{padding:14px;display:flex;flex-direction:column;gap:12px}
+.fs-card{background:#fff;color:#201F1E;border-radius:6px;padding:14px 16px;box-shadow:0 1px 2px rgba(0,0,0,.12);display:flex;flex-direction:column;gap:10px}
+.fs-card h4{margin:0;font:600 15px var(--sans)}
+.fs-card h4 i{color:#C4314B;font-style:normal}
+.fs-auto{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:13.5px}
+.fs-auto dt{color:#605E5C}
+.fs-auto dd{margin:0;font-weight:600}
+.fs-nota{font-size:12px;color:#605E5C;margin:0}
+.fs-op{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fs-op button{display:flex;align-items:center;gap:12px;border:1px solid #C8C6C4;background:#fff;border-radius:6px;padding:13px 14px;font:600 15px var(--sans);cursor:pointer;text-align:left;color:#201F1E}
+.fs-op button::before{content:"";width:18px;height:18px;border-radius:50%;border:2px solid #8A8886;flex:none}
+.fs-op button[aria-pressed="true"]{border-color:#0F6CBD;background:#EFF6FC}
+.fs-op button[aria-pressed="true"]::before{border:6px solid #0F6CBD}
+.fs-op button{justify-content:center;padding:18px 10px;font-size:16px}
+.fs-op button::before{display:none}
+.fs-op button[data-fssit="ok"][aria-pressed="true"]{background:#DFF6DD;border-color:#107C10;color:#107C10}
+.fs-op button[data-fssit="nao"][aria-pressed="true"]{background:#FDE7E9;border-color:#C4314B;color:#C4314B}
+.fs-card textarea{width:100%;min-height:70px;border:1px solid #C8C6C4;border-radius:4px;padding:8px;font:14px var(--sans);resize:vertical;color:#201F1E;background:#fff}
+.fs-enviar{background:#0F6CBD;color:#fff;border:0;border-radius:6px;padding:13px;font:700 16px var(--sans);cursor:pointer}
+.fs-enviar:disabled{background:#C8C6C4;cursor:not-allowed}
+.fs-ok{text-align:center;padding:30px 16px;align-items:center}
+.fs-ok .ic{font-size:44px}
+.resp-tab td small{display:block;color:var(--ink-2);font-size:11.5px}
+.hr-kpis{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:640px){ .hr-kpis{grid-template-columns:1fr 1fr} .hr-rota summary .quem{white-space:normal} }
+.btn-hist{margin-left:auto;padding:6px 12px;font-size:13px}
+.btn-hist span{font:700 11px var(--mono);background:var(--muted-bg);border-radius:999px;padding:1px 7px;margin-left:4px}
+.hr-filtros{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.hr-filtros input{flex:1 1 220px;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:14px;background:var(--surface);color:var(--ink)}
+.hr-rota{background:var(--surface);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.hr-rota[open]{border-color:var(--accent)}
+.hr-rota summary{list-style:none;cursor:pointer;padding:12px 14px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 12px;align-items:center}
+.hr-rota summary::-webkit-details-marker{display:none}
+.hr-rota summary .dt{font:700 15px var(--mono)}
+.hr-rota summary .quem{font-size:13px;color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hr-rota summary .tags{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.hr-rota summary .tags .st{font:700 11px var(--sans);padding:2px 7px;border-radius:999px}
+.hr-rota summary .barra{grid-column:1/-1;height:6px;border-radius:3px;background:var(--muted-bg);display:flex;overflow:hidden}
+.hr-rota summary .barra i{display:block;height:100%}
+.hr-det{padding:0 14px 14px;display:flex;flex-direction:column;gap:10px}
+.hr-det table{width:100%;border-collapse:collapse;font-size:12.5px}
+.hr-det td,.hr-det th{padding:6px;border-top:1px solid var(--line);text-align:left;vertical-align:top}
+.hr-det th{position:static;background:none;font-size:10.5px;border-top:0}
+.hr-det td small{display:block;color:var(--ink-2);font-size:11.5px}
+.hist-item{cursor:pointer;border-radius:4px}
+.hist-item:hover{background:var(--muted-bg)}
+.btn-resumo{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.45);border-radius:6px;padding:8px 14px;font:700 13.5px var(--sans);cursor:pointer;white-space:nowrap}
+.btn-resumo:hover{background:rgba(255,255,255,.24)}
+.x-pnl{width:min(640px,100%);height:100%;background:var(--bg);overflow:auto;display:flex;flex-direction:column}
+.x-cab{background:var(--surface);border-bottom:1px solid var(--line);padding:16px 56px 14px 16px;position:relative}
+.x-cab b{display:block;font:700 22px var(--cond);text-transform:uppercase;letter-spacing:.02em}
+.x-cab span{font-size:13px;color:var(--ink-2)}
+.x-corpo{padding:16px;display:flex;flex-direction:column;gap:14px}
+.x-tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.x-tiles div{background:var(--surface);border-radius:8px;padding:10px 12px;box-shadow:var(--shadow);border-left:4px solid var(--k)}
+.x-tiles small{display:block;font:600 10.5px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.x-tiles b{font:700 22px var(--mono)}
+.x-msg{background:#E7FFDB;color:#111B21;border-radius:8px;padding:12px 14px;font:13.5px/1.45 var(--sans);white-space:pre-wrap;box-shadow:var(--shadow);max-height:46vh;overflow:auto}
+.x-acoes{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn-contagem{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;border:1px solid var(--accent);background:var(--green-soft);color:var(--accent);border-radius:8px;padding:10px 12px;font:700 13.5px var(--sans);cursor:pointer;text-align:left;margin-bottom:14px}
+.btn-contagem small{display:block;font-weight:500;font-size:11.5px;color:var(--ink-2)}
+.btn-contagem em{font:700 18px var(--mono);font-style:normal}
+.ct-dia{display:flex;align-items:center;gap:8px}
+.ct-dia button{border:1px solid var(--line);background:var(--surface);border-radius:6px;width:32px;height:32px;cursor:pointer;font-size:15px}
+.ct-tab{width:100%;border-collapse:collapse;font-size:13px;background:var(--surface);border-radius:8px;overflow:hidden;box-shadow:var(--shadow)}
+.ct-tab th,.ct-tab td{padding:8px 10px;border-top:1px solid var(--line);text-align:left;vertical-align:top}
+.ct-tab th{position:static;font-size:10.5px;background:var(--muted-bg);border-top:0}
+.ct-tab .loc{font:700 12.5px var(--mono);white-space:nowrap}
+.ct-tab td small{display:block;color:var(--ink-2);font-size:11.5px}
+.ct-tab .cont{width:90px;border-bottom:1px solid var(--ink-2)}
+.ct-tab tr[data-cod]{cursor:pointer}
+.ct-tab tr[data-cod]:hover{background:var(--muted-bg)}
+.ct-por{font:700 10.5px var(--sans);padding:2px 7px;border-radius:999px;white-space:nowrap}
+@media (max-width:640px){ .x-tiles{grid-template-columns:1fr 1fr} .ct-tab .cont{display:none} .btn-resumo{padding:7px 10px} }
+@media print{
+  body > *:not(#extra){display:none!important}
+  #extra{position:static;background:none;display:block}
+  #extra .x-pnl{width:100%;height:auto;overflow:visible}
+  #extra .x-acoes,#extra .ct-dia button,#extra .fechar,#extra .nao-imprime{display:none!important}
+  .ct-tab{box-shadow:none} .ct-tab tr{break-inside:avoid}
+}
+.mot-rodape{padding:12px 12px 24px;font-size:12.5px;color:var(--ink-2);text-align:center}
+
 /* Dias de segurança */
 .seg{background:var(--surface);border-radius:8px;padding:14px 16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px}
 .seg h3{margin:0;font:700 15px var(--cond);text-transform:uppercase;letter-spacing:.03em;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
@@ -301,14 +537,171 @@ td.loc span{white-space:nowrap;font:700 12px var(--mono);background:var(--shelf)
   .col-opc{display:none}
 }
 @media (prefers-reduced-motion:reduce){*:not(.ticker-trilho){transition:none!important;animation:none!important}}
+/* ===================== Visual novo (camada de sistema) ===================== */
+body{font:14px/1.45 var(--sans);-webkit-font-smoothing:antialiased}
+.app{display:grid;grid-template-columns:256px minmax(0,1fr);min-height:100vh}
+.side{background:var(--side);color:var(--side-ink);position:sticky;top:0;height:100vh;display:flex;flex-direction:column;padding:18px 12px 14px;gap:16px;overflow:auto;z-index:40}
+.brand{display:flex;align-items:center;gap:10px;padding:0 8px}
+.brand .mk{width:36px;height:36px;border-radius:8px;background:#E9F4EC;color:#103A25;display:grid;place-items:center;font:700 15px var(--cond);flex:none}
+.brand b{display:block;font:700 17px/1.1 var(--cond);color:#fff;letter-spacing:.01em}
+.brand small{font-size:11.5px;color:var(--side-ink-2)}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav h4{margin:10px 10px 6px;font:600 10.5px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--side-ink-2)}
+.nav-it{display:flex;align-items:center;gap:11px;padding:8px 10px;border-radius:7px;color:var(--side-ink);border:0;background:none;cursor:pointer;font:500 13.5px var(--sans);text-align:left;width:100%}
+.nav-it svg{width:18px;height:18px;flex:none;opacity:.85}
+.nav-it .nm{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav-it:hover{background:rgba(255,255,255,.06)}
+.nav-it[aria-current="page"]{background:var(--side-2);color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+.nav-it .bd{margin-left:auto;font:600 11px var(--mono);padding:1px 7px;border-radius:999px;background:rgba(255,255,255,.12);color:var(--side-ink)}
+.nav-it .bd.r{background:#C3362C;color:#fff}
+.side-foto{margin-top:auto;position:relative;border-radius:10px;overflow:hidden;aspect-ratio:16/9;max-width:100%}
+.side-foto img{width:100%;height:100%;object-fit:cover;object-position:center 57%;display:block;filter:saturate(.9)}
+.side-foto{display:block;text-decoration:none;box-shadow:0 0 0 1px rgba(255,255,255,.08)}
+.side-foto img{transition:transform .25s}
+.side-foto:hover img{transform:scale(1.04)}
+.side-foto::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,.6))}
+.side-foto span{position:absolute;z-index:1;bottom:6px;font:600 11px var(--sans);color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6)}
+.side-foto .lg{left:8px}
+.side-foto .mp{right:8px;opacity:.85}
+.side-foto:hover .mp{opacity:1;text-decoration:underline}
+.side-emp{padding:0 4px;display:flex;flex-direction:column;gap:1px;font-size:11.5px;color:var(--side-ink-2)}
+.side-emp b{color:var(--side-ink);font-weight:600;font-size:12px}
+.side-emp span:nth-child(2){font-family:var(--mono);font-size:11.5px;color:var(--side-ink)}
+.side-pe{padding:10px 10px 0;border-top:1px solid rgba(255,255,255,.08);font-size:12px;color:var(--side-ink-2);display:flex;flex-direction:column;gap:3px}
+.side-pe b{color:var(--side-ink);font-weight:600}
+.side-pe .ok{display:flex;align-items:center;gap:7px;color:var(--side-ink)}
+.side-pe .ok i{width:8px;height:8px;border-radius:50%;background:#4CC27A;box-shadow:0 0 0 3px rgba(76,194,122,.18);flex:none}
+.main{min-width:0;display:flex;flex-direction:column}
+.barra-topo{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.barra-l1{display:flex;align-items:center;gap:12px;padding:10px 28px}
+.menu-bt{display:none;border:1px solid var(--line);background:var(--surface);border-radius:8px;width:38px;height:38px;cursor:pointer;place-items:center;flex:none}
+.trilha{font-size:13px;color:var(--ink-3);white-space:nowrap;margin-right:auto}
+.trilha b{color:var(--ink);font-weight:600}
+.barra-l1 .busca{flex:0 1 380px;max-width:380px;margin:0}
+.barra-l1 .busca input{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:9px 12px 9px 36px;font-size:14px}
+.barra-l1 .busca svg{color:var(--ink-3)}
+.btn-resumo{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px 14px;font:600 13.5px var(--sans);cursor:pointer;white-space:nowrap}
+.btn-resumo:hover{border-color:var(--accent);color:var(--accent)}
+.barra-topo .ticker{margin:0;height:34px;border-top:0}
+.pagina{padding-block:22px 44px;padding-inline:28px;max-width:1440px;margin:0;width:100%;gap:18px}
+.pg-cab{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.pg-cab h1{margin:0;font:700 28px/1.1 var(--cond);text-wrap:balance}
+.pg-cab p{margin:4px 0 0;color:var(--ink-2)}
+.aviso{background:var(--blue-soft);border-color:color-mix(in srgb,var(--blue) 22%,transparent);border-radius:10px;font-size:13px;color:var(--ink-2)}
+.aviso > span:first-child{color:var(--blue)}
+.card{border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow)}
+.card-cab{padding:16px 18px 10px}
+.card-cab h2{font:600 15.5px/1.25 var(--sans);text-transform:none;letter-spacing:0}
+.card-cab p{font-size:12.5px;color:var(--ink-3)}
+.card-cab .dir{margin-left:auto}
+.lnk{border:0;background:none;color:var(--accent);font:600 13px var(--sans);cursor:pointer;padding:0}
+.lnk:hover{text-decoration:underline}
+.kpis{gap:12px}
+.kpi{border:1px solid var(--line);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow);gap:4px}
+.kpi::before{display:none}
+.kpi small{font-size:11px;color:var(--ink-3);letter-spacing:.08em}
+.kpi b{font:700 28px/1.1 var(--cond);color:var(--k,var(--ink))}
+.kpi:hover{border-color:color-mix(in srgb,var(--k,var(--accent)) 45%,var(--line))}
+.kpi[aria-pressed="true"]{outline:0;border-color:var(--k);background:color-mix(in srgb,var(--k) 7%,var(--surface));box-shadow:0 0 0 1px var(--k)}
+.filtros label{font-size:11px;color:var(--ink-3);letter-spacing:.1em}
+.chip{border-color:var(--line);background:var(--surface);color:var(--ink-2);padding:4px 11px;font-size:13px}
+.chip:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--line));color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--green-soft);border-color:color-mix(in srgb,var(--accent) 45%,transparent);color:var(--accent);font-weight:600}
+th{background:var(--surface-2);font-size:11px;color:var(--ink-3);letter-spacing:.07em;padding:9px 12px;border-bottom:1px solid var(--line)}
+td{padding:10px 12px;border-top:1px solid var(--line-2)}
+tbody tr:hover{background:var(--surface-2)}
+.grafico{background:var(--surface-2);border:1px solid var(--line-2);border-radius:10px;margin:0 14px 14px}
+.pill{font-weight:600}
+.btn{border-radius:8px}
+/* Início */
+.heroi{position:relative;border-radius:14px;overflow:hidden;min-height:180px;display:flex;align-items:flex-end;padding:24px 26px;color:#fff;
+  background:linear-gradient(90deg,rgba(10,34,22,.88) 0%,rgba(10,34,22,.62) 45%,rgba(10,34,22,.15) 100%),url("fotos/capa.jpg?v=2") center 57%/cover no-repeat,#103A25}
+.heroi .sobre{font:600 11.5px var(--sans);letter-spacing:.12em;text-transform:uppercase;opacity:.85}
+.heroi h1{margin:6px 0 4px;font:700 32px/1.1 var(--cond);text-wrap:balance}
+.heroi p{margin:0;opacity:.9}
+.atencao{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.acao{all:unset;box-sizing:border-box;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:16px 18px;display:flex;flex-direction:column;gap:9px;transition:border-color .15s,transform .15s}
+.acao:hover{border-color:color-mix(in srgb,var(--k) 55%,var(--line));transform:translateY(-1px)}
+.acao:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.acao .topo-a{display:flex;align-items:center;justify-content:space-between}
+.acao .ic{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:color-mix(in srgb,var(--k) 13%,var(--surface));color:var(--k)}
+.acao .ic svg{width:18px;height:18px}
+.acao .seta{color:var(--ink-3);font-size:18px}
+.acao b{font:700 34px/1 var(--cond);color:var(--k);font-variant-numeric:tabular-nums}
+.acao .t{font-weight:600}
+.acao .s{font-size:12.5px;color:var(--ink-2);margin-top:-5px}
+.fila{list-style:none;margin:0;padding:0 8px 8px}
+.fila li{display:grid;grid-template-columns:minmax(0,1fr) 100px 140px;gap:14px;align-items:center;padding:10px;border-top:1px solid var(--line-2);cursor:pointer;border-radius:8px}
+.fila li:first-child{border-top:0}
+.fila li:hover{background:var(--surface-2)}
+.fila .it b{font:600 13px var(--mono)}
+.fila .it .ds{display:block;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:2px}
+.fila .sl{font:600 13px var(--mono);text-align:right}
+.fila .sl small{display:block;font:500 11.5px var(--sans);color:var(--ink-3)}
+.fila .rp{text-align:right}
+.hoje{display:flex;flex-direction:column;padding:0 8px 8px}
+.hoje button{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:12px;align-items:center;text-align:left;border:0;background:none;padding:10px;border-top:1px solid var(--line-2);border-radius:8px;cursor:pointer}
+.hoje button:first-child{border-top:0}
+.hoje button:hover{background:var(--surface-2)}
+.hoje .ic{width:36px;height:36px;border-radius:9px;display:grid;place-items:center;background:var(--green-soft);color:var(--accent)}
+.hoje .ic svg{width:18px;height:18px}
+.hoje b{display:block;font-weight:600}
+.hoje small{display:block;color:var(--ink-2);font-size:12.5px}
+.hoje .seta{color:var(--ink-3);font-size:18px}
+.dist{padding:4px 18px 18px;display:flex;flex-direction:column;gap:12px}
+.dist-barra{display:flex;height:12px;border-radius:6px;overflow:hidden;gap:2px}
+.dist-barra i{display:block;height:100%}
+.dist ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;font-size:13px}
+.dist li{display:flex;align-items:center;gap:8px}
+.dist li i{width:10px;height:10px;border-radius:3px;flex:none}
+.dist li b{margin-left:auto;font:600 13px var(--mono)}
+/* Inventário */
+.inv{display:flex;flex-direction:column}
+.inv-topo{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px 18px}
+.inv-topo .ct-dia b{font-size:15px}
+.inv-res{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--ink-2)}
+.inv-res b{font:700 16px var(--mono);color:var(--ink)}
+.inv .ct-tab{box-shadow:none;border-radius:0}
+.inv-pe{display:flex;flex-direction:column;gap:12px;padding:14px 18px 18px;border-top:1px solid var(--line)}
+.hoje-bt{width:auto!important;padding:0 10px;font-size:12.5px}
+/* Prateleiras dentro do novo layout */
+.layout{min-height:calc(100vh - var(--topo-h,100px))}
+.mapa{top:var(--topo-h,100px)}
+/* Responsivo */
+@media (max-width:1100px){ .atencao{grid-template-columns:1fr 1fr} }
+@media (max-width:900px){
+  .app{grid-template-columns:1fr}
+  .side{position:fixed;left:0;top:0;bottom:0;width:264px;transform:translateX(-100%);transition:transform .2s;padding-top:calc(18px + env(safe-area-inset-top,0px));z-index:70}
+  .app.menu-aberto .side{transform:none;box-shadow:12px 0 32px rgba(0,0,0,.3)}
+  .menu-bt{display:grid}
+  .barra-l1{padding:10px 16px;flex-wrap:wrap}
+  .trilha{display:none}
+  .barra-l1 .busca{flex:1 1 200px;max-width:none;order:3}
+  .btn-resumo{margin-left:auto}
+  .pagina{padding-inline:16px}
+  .fila li{grid-template-columns:minmax(0,1fr) auto}
+  .fila .sl{display:none}
+}
+@media (max-width:520px){ .atencao{gap:10px} .acao{padding:14px} .acao b{font-size:28px} .heroi{min-height:150px;padding:18px} .heroi h1{font-size:25px} .pg-cab h1{font-size:24px} .fila .rp{display:none} }
+
 </style>
-</head>
-<body>
 
-
-<header class="topo">
-  <div class="topo-l1">
-    <div class="marca"><b>Almoxarifado</b><span>Goiás Verde · Gestão de estoque e reposição</span></div>
+<div class="app" id="app">
+<aside class="side" aria-label="Menu principal">
+  <div class="brand"><div class="mk">GV</div><div><b>Almoxarifado</b><small>Goiás Verde Alimentos</small></div></div>
+  <nav class="nav" id="nav"><h4>Operação</h4><button class="nav-it" data-tela="inicio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5h13V10"/></svg><span class="nm">Início</span><span class="bd" id="bd-inicio" hidden></span></button><button class="nav-it" data-tela="prateleiras"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="1.5"/><path d="M3.5 9.5h17M3.5 15h17M12 3.5v17"/></svg><span class="nm">Prateleiras</span><span class="bd" id="bd-prateleiras" hidden></span></button><button class="nav-it" data-tela="gestao"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 3.5 7.5 12 12l8.5-4.5z"/><path d="M3.5 7.5v9L12 21l8.5-4.5v-9"/><path d="M12 12v9"/></svg><span class="nm">Gestão de estoque</span><span class="bd" id="bd-gestao" hidden></span></button><h4>Compras</h4><button class="nav-it" data-tela="pedidos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h9l3.5 3.5v13.5H6z"/><path d="M14.5 3.5V7.5h4"/><path d="M9 12h6M9 15.5h6"/></svg><span class="nm">Pedidos de compra</span><span class="bd" id="bd-pedidos" hidden></span></button><button class="nav-it" data-tela="rota"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 16.5V7.5h11v9"/><path d="M14 10.5h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17.5" cy="17.5" r="1.8"/></svg><span class="nm">Rota da van</span><span class="bd" id="bd-rota" hidden></span></button><h4>Controle</h4><button class="nav-it" data-tela="inventario"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="5.5" width="15" height="15" rx="1.5"/><path d="M8.5 3.5v4M15.5 3.5v4"/><path d="m8.5 13.5 2.2 2.2 4.8-4.7"/></svg><span class="nm">Inventário rotativo</span><span class="bd" id="bd-inventario" hidden></span></button><button class="nav-it" data-tela="extrato"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h13l-3.5-3.5M20 16H7l3.5 3.5"/></svg><span class="nm">Movimentação</span><span class="bd" id="bd-extrato" hidden></span></button></nav>
+  <a class="side-foto" href="https://www.google.com/maps/search/?api=1&query=Goi%C3%A1s+Verde+Alimentos+Rodovia+GO-010+Luzi%C3%A2nia+GO" target="_blank" rel="noopener" title="Abrir a localização da Goiás Verde no Google Maps">
+    <img src="fotos/capa.jpg?v=2" alt="Vista aérea da fábrica da Goiás Verde em Luziânia">
+    <span class="lg">Luziânia · GO</span><span class="mp">📍 Ver no mapa</span></a>
+  <div class="side-emp"><b>Goiás Verde Alimentos Ltda</b><span>CNPJ 24.866.741/0001-18</span><span>Rodovia GO-010 · Luziânia - GO</span></div>
+  <div class="side-pe"><span class="ok"><i></i>Robô atualizando a cada 5 min</span><span>Planilha de <b class="ult-mov2"></b></span></div>
+</aside>
+<div class="main">
+<header class="barra-topo">
+  <div class="barra-l1">
+    <button class="menu-bt" id="menu-bt" aria-label="Abrir menu"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <div class="trilha" id="trilha"></div>
+    <button class="btn-resumo" id="abrir-resumo">📋 Resumo do dia</button>
     <div class="busca">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
       <input id="busca" type="search" placeholder="Digite o código do produto (ex.: 36605)" autocomplete="off" aria-label="Buscar produto">
@@ -319,15 +712,33 @@ td.loc span{white-space:nowrap;font:700 12px var(--mono);background:var(--shelf)
     <div class="ticker-rot"><i></i>Top 5 urgentes</div>
     <div class="ticker-janela"><div class="ticker-trilho" id="ticker"></div></div>
   </div>
-  <nav class="abas">
-    <button class="aba" data-tela="prateleiras">Análise por prateleira</button>
-    <button class="aba" data-tela="gestao" aria-current="page">Gestão de estoque</button>
-    <button class="aba" data-tela="extrato">Extrato de movimentação</button>
-  </nav>
 </header>
 
+<main class="pagina" id="v-inicio" hidden>
+  <section class="heroi">
+    <div class="heroi-txt"><span class="sobre">Goiás Verde Alimentos · Almoxarifado</span><h1 id="ini-sauda">Bom dia</h1><p id="ini-data"></p></div>
+  </section>
+  <section class="atencao" id="ini-atencao" aria-label="Precisa de atenção"></section>
+  <div class="grade">
+    <div class="col">
+      <section class="card"><div class="card-cab"><h2>Fila de compra</h2><p>os 8 itens mais urgentes abaixo do mínimo</p><button class="lnk dir" data-irvisao="prioridade">Ver todos →</button></div><ul class="fila" id="ini-fila"></ul></section>
+      <section class="card"><div class="card-cab"><h2>Natureza de movimentação</h2><p>Rupturas: quantas vezes algum item zerou no mês, 2025 x 2026</p></div><div class="grafico" style="height:240px"><canvas id="g-ini" aria-label="Natureza de movimentação: rupturas por mês"></canvas></div></section>
+    </div>
+    <div class="col">
+      <section class="card"><div class="card-cab"><h2>Hoje no almoxarifado</h2></div><div class="hoje" id="ini-hoje"></div></section>
+      <section class="card"><div class="card-cab"><h2>Situação do estoque</h2><p id="ini-tot"></p></div><div class="dist" id="ini-dist"></div></section>
+    </div>
+  </div>
+</main>
+
+<main class="pagina" id="v-inventario" hidden>
+  <section class="pg-cab"><div><h1>Inventário rotativo</h1><p>Lista do dia para contagem, em ordem de prateleira, para manter o saldo do sistema confiável</p></div></section>
+  <section class="card"><div class="inv" id="inv-corpo"></div></section>
+</main>
+
 <main class="pagina" id="v-gestao">
-  <div class="aviso info-dados" id="info-dados"></div>
+  <section class="pg-cab"><div><h1>Gestão de estoque</h1><p>Mínimo e máximo, rupturas, segurança de estoque e reposição de cada item</p></div></section>
+  <div class="aviso" id="info-dados"></div>
 
   <div class="filtros" id="filtros"><label>Categoria</label></div>
 
@@ -372,7 +783,94 @@ td.loc span{white-space:nowrap;font:700 12px var(--mono);background:var(--shelf)
 
 </main>
 
+<main class="pagina" id="v-pedidos" hidden>
+  <section class="pg-cab"><div><h1>Pedidos de compra</h1><p>Itens comprados que ainda não chegaram, por pedido e fornecedor</p></div></section>
+  <div class="aviso"><span aria-hidden="true">ⓘ</span><div><b>Pedidos de compra em atendimento</b> (relatório do sistema de <span id="ped-gerado"></span>). Mostra só itens que ainda têm saldo a entregar. A data de entrega está igual à data de emissão em quase todos os pedidos, então o atraso é contado em <b>dias em aberto desde a emissão</b>.</div></div>
+  <div class="modo" id="modo-ped" role="group" aria-label="Mostrar urgentes ou geral"></div>
+  <section class="kpis" id="kpis-ped" aria-label="Resumo dos pedidos"></section>
+  <div class="busca-linha"><div class="busca-aba"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="busca-ped" type="search" placeholder="Buscar pedido, fornecedor, CNPJ, comprador, código ou material" autocomplete="off" aria-label="Buscar nos pedidos"><button data-limpa="busca-ped" aria-label="Limpar busca" hidden>✕</button></div><p class="nota" id="busca-ped-res"></p></div>
+  <div class="filtros" id="filtros-ped"></div>
+  <div class="grade">
+    <div class="col">
+      <section class="card">
+        <div class="card-cab"><h2 id="t-ped">Itens aguardando entrega</h2><p id="s-ped">Do pedido mais antigo para o mais novo</p><span class="qt" id="q-ped"></span></div>
+        <div class="tabela-wrap" style="max-height:720px"><table>
+          <thead><tr><th>Pedido</th><th>Emissão</th><th>Em aberto</th><th>Fornecedor</th><th>Item</th><th style="text-align:right">Pedido</th><th style="text-align:right" class="col-opc">Entregue</th><th style="text-align:right">Falta</th><th>Estoque</th><th class="col-opc">Comprador</th></tr></thead>
+          <tbody id="tb-ped"></tbody>
+        </table></div>
+      </section>
+    </div>
+    <div class="col">
+      <section class="card">
+        <div class="card-cab"><h2>Situação dos pedidos</h2><p>Pelas quantidades entregues de cada item</p></div>
+        <div class="sit-ped" id="sit-ped"></div>
+        <div class="parados-cab" id="filtro-sitped"></div>
+        <div class="tabela-wrap" style="max-height:340px"><table><thead><tr><th>Pedido</th><th>Fornecedor</th><th>Frete</th><th>Itens entregues</th><th>Situação</th></tr></thead><tbody id="tb-sitped"></tbody></table></div>
+      </section>
+      <section class="card">
+        <div class="card-cab"><h2>Tempo em aberto</h2><p>Itens por dias desde a emissão do pedido</p></div>
+        <div class="grafico" style="height:230px"><canvas id="g-aging" aria-label="Itens por faixa de dias em aberto"></canvas></div>
+      </section>
+      <section class="card">
+        <div class="card-cab"><h2>Fornecedores</h2><p>Clique para ver só os itens do fornecedor</p><span class="qt" id="q-forn"></span></div>
+        <div class="lista forn-lista" id="forn"></div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<main class="pagina" id="v-rota" hidden>
+  <section class="pg-cab"><div><h1>Rota da van</h1><p>Retiradas nos fornecedores, envio ao motorista e retorno da coleta</p></div></section>
+  <div class="aviso"><span aria-hidden="true">⚠</span><div><b>Rota do motorista (protótipo).</b> Pedidos, itens e quantidades são reais. <b>Tipo de frete, liberação para retirada, cidade, telefone e horário dos fornecedores são exemplos</b> até chegar o cadastro de vocês. O ponto de saída considerado é a Goiás Verde em Luziânia - GO.</div></div>
+  <div class="modo" id="modo-rota" role="group" aria-label="Mostrar urgentes ou geral"></div>
+  <section class="kpis" id="kpis-rota" aria-label="Resumo das retiradas"></section>
+  <div class="busca-linha"><div class="busca-aba"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="busca-rota" type="search" placeholder="Buscar fornecedor, cidade, pedido, código ou material" autocomplete="off" aria-label="Buscar nas retiradas"><button data-limpa="busca-rota" aria-label="Limpar busca" hidden>✕</button></div><p class="nota" id="busca-rota-res"></p></div>
+  <div class="filtros" id="filtros-rota"></div>
+  <div class="grade rota-grade">
+    <div class="col">
+      <section class="card">
+        <div class="card-cab"><h2 id="t-paradas">Retiradas disponíveis</h2><p id="s-paradas">Escolha os fornecedores que entram na rota</p><span class="qt" id="q-paradas"></span></div>
+        <div class="paradas" id="paradas"></div>
+      </section>
+    </div>
+    <div class="col">
+      <section class="card rota-card">
+        <div class="card-cab"><h2>Rota do dia</h2><span class="qt" id="q-rota"></span><button class="btn sec btn-hist" id="abrir-hist">🕘 Histórico de rotas <span id="n-hist"></span></button></div>
+        <div class="rota-campos">
+          <label>Data<input type="date" id="rota-data"></label>
+          <label>Motorista<input type="text" id="rota-mot" placeholder="Nome do motorista"></label>
+          <label>Van<input type="text" id="rota-cam" placeholder="Placa da van"></label>
+          <label style="grid-column:1/-1">WhatsApp do almoxarifado (recebe o retorno do motorista)<input type="tel" id="rota-wpp" placeholder="(61) 99999-9999" inputmode="tel"></label>
+        </div>
+        <details class="form-cfg" id="form-cfg"></details>
+        <div class="rota-alerta" id="rota-alerta"></div>
+        <ol class="rota-lista" id="rota-lista"></ol>
+        <div class="rota-acoes">
+          <button class="btn" id="rota-sugerir">★ Sugerir rota</button>
+          <button class="btn sec" id="rota-ordenar">Ordenar por cidade</button>
+          <button class="btn sec" id="rota-limpar">Limpar rota</button>
+        </div>
+        <div class="rota-envio" id="rota-envio"></div>
+        <details class="previa"><summary>Ver mensagem do WhatsApp</summary><pre id="rota-texto"></pre></details>
+      </section>
+      <section class="card">
+        <div class="card-cab"><h2>Retorno do motorista</h2><p>O que foi coletado em cada parada</p></div>
+        <div class="retorno" id="retorno"></div>
+      </section>
+      <section class="card">
+        <div class="card-cab"><h2>Respostas do formulário</h2><p>Como chegam na planilha do Forms</p><span class="qt" id="q-resp"></span></div>
+        <div class="historico" id="respostas"></div>
+      </section>
+      <section class="card">
+        <div class="card-cab"><h2>Rotas anteriores</h2><p>Clique em uma rota para ver o detalhe</p></div>
+        <div class="historico" id="historico"></div>
+      </section>
+    </div>
+  </div>
+</main>
+
 <main class="pagina" id="v-extrato" hidden>
+  <section class="pg-cab"><div><h1>Movimentação</h1><p>Itens parados há mais de um ano e a decisão de manter, retirar ou avaliar</p></div></section>
   <div class="aviso"><span aria-hidden="true">ⓘ</span><div><b>Extrato de movimentação.</b> Itens com saldo que não tiveram nenhuma saída nos últimos 12 meses, pelas movimentações de 01/2024 a <span class="ult-mov2"></span>. Use a lista para decidir se o item continua em estoque ou será retirado.</div></div>
   <section class="kpis" id="kpis-ext" aria-label="Resumo dos itens parados"></section>
   <div class="filtros" id="filtros-ext"></div>
@@ -393,7 +891,12 @@ td.loc span{white-space:nowrap;font:700 12px var(--mono);background:var(--shelf)
   <div class="principal" id="principal"></div>
 </div>
 
+</div></div>
 <div class="fundo" id="fundo" hidden></div>
+<div class="fundo motorista-fundo" id="motorista" hidden></div>
+<div class="fundo fs-fundo" id="formsim" hidden></div>
+<div class="fundo" id="histrotas" hidden></div>
+<div class="fundo" id="extra" hidden></div>
 
 <script src="dados.js"></script>
 <script src="gestao.js"></script>
@@ -404,9 +907,13 @@ const GG = window.GESTAO || null;
 const ANO0 = (GG && GG.ano0) || 2024;
 const DADOS = {
   ultMov: GG && GG.ultMov, saidas: (GG && GG.saidas) || {}, natureza: (GG && GG.natureza) || {},
+  pedidos: (window.PEDIDOS && window.PEDIDOS.linhas) ? window.PEDIDOS : null,
   itens: E.itens.map(e => { const g = (GG && GG.itens && GG.itens[e.c]) || {};
     return Object.assign({}, g, { c:e.c, d:e.d, u:e.u, l:e.l, mn:e.mn, mx:e.mx, cat:e.cat, f:e.f || 0, fv:e.fv || "", s: g.s != null ? g.s : null }); })
 };
+const _cs = getComputedStyle(document.documentElement), _v = n => _cs.getPropertyValue(n).trim();
+const _escuro = false;   // painel sempre no tema claro
+const CC = { t:_v("--ink"), t2:_v("--ink-2"), t3:_escuro ? "#34423A" : "#C9D3CC", g:_escuro ? "rgba(255,255,255,.07)" : "rgba(16,32,24,.07)", tip:"#0B1410", red:_v("--red") };
 Chart.register(ChartDataLabels);
 
 // ---------- Dados reais (GESTÃO DE ESTOQUE 2.2) ----------
@@ -639,11 +1146,11 @@ const cssv = n => getComputedStyle(document.documentElement).getPropertyValue(n)
 function baseOpts(extra){
   return Object.assign({
     responsive:true, maintainAspectRatio:false, animation:false,
-    plugins:{ legend:{ labels:{ color:"#E6ECE8", boxWidth:14, font:{family:"Barlow", size:12} } },
-      tooltip:{ backgroundColor:"#0B0F0D", titleFont:{family:"Barlow"}, bodyFont:{family:"JetBrains Mono"} },
-      datalabels:{ color:"#E6ECE8", font:{family:"JetBrains Mono", size:11, weight:"700"} } },
-    scales:{ x:{ ticks:{color:"#9AA8A1", font:{family:"Barlow"}}, grid:{color:"rgba(255,255,255,.06)"} },
-             y:{ ticks:{color:"#9AA8A1", font:{family:"JetBrains Mono", size:11}}, grid:{color:"rgba(255,255,255,.06)"}, beginAtZero:true } }
+    plugins:{ legend:{ labels:{ color:CC.t, boxWidth:14, font:{family:"IBM Plex Sans", size:12} } },
+      tooltip:{ backgroundColor:CC.tip, titleFont:{family:"IBM Plex Sans"}, bodyFont:{family:"IBM Plex Mono"} },
+      datalabels:{ color:CC.t, font:{family:"IBM Plex Mono", size:11, weight:"700"} } },
+    scales:{ x:{ ticks:{color:CC.t2, font:{family:"IBM Plex Sans"}}, grid:{color:CC.g} },
+             y:{ ticks:{color:CC.t2, font:{family:"IBM Plex Mono", size:11}}, grid:{color:CC.g}, beginAtZero:true } }
   }, extra);
 }
 function grafico(id, cfg){ if (G[id]) G[id].destroy(); G[id] = new Chart(document.getElementById(id), cfg); return G[id]; }
@@ -653,14 +1160,14 @@ function graficos(L){
   const r26 = MESES.map((_,m) => m > MES_ATUAL ? null : L.reduce((a,i)=>a+(i.z26[m]||0),0));
   const r25 = MESES.map((_,m) => L.reduce((a,i)=>a+i.z25[m],0));
   grafico("g-rupt", { type:"bar", data:{ labels:MESES, datasets:[
-      { label:String(ANO-1), data:r25, backgroundColor:"#3FB36C", borderRadius:4, datalabels:{anchor:"end", align:"end", offset:0, font:{size:10}} },
-      { label:String(ANO), data:r26, backgroundColor:"#E5574C", borderRadius:4, datalabels:{anchor:"end", align:"end", offset:0, font:{size:10}} } ] },
+      { label:String(ANO-1), data:r25, backgroundColor:"#D9534A", borderRadius:4, datalabels:{anchor:"end", align:"end", offset:0, font:{size:10}} },
+      { label:String(ANO), data:r26, backgroundColor:"#2E9A57", borderRadius:4, datalabels:{anchor:"end", align:"end", offset:0, font:{size:10}} } ] },
     options: baseOpts({ layout:{padding:{top:18}}, datasets:{bar:{categoryPercentage:.8, barPercentage:.92}} }) });
 
   // Movimentação de saída (quantidade de lançamentos) por mês
   const SD = DADOS.saidas || {};
-  const serie = catSel ? (SD[catSel] || []) : (SD["*"] || []);
-  const s25 = anoSerie(serie, ANO-1), s26 = anoSerie(serie, ANO).map((v,m) => m > MES_ATUAL ? null : v);
+  const serie = catSel ? (SD[catSel] || new Array(36).fill(0)) : (SD["*"] || []);
+  const s25 = serie.slice(12,24), s26 = serie.slice(24,36).map((v,m) => m > MES_ATUAL ? null : v);
   const med25 = soma(s25)/12, med26 = soma(s26.slice(0, MES_ATUAL))/Math.max(1, MES_ATUAL);   // mês atual incompleto fica fora da média
   grafico("g-said", { type:"bar", data:{ labels:MESES, datasets:[
       { label:String(ANO-1), data:s25, backgroundColor:"#6E7C75", borderRadius:4, datalabels:{anchor:"end", align:"end", offset:0, font:{size:9.5}, formatter:v=>fmt(v)} },
@@ -681,9 +1188,9 @@ function graficos(L){
   const top = [...L].sort((a,b)=>b.lead-a.lead).slice(0,10);
   const g2 = grafico("g-lead", { type:"bar", data:{ labels: top.map(i=>i.c), datasets:[{ label:"Dias", data: top.map(i=>i.lead), backgroundColor:"#5B92EA", borderRadius:4,
       datalabels:{ anchor:"end", align:"end", formatter:v=>v+"d" } }] },
-    options: baseOpts({ indexAxis:"y", layout:{padding:{right:34}}, plugins:{ legend:{display:false}, datalabels:{color:"#E6ECE8", font:{family:"JetBrains Mono", size:11, weight:"700"}},
+    options: baseOpts({ indexAxis:"y", layout:{padding:{right:34}}, plugins:{ legend:{display:false}, datalabels:{color:CC.t, font:{family:"IBM Plex Mono", size:11, weight:"700"}},
       tooltip:{ callbacks:{ title:c => top[c[0].dataIndex].c + " · " + top[c[0].dataIndex].d.slice(0,40), label:c => c.raw + " dias" } } },
-      scales:{ x:{ ticks:{color:"#9AA8A1"}, grid:{color:"rgba(255,255,255,.06)"}, beginAtZero:true }, y:{ ticks:{color:"#E6ECE8", font:{family:"JetBrains Mono", size:11}}, grid:{display:false} } },
+      scales:{ x:{ ticks:{color:CC.t2}, grid:{color:CC.g}, beginAtZero:true }, y:{ ticks:{color:CC.t, font:{family:"IBM Plex Mono", size:11}}, grid:{display:false} } },
       onClick:(e,els) => { if (els[0]) abrirFicha(top[els[0].index].c); } }) });
 
   // Abaixo do mínimo por categoria
@@ -692,8 +1199,8 @@ function graficos(L){
   const cats = Object.entries(cc).sort((a,b)=>b[1]-a[1]).slice(0,7);
   grafico("g-cat", { type:"bar", data:{ labels: cats.map(c=>cap(c[0])), datasets:[{ data: cats.map(c=>c[1]),
       backgroundColor: cats.map(c => !catSel || c[0]===catSel ? "#E5574C" : "#4A3B39"), borderRadius:4, datalabels:{anchor:"end", align:"end"} }] },
-    options: baseOpts({ indexAxis:"y", layout:{padding:{right:30}}, plugins:{ legend:{display:false}, datalabels:{color:"#E6ECE8", font:{family:"JetBrains Mono", size:11, weight:"700"}} },
-      scales:{ x:{ ticks:{color:"#9AA8A1"}, grid:{color:"rgba(255,255,255,.06)"}, beginAtZero:true }, y:{ ticks:{color:"#E6ECE8", font:{family:"Barlow", size:12}}, grid:{display:false} } } }) });
+    options: baseOpts({ indexAxis:"y", layout:{padding:{right:30}}, plugins:{ legend:{display:false}, datalabels:{color:CC.t, font:{family:"IBM Plex Mono", size:11, weight:"700"}} },
+      scales:{ x:{ ticks:{color:CC.t2}, grid:{color:CC.g}, beginAtZero:true }, y:{ ticks:{color:CC.t, font:{family:"IBM Plex Sans", size:12}}, grid:{display:false} } } }) });
 }
 
 // ---------- Busca por código ----------
@@ -708,6 +1215,8 @@ inp.addEventListener("input", () => {
 });
 inp.addEventListener("keydown", e => { if (e.key === "Enter") { const b = sug.querySelector("[data-cod]"); if (b) { abrirFicha(b.dataset.cod); sug.hidden = true; } } });
 document.addEventListener("click", e => {
+  const pd = e.target.closest("[data-ped]");
+  if (pd && !e.target.closest("#fundo") && !e.target.closest("button")) { abrirPedido(pd.dataset.ped, pd.dataset.pcod); return; }
   const b = e.target.closest("[data-cod]");
   if (b && !e.target.closest("#fundo")) { abrirFicha(b.dataset.cod); sug.hidden = true; return; }
   if (!e.target.closest(".busca")) sug.hidden = true;
@@ -720,7 +1229,7 @@ function blocoSeguranca(i){
   if (!cd) return `<div class="seg"><h3>Análise de segurança de estoque</h3><p class="seg-txt">Sem saídas nos últimos 12 meses, então não dá para calcular quantos dias o estoque dura. O saldo de <b>${fmt1(i.s)} ${esc(i.u)}</b> está parado.</p></div>`;
   const dura = Math.floor(i.s / cd);
   const folga = dura - i.lead;
-  const ult3 = [1,2,3].map(k => i.cons[IDX - k] || 0), cd3 = soma(ult3) / 90;
+  const ult3 = i.cons.slice(IDX - 3, IDX), cd3 = soma(ult3) / 90;
   const dura3 = cd3 ? Math.floor(i.s / cd3) : null;
   const m = i.ult12, med = soma(m) / 12, dp = Math.sqrt(soma(m.map(v => (v - med) ** 2)) / 12);
   const ss = 1.65 * (dp / Math.sqrt(30)) * Math.sqrt(i.lead);          // estoque de segurança (95%)
@@ -783,7 +1292,7 @@ function abrirFicha(cod){
 
 // Galeria: setas ao passar o mouse nas laterais, miniaturas, pontos, teclado e arrastar no celular
 let galFotos = [], galIdx = 0, galTimer = null;
-const ROT_FOTO = ["Foto principal"];
+const ROT_FOTO = ["Foto do item", "Detalhe", "Etiqueta"];
 function galDesenhar(){
   const g = document.getElementById("gal"); if (!g || !galFotos.length) return;
   const n = galFotos.length, src = galFotos[galIdx];
@@ -846,6 +1355,9 @@ function corpoFicha(i){
         <div class="passo ${i.atras?"atras":"futuro"}"><i></i><div><b>Previsão de entrega</b><span>${i.atras?"atrasada":"em "+Math.round((i.sc.previsao-HOJE)/DIA)+" dias"}</span></div><time>${fmtD(i.sc.previsao)}</time></div>
         <div class="passo futuro"><i></i><div><b>Entrada no almoxarifado</b><span>aguardando</span></div><time>—</time></div>
       </div>${i.antigas.length ? `<div class="alerta amber" style="margin-top:10px"><b>${i.antigas.length} SC(s) antiga(s) ainda pendente(s):</b>&nbsp;${i.antigas.map(x => x.num + " de " + fmtD(x.abertura)).join(", ")}. Verificar se ainda vale.</div>` : ""}${i.abertas.length > 1 ? `<div class="nota">Mais ${i.abertas.length-1} SC(s) em aberto: ${i.abertas.slice(1).map(x => x.num + " (" + fmtD(x.abertura) + ")").join(", ")}</div>` : ""}</div>` : `<div class="bloco"><h3>Solicitação de compra</h3><div class="nota">Nenhuma SC ativa para este item.</div>${i.antigas.length ? `<div class="alerta amber" style="margin-top:10px"><b>${i.antigas.length} SC(s) antiga(s) ainda pendente(s):</b>&nbsp;${i.antigas.map(x => x.num + " de " + fmtD(x.abertura)).join(", ")}. Verificar se ainda vale.</div>` : ""}</div>`}
+      ${(PED_COD[i.c] || []).length ? `<div class="bloco"><h3>Pedidos de compra em atendimento</h3><div class="tabela-wrap" style="max-height:none"><table><thead><tr><th>Pedido</th><th>Fornecedor</th><th>Emissão</th><th>Em aberto</th><th style="text-align:right">Falta</th></tr></thead><tbody>
+        ${PED_COD[i.c].map(p => `<tr style="cursor:default"><td class="cod">${p.n}</td><td class="forn" title="${esc(p.forn)}">${esc(p.forn)}</td><td class="num" style="text-align:left">${fmtD(p.em)}</td><td><span class="pill ${faixa(p.dias)[0]}">${txtDias(p.dias)}</span></td><td class="num"><b>${fmt1(p.sal)}</b> de ${fmt1(p.q)}</td></tr>`).join("")}
+      </tbody></table></div></div>` : ""}
       ${i.hsc.length ? `<div class="bloco"><h3>Últimas SCs</h3><div class="tabela-wrap" style="max-height:none"><table><thead><tr><th>SC</th><th>Data</th><th style="text-align:right">Qtd</th><th>Situação</th><th style="text-align:right">Chegou em</th></tr></thead><tbody>
         ${[...i.hsc].reverse().map(h => { const d0 = dISO(h.d), d1 = dISO(h.de); const pend = h.st === "PENDENTE" || h.st === "ENTREGUE PARCIAL";
           return `<tr style="cursor:default"><td class="cod">${h.n}</td><td class="num" style="text-align:left">${fmtD(d0)}</td><td class="num">${fmt(h.q)}</td>
@@ -877,21 +1389,696 @@ function corpoFicha(i){
 fundo.addEventListener("click", e => {
   if (e.target === fundo || e.target.closest("[data-fechar]")) { fundo.hidden = true; fundo.innerHTML = ""; return; }
   const gz = e.target.closest("[data-gal]"); if (gz){ clearTimeout(galTimer); galTimer = null; galIr(galIdx + Number(gz.dataset.gal)); return; }
+  const pi = e.target.closest("[data-pedit]"); if (pi){ abrirPedido(pedAberto, pi.dataset.pedit); return; }
+  const af = e.target.closest("[data-abrirficha]"); if (af){ abrirFicha(af.dataset.abrirficha);
+    const ab = fundo.querySelector(".f-abas"); if (ab) ab.insertAdjacentHTML("beforebegin", `<div style="padding:10px 16px 0;background:var(--surface)"><button class="btn sec" data-voltaped>← Voltar ao pedido ${pedAberto}</button></div>`); return; }
+  const vp = e.target.closest("[data-voltaped]"); if (vp){ abrirPedido(pedAberto, codFichaPed); return; }
   const gi = e.target.closest("[data-galir]"); if (gi){ galIr(+gi.dataset.galir); return; }
   const a = e.target.closest("[data-aba]");
   if (a){ abaFicha = a.dataset.aba; document.querySelectorAll(".f-aba").forEach(x => x.setAttribute("aria-selected", x===a)); corpoFicha(POR_COD.get(codFicha)); }
 });
 document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && !document.getElementById("extra").hidden) { xFechar(); return; }
+  if (e.key === "Escape" && !document.getElementById("histrotas").hidden) { document.getElementById("histrotas").hidden = true; document.getElementById("histrotas").innerHTML = ""; return; }
+  if (e.key === "Escape" && !document.getElementById("formsim").hidden) { document.getElementById("formsim").hidden = true; document.getElementById("formsim").innerHTML = ""; return; }
+  if (e.key === "Escape" && !document.getElementById("motorista").hidden) { document.getElementById("motorista").hidden = true; document.getElementById("motorista").innerHTML = ""; desenharRotaDia(); return; }
   if (fundo.hidden) return;
   if (e.key === "Escape") { fundo.hidden = true; fundo.innerHTML = ""; }
   else if (e.key === "ArrowRight") galIr(galIdx + 1);
   else if (e.key === "ArrowLeft") galIr(galIdx - 1);
 });
 
+// ---------- Pedidos em atendimento ----------
+const PD = DADOS.pedidos || { linhas:[], forn:[], comp:[], dep:[] };
+const EXF = (PD.exemplo && PD.exemplo.forn) || [];
+const LIB = (PD.exemplo && PD.exemplo.liberado) || {};
+const PED_ALL = PD.linhas.map(([n, em, en, f, c, cod, desc, q, at, sal, dp]) => {
+  const de = dISO(em), ex = EXF[f] || {};
+  return { n, em:de, en:dISO(en), fi:f, forn:PD.forn[f], cnpj:(PD.cnpj||[])[f] || "", comp:PD.comp[c], cod, desc, q, at, sal, dep:PD.dep[dp],
+    dias:Math.max(0, Math.round((HOJE - de) / DIA)), item:POR_COD.get(cod), frete:ex.fr || "E", cid:ex.cid || "", tel:ex.tel || "", hor:ex.hor || "" };
+});
+const PED = PED_ALL.filter(p => p.sal > 0);   // só o que falta entregar
+const PED_COD = {};
+PED.forEach(p => (PED_COD[p.cod] = PED_COD[p.cod] || []).push(p));
+let depPed = PD.dep.includes("Almoxarifado") ? "Almoxarifado" : null, compPed = null, fornPed = null, idadePed = null, qPed = "";
+// Busca livre: todas as palavras precisam aparecer (sem diferenciar acento/maiúscula)
+const semAc = s => String(s == null ? "" : s).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+const termos = q => semAc(q).split(/\s+/).filter(Boolean);
+const casa = (txt, T) => T.every(w => txt.includes(w));
+const txtPed = p => p._tx || (p._tx = semAc([p.n, p.forn, p.cnpj, p.comp, p.cod, p.desc, p.dep, p.cid].join(" ")));
+const IDADES = [["ate15","Até 15 dias",0,15],["ate30","16 a 30 dias",16,30],["ate90","31 a 90 dias",31,90],["mais90","Mais de 90 dias",91,1e9]];
+const filtroPed = (p, semForn) => { const T = termos(qPed), fx = IDADES.find(x => x[0] === idadePed);
+  return (!depPed || p.dep === depPed) && (!compPed || p.comp === compPed) && (semForn || !fornPed || p.forn === fornPed)
+    && (!fx || (p.dias >= fx[2] && p.dias <= fx[3])) && (!T.length || casa(txtPed(p), T)); };
+// Cartões Urgentes x Geral
+let modoPed = "geral", modoRota = "geral";
+const ehUrg = l => urgLinha(l) === 2;
+function cartoesModo(id, atr, modo, U, G, oque){
+  document.getElementById(id).innerHTML = [
+    ["urg", "⚠ Urgentes", "zerados ou que acabam antes de chegar", "var(--red)", U],
+    ["geral", "Geral", oque, "var(--blue)", G]].map(([k, t, sub, cor, v]) =>
+    `<button ${atr}="${k}" aria-pressed="${modo === k}" style="--k:${cor}"><span class="marca">✓ mostrando</span>
+      <span class="t">${t} <em>${sub}</em></span>
+      <span class="nums"><span><b>${fmt(v.itens)}</b><small>itens</small></span><span><b>${fmt(v.forn)}</b><small>fornecedores</small></span>${v.ped != null ? `<span><b>${fmt(v.ped)}</b><small>pedidos</small></span>` : ""}</span></button>`).join("");
+}
+const contaModo = L => ({ itens:L.length, forn:new Set(L.map(p => p.forn)).size, ped:new Set(L.map(p => p.n)).size });
+const faixa = d => d <= 15 ? ["p-green","ate15"] : d <= 30 ? ["p-amber","ate30"] : ["p-red","mais30"];
+const txtDias = d => d === 0 ? "hoje" : d + (d === 1 ? " dia" : " dias");
+const SEM_PED = !PD.linhas.length;
+function telaSemPedidos(id){
+  const m = document.getElementById(id); if (m.dataset.vazio) return true;
+  [...m.children].forEach(c => { if (!c.classList.contains("pg-cab")) c.hidden = true; });
+  m.insertAdjacentHTML("beforeend", `<section class="card"><div class="vazio" style="padding:48px 20px;display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center">
+    <b style="font-size:16px;color:var(--ink)">Aguardando o relatório de pedidos</b>
+    <span>Esta tela começa a funcionar quando o relatório de pedidos de compra pendentes for ligado ao robô.</span></div></section>`);
+  m.dataset.vazio = "1"; return true;
+}
+function desenharPedidos(){
+  if (SEM_PED) { telaSemPedidos("v-pedidos"); return; }
+  const base0 = PED.filter(p => filtroPed(p, true));
+  cartoesModo("modo-ped", "data-modoped", modoPed, contaModo(base0.filter(ehUrg)), contaModo(base0), "todos os itens aguardando entrega");
+  const base = modoPed === "urg" ? base0.filter(ehUrg) : base0;
+  const L = base.filter(p => !fornPed || p.forn === fornPed).sort((a,b) => b.dias - a.dias || a.n - b.n);
+  const T = termos(qPed);
+  document.getElementById("busca-ped-res").textContent = T.length ? `${fmt(L.length)} item(ns) em ${new Set(L.map(p=>p.n)).size} pedido(s) encontrados` : "";
+  const nPed = new Set(base.map(p => p.n)).size;
+  const abaixoCom = new Set(base.filter(p => p.item && (p.item.st === "zerado" || p.item.st === "repor")).map(p => p.cod)).size;
+  document.getElementById("kpis-ped").innerHTML = [
+    ["Pedidos em aberto", nPed, "com item a entregar", "var(--blue)"],
+    ["Itens aguardando entrega", base.length, `${fmt(new Set(base.map(p=>p.cod)).size)} produtos diferentes`, "var(--blue)"],
+    ["Em aberto há mais de 30 dias", base.filter(p => p.dias > 30).length, "itens de pedido", "var(--red)"],
+    ["Mais antigo", base.length ? Math.max(...base.map(p=>p.dias)) : 0, "dias desde a emissão", "var(--red)"],
+    ["Fornecedores com pendência", new Set(base.map(p=>p.forn)).size, "com item a entregar", "var(--amber)"],
+    ["Abaixo do mínimo com pedido", abaixoCom, "produtos que esperam este pedido", "var(--red)"],
+    ["Entregas parciais", base.filter(p => p.at > 0).length, "já chegou uma parte", "var(--amber)"],
+    ["Até 15 dias", base.filter(p => p.dias <= 15).length, "itens de pedidos recentes", "var(--accent)"],
+  ].map(([t,v,sub,cor]) => `<div class="kpi" style="--k:${cor};cursor:default"><small>${t}</small><b>${fmt(v)}</b><span>${sub}</span></div>`).join("");
+  const cont = k => PED.filter(p => (k === "dep" ? true : (!depPed || p.dep === depPed)));
+  document.getElementById("filtros-ped").innerHTML =
+    `<label>Depósito</label><button class="chip" data-pdep="" aria-pressed="${!depPed}">Todos</button>` +
+    PD.dep.map(d => `<button class="chip" data-pdep="${esc(d)}" aria-pressed="${d===depPed}">${esc(d)}<span>${PED.filter(p=>p.dep===d).length}</span></button>`).join("") +
+    `<label style="margin-left:14px">Comprador</label><button class="chip" data-pcomp="" aria-pressed="${!compPed}">Todos</button>` +
+    PD.comp.map(c => `<button class="chip" data-pcomp="${esc(c)}" aria-pressed="${c===compPed}">${esc(c.split(" ")[0])}</button>`).join("") +
+    `<label style="margin-left:14px">Em aberto</label><button class="chip" data-pidade="" aria-pressed="${!idadePed}">Todos</button>` +
+    IDADES.map(([k,t]) => `<button class="chip" data-pidade="${k}" aria-pressed="${k===idadePed}">${t}</button>`).join("") +
+    (fornPed ? `<span class="filtro-ativo" style="margin-left:14px">${esc(fornPed)}<button data-pforn="" aria-label="Tirar filtro do fornecedor">✕</button></span>` : "");
+  document.getElementById("t-ped").textContent = (fornPed ? "Itens de " + fornPed : "Itens aguardando entrega") + (modoPed === "urg" ? " · só urgentes" : "");
+  document.getElementById("q-ped").textContent = fmt(L.length) + " itens";
+  document.getElementById("tb-ped").innerHTML = L.slice(0, 400).map(p => {
+    const fx = faixa(p.dias), it = p.item;
+    return `<tr data-ped="${p.n}" data-pcod="${esc(p.cod)}" title="Ver detalhes do pedido">
+      <td class="cod">${p.n}</td><td class="num" style="text-align:left">${fmtDc(p.em)}</td>
+      <td><span class="pill ${fx[0]}">${txtDias(p.dias)}</span></td>
+      <td class="forn" title="${esc(p.forn)}">${esc(p.forn)}</td>
+      <td class="item"><b>${esc(p.cod)}</b><span title="${esc(p.desc)}">${esc(p.desc)}</span></td>
+      <td class="num">${fmt1(p.q)}</td><td class="num col-opc">${fmt1(p.at)}</td><td class="num"><b>${fmt1(p.sal)}</b></td>
+      <td>${it ? `<span class="pill ${STP[it.st][0]}">${STP[it.st][1]}</span>` : `<span style="font-size:12px;color:var(--ink-2)">fora da base</span>`}</td>
+      <td class="col-opc" style="font-size:12.5px">${esc(p.comp.split(" ")[0])}</td></tr>`;
+  }).join("") || `<tr><td colspan="10" style="text-align:center;color:var(--ink-2);padding:24px">Nenhum item pendente com esse filtro.</td></tr>`;
+  // fornecedores
+  const F = {};
+  base.forEach(p => { const o = F[p.forn] = F[p.forn] || { n:new Set(), itens:0, a:0, b:0, c:0, max:0 }; o.n.add(p.n); o.itens++; o[faixa(p.dias)[1] === "ate15" ? "a" : faixa(p.dias)[1] === "ate30" ? "b" : "c"]++; o.max = Math.max(o.max, p.dias); });
+  const FL = Object.entries(F).sort((x,y) => y[1].c - x[1].c || y[1].itens - x[1].itens);
+  document.getElementById("q-forn").textContent = FL.length;
+  document.getElementById("forn").innerHTML = FL.map(([nome,o]) => `<button data-pforn="${esc(nome)}" aria-pressed="${nome===fornPed}">
+      <span><span class="nome" style="display:block">${esc(nome)}</span><small>${o.n.size} pedido(s) · mais antigo há ${txtDias(o.max)}</small>
+      <span class="barra"><i style="width:${o.c/o.itens*100}%;background:var(--red)"></i><i style="width:${o.b/o.itens*100}%;background:var(--amber)"></i><i style="width:${o.a/o.itens*100}%;background:var(--accent)"></i></span></span>
+      <span class="v">${o.itens}<small style="display:block">itens</small></span></button>`).join("");
+  desenharSitPed();
+  // gráfico de faixas
+  const FX = [["0–15", 0, 15], ["16–30", 16, 30], ["31–60", 31, 60], ["61–90", 61, 90], ["91–180", 91, 180], ["+180", 181, 1e9]];
+  grafico("g-aging", { type:"bar", data:{ labels: FX.map(f => f[0] + " dias"), datasets:[{ data: FX.map(f => base.filter(p => p.dias >= f[1] && p.dias <= f[2]).length),
+      backgroundColor: ["#3FB36C","#E0A030","#E5574C","#E5574C","#C8372D","#A12A22"], borderRadius:4, datalabels:{anchor:"end", align:"end"} }] },
+    options: baseOpts({ layout:{padding:{top:18}}, plugins:{ legend:{display:false}, datalabels:{color:CC.t, font:{family:"IBM Plex Mono", size:11, weight:"700"}} } }) });
+}
+// ---------- Detalhe do pedido (só leitura) ----------
+let pedAberto = null, codFichaPed = null;
+const sitLinha = l => l.sal <= 0 ? ["p-green","Entregue"] : l.at > 0 ? ["p-amber","Parcial"] : ["p-red","Pendente"];
+function abrirPedido(n, cod){
+  n = String(n);
+  const L = PED_ALL.filter(p => String(p.n) === n); if (!L.length) return;
+  pedAberto = n;
+  const sel = L.find(p => p.cod === cod) || L.find(p => p.sal > 0) || L[0];
+  codFichaPed = sel.cod;
+  const p0 = L[0], ex = EXF[p0.fi] || {};
+  const comp = L.filter(l => l.sal <= 0).length;
+  const st = comp === L.length ? "completo" : (comp || L.some(l => l.at > 0)) ? "parcial" : "pendente";
+  const it = sel.item, sl = sitLinha(sel);
+  const pc = sel.q ? Math.min(100, sel.at / sel.q * 100) : 0;
+  // item no estoque
+  let est = `<div class="nota">Este código não está na base do almoxarifado.</div>`;
+  if (it){
+    const s = STP[it.st];
+    let al = "";
+    if (sel.sal > 0 && (it.st === "zerado" || (it.st === "repor" && it.falta))) al = `<div class="alerta red"><span><b>Item urgente.</b> ${it.st === "zerado" ? "O estoque está zerado" : `O estoque dura cerca de ${it.cob} dias e a reposição leva ${it.lead}`}: este pedido é o que vai repor.</span></div>`;
+    else if (sel.sal > 0 && it.st === "repor") al = `<div class="alerta amber"><span><b>Abaixo do mínimo.</b> Este pedido ajuda a repor o estoque.</span></div>`;
+    est = al + `<div class="pd-dados">
+        <div><small>Situação</small><span class="pill ${s[0]}">${s[1]}</span></div>
+        <div><small>Saldo atual</small><b>${fmt(it.s)} ${esc(it.u)}</b></div>
+        <div><small>Mínimo / máximo</small><b>${fmt(it.mn)} / ${fmt(it.mx)}</b></div>
+        <div><small>Segurança de estoque</small><b>${it.s === 0 ? "Sem estoque" : it.cob > 365 ? (it.base ? "> 1 ano" : "sem consumo") : it.cob + " dias"}</b></div>
+        <div><small>Consumo médio</small><b>${fmt1(it.base)}/mês</b></div>
+        <div><small>Localização</small><b style="font-family:var(--mono)">${esc(it.l)}</b></div>
+      </div>
+      <div class="pd-acoes"><button class="btn sec" data-abrirficha="${esc(it.c)}">Abrir ficha completa do item</button></div>`;
+  }
+  // fornecedor e rota
+  const fr = p0.frete === "R";
+  const pos = (typeof ROTA !== "undefined") ? ROTA.paradas.indexOf(p0.forn) : -1;
+  const ret = pos >= 0 && ROTA.ret[p0.forn], tent = (typeof TENT !== "undefined") && TENT[p0.forn];
+  const rotaTxt = !fr ? "O fornecedor entrega na empresa." :
+    pos >= 0 ? `Na rota de ${ROTA.data ? ROTA.data.split("-").reverse().join("/") : fmtD(HOJE)}, parada ${pos + 1}${ret ? ` · retorno: <b>${ROT_RET[ret.st][1]}</b>${ret.obs ? ` (${esc(ret.obs)})` : ""}` : ""}.` :
+    LIB[p0.n] ? "Pronto para retirar, ainda fora da rota." : "Aguardando o fornecedor liberar para retirada.";
+  // outros pedidos abertos do mesmo item
+  const outros = (PED_COD[sel.cod] || []).filter(p => String(p.n) !== n);
+  fundo.innerHTML = `<aside class="ficha" role="dialog" aria-label="Pedido ${n}">
+    <div class="ficha-topo sem-foto-grande">
+      <div><div class="cod">Pedido ${n} <span class="pill ${ROT_SITP[st][0]}">${ROT_SITP[st][1]}</span></div>
+        <h2>${esc(p0.forn)}</h2>
+        <div class="meta"><span>Emissão ${fmtD(p0.em)}</span><span>${txtDias(p0.dias)} em aberto</span><span>Comprador: ${esc(p0.comp)}</span><span>${esc(p0.dep)}</span></div></div>
+      <button class="fechar" data-fechar aria-label="Fechar">✕</button>
+    </div>
+    <div class="f-corpo">
+      <section class="pd-bloco">
+        <div class="pd-item-cab"><div><div class="cd">${esc(sel.cod)}</div><div class="ds">${esc(sel.desc)}</div></div><span class="pill ${sl[0]}">${sl[1]}</span></div>
+        <div class="pd-barra" title="${Math.round(pc)}% entregue"><i style="width:${pc}%"></i></div>
+        <div class="pd-dados">
+          <div><small>Pedido</small><b>${fmt1(sel.q)} ${esc(unid(sel))}</b></div>
+          <div><small>Entregue</small><b>${fmt1(sel.at)}</b></div>
+          <div><small>Falta entregar</small><b style="color:${sel.sal > 0 ? "var(--red)" : "var(--accent)"}">${fmt1(sel.sal)}</b></div>
+          <div><small>Em aberto</small><span class="pill ${faixa(sel.dias)[0]}">${txtDias(sel.dias)}</span></div>
+        </div>
+      </section>
+      <section class="pd-bloco"><h3>Estoque do item</h3>${est}</section>
+      <section class="pd-bloco"><h3>Fornecedor e retirada</h3>
+        <div class="pd-dados">
+          <div><small>CNPJ</small><b>${esc(p0.cnpj || "—")}</b></div>
+          <div><small>Frete</small><span class="pill ${fr ? "p-frete-r" : "p-frete-e"}">${fr ? "Retirada" : "Entrega"}</span></div>
+          <div><small>Cidade</small><b>${esc(ex.cid || "—")}</b></div>
+          <div><small>Telefone</small><b>${ex.tel ? `<a href="tel:${ex.tel.replace(/\D/g,"")}">${esc(ex.tel)}</a>` : "—"}</b></div>
+          <div><small>Horário</small><b>${esc(ex.hor || "—")}</b></div>
+        </div>
+        <div class="nota" style="margin:0">${rotaTxt}${tent ? ` <span class="tag-u tent">Tentativa em ${tent.data}: ${tent.motivo}</span>` : ""}</div>
+        <div class="nota" style="margin:0;font-size:11.5px">Frete, cidade, telefone e horário ainda são dados de exemplo.</div>
+      </section>
+      <section class="pd-bloco"><h3>Itens deste pedido <span class="pill p-blue">${comp} de ${L.length} entregues</span></h3>
+        <table class="pd-tab"><thead><tr><th>Item</th><th class="num">Pedido</th><th class="num">Falta</th><th>Situação</th><th>Estoque</th></tr></thead><tbody>
+        ${L.map(l => { const s = sitLinha(l); return `<tr data-pedit="${esc(l.cod)}" class="${l === sel ? "sel" : ""}"><td><b style="font-family:var(--mono)">${esc(l.cod)}</b> ${esc(l.desc)}</td><td class="num">${fmt1(l.q)}</td><td class="num"><b>${fmt1(l.sal)}</b></td><td><span class="pill ${s[0]}">${s[1]}</span></td><td>${l.item ? `<span class="pill ${STP[l.item.st][0]}">${STP[l.item.st][1]}</span>` : "—"}</td></tr>`; }).join("")}
+        </tbody></table>
+        <div class="nota" style="margin:0">Clique em um item para ver os detalhes dele.</div>
+      </section>
+      ${outros.length ? `<section class="pd-bloco"><h3>Outros pedidos abertos deste item</h3>
+        <table class="pd-tab"><thead><tr><th>Pedido</th><th>Fornecedor</th><th>Em aberto</th><th class="num">Falta</th></tr></thead><tbody>
+        ${outros.map(o => `<tr><td style="font-family:var(--mono)">${o.n}</td><td>${esc(o.forn)}</td><td><span class="pill ${faixa(o.dias)[0]}">${txtDias(o.dias)}</span></td><td class="num">${fmt1(o.sal)}</td></tr>`).join("")}
+        </tbody></table></section>` : ""}
+    </div></aside>`;
+  fundo.hidden = false;
+  fundo.querySelector(".ficha").scrollTop = 0;
+}
+
+// Situação de cada pedido: Completo (tudo entregue), Parcial (parte entregue), Pendente (nada entregue)
+let sitFiltro = "todos";
+function pedidosAgrupados(){
+  const G = {};
+  PED_ALL.filter(p => filtroPed(p)).forEach(p => {
+    const o = G[p.n] = G[p.n] || { n:p.n, forn:p.forn, frete:p.frete, em:p.em, linhas:[] }; o.linhas.push(p); });
+  return Object.values(G).filter(o => modoPed !== "urg" || o.linhas.some(l => l.sal > 0 && ehUrg(l))).map(o => {
+    const comp = o.linhas.filter(l => l.sal <= 0).length, parc = o.linhas.some(l => l.at > 0) || comp > 0;
+    o.comp = comp; o.st = comp === o.linhas.length ? "completo" : parc ? "parcial" : "pendente"; return o; });
+}
+const ROT_SITP = { pendente:["p-red","Pendente"], parcial:["p-amber","Parcial"], completo:["p-green","Completo"] };
+function desenharSitPed(){
+  const P = pedidosAgrupados();
+  const n = k => P.filter(o => o.st === k).length;
+  document.getElementById("sit-ped").innerHTML =
+    `<div style="--k:var(--red)"><small>Pendentes</small><b>${n("pendente")}</b></div><div style="--k:var(--amber)"><small>Parciais</small><b>${n("parcial")}</b></div><div style="--k:var(--accent)"><small>Completos</small><b>${n("completo")}</b></div>`;
+  document.getElementById("filtro-sitped").innerHTML = [["todos","Todos"],["pendente","Pendentes"],["parcial","Parciais"],["completo","Completos"]]
+    .map(([k,t]) => `<button class="chip" data-sitp="${k}" aria-pressed="${k===sitFiltro}">${t}</button>`).join("");
+  const V = P.filter(o => sitFiltro === "todos" || o.st === sitFiltro).sort((a,b) => a.em - b.em);
+  document.getElementById("tb-sitped").innerHTML = V.map(o => `<tr data-ped="${o.n}" title="Ver detalhes do pedido">
+    <td class="cod">${o.n}</td><td class="forn" style="max-width:120px" title="${esc(o.forn)}">${esc(o.forn)}</td>
+    <td><span class="pill ${o.frete === "R" ? "p-frete-r" : "p-frete-e"}">${o.frete === "R" ? "Retirada" : "Entrega"}</span></td>
+    <td><span class="prog"><i style="--p:${o.comp/o.linhas.length*100}%"></i>${o.comp} de ${o.linhas.length}</span></td>
+    <td><span class="pill ${ROT_SITP[o.st][0]}">${ROT_SITP[o.st][1]}</span>${o.st === "completo" ? `<small style="display:block;font-size:11px;color:var(--ink-2)">falta encerrar no sistema</small>` : ""}</td></tr>`).join("")
+    || `<tr><td colspan="5" style="text-align:center;color:var(--ink-2);padding:20px">Nenhum pedido.</td></tr>`;
+}
+document.getElementById("v-pedidos").addEventListener("click", e => {
+  const sp = e.target.closest("[data-sitp]"); if (sp){ sitFiltro = sp.dataset.sitp; desenharSitPed(); return; }
+  const d = e.target.closest("[data-pdep]"); if (d){ depPed = d.dataset.pdep || null; fornPed = null; desenharPedidos(); return; }
+  const mp = e.target.closest("[data-modoped]"); if (mp){ modoPed = mp.dataset.modoped; fornPed = null; desenharPedidos(); return; }
+  const id = e.target.closest("[data-pidade]"); if (id){ idadePed = id.dataset.pidade || null; desenharPedidos(); return; }
+  const c = e.target.closest("[data-pcomp]"); if (c){ compPed = c.dataset.pcomp || null; fornPed = null; desenharPedidos(); return; }
+  const f = e.target.closest("[data-pforn]"); if (f){ fornPed = f.dataset.pforn && f.dataset.pforn !== fornPed ? f.dataset.pforn : null; desenharPedidos(); document.getElementById("t-ped").scrollIntoView({behavior:"smooth", block:"start"}); }
+});
+
+// Campos de busca das abas de pedidos e rota
+(function(){
+  let tm = null;
+  const liga = (id, fn) => { const el = document.getElementById(id), bt = document.querySelector(`[data-limpa="${id}"]`);
+    el.addEventListener("input", () => { bt.hidden = !el.value; clearTimeout(tm); tm = setTimeout(() => fn(el.value), 180); });
+    el.addEventListener("keydown", e => { if (e.key === "Escape" && el.value){ e.stopPropagation(); el.value = ""; bt.hidden = true; fn(""); } });
+    bt.addEventListener("click", () => { el.value = ""; bt.hidden = true; fn(""); el.focus(); }); };
+  liga("busca-ped", v => { qPed = v; desenharPedidos(); });
+  liga("busca-rota", v => { qRota = v; desenharRota(); });
+})();
+
+// ---------- Rota do motorista (van) ----------
+const ORIGEM = "Goiás Verde Alimentos, Rodovia GO-010, Luziânia - GO";
+let qRota = "";
+const VOLUMOSO = /\b(BARRA|CHAPA|TAMBOR|TUBO|TABUA|PALLET|PALETE|BOBINA|ROLO|PERFIL|CANTONEIRA|VERGALH|GALAO|BALDE|SACO|CAIXA D|TOCO|VIGA|PORTA)\b/;
+let freteRota = "R", soLiberados = false;
+let ROTA = { data:"", mot:"", cam:"", paradas:[], ret:{} };
+let TENT = {}, HIST = [];
+const ler = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k) || "null"); return v == null ? d : v; } catch(e){ return d; } };
+ROTA = Object.assign(ROTA, ler("almox-rota", {})); ROTA.ret = ROTA.ret || {};
+TENT = ler("almox-rota-tent", {}); HIST = ler("almox-rota-hist", []);
+const salvarRota = () => { try { localStorage.setItem("almox-rota", JSON.stringify(ROTA)); localStorage.setItem("almox-rota-tent", JSON.stringify(TENT)); localStorage.setItem("almox-rota-hist", JSON.stringify(HIST)); } catch(e){} };
+
+// Formulário de retorno (Microsoft Forms): link pré-preenchido com marcadores trocados por parada
+let FORM_URL = ler("almox-form-url", "");
+const MARCAS = ["{DATA}", "{MOT}", "{VAN}", "{FORN}", "{PED}"];
+function linkForm(o, k){
+  if (!FORM_URL) return "";
+  const dt = ROTA.data ? ROTA.data.split("-").reverse().join("/") : fmtD(HOJE);
+  const peds = [...new Set((o.libLinhas.length ? o.libLinhas : o.linhas).map(l => l.n))].join(", ");
+  const val = { "{DATA}":dt, "{MOT}":ROTA.mot || "", "{VAN}":ROTA.cam || "", "{FORN}":o.forn, "{PED}":peds };
+  let u = FORM_URL;
+  MARCAS.forEach(m => { u = u.split(encodeURIComponent(m)).join(encodeURIComponent(val[m])).split(m).join(encodeURIComponent(val[m])); });
+  return u;
+}
+function desenharFormCfg(){
+  const el = document.getElementById("form-cfg"), aberto = el.open;
+  if (el.dataset.feito === FORM_URL + "|") return;   // só redesenha quando o link muda (não fecha o painel ao digitar)
+  el.dataset.feito = FORM_URL + "|";
+  const achadas = MARCAS.filter(m => FORM_URL.includes(m) || FORM_URL.includes(encodeURIComponent(m)));
+  el.innerHTML = `<summary>Formulário de retorno do motorista <span class="st-form ${FORM_URL ? "ok" : "nao"}">${FORM_URL ? "configurado" : "não configurado"}</span></summary>
+    <ol>
+      <li>No Microsoft Forms, crie o formulário com as perguntas: <b>Data</b>, <b>Motorista</b>, <b>Van</b>, <b>Fornecedor</b>, <b>Pedidos</b> (texto), <b>Situação</b> (escolha: Coletado / Não coletado) e <b>Observação</b>.</li>
+      <li>Em Configurações, deixe <b>Qualquer pessoa pode responder</b>.</li>
+      <li>No menu <b>…</b> escolha <b>Obter URL pré-preenchida</b> e preencha exatamente: Data <code>{DATA}</code>, Motorista <code>{MOT}</code>, Van <code>{VAN}</code>, Fornecedor <code>{FORN}</code>, Pedidos <code>{PED}</code>. Deixe Situação e Observação em branco.</li>
+      <li>Copie o link gerado e cole aqui:</li>
+    </ol>
+    <textarea id="form-url" placeholder="https://forms.office.com/...">${esc(FORM_URL)}</textarea>
+    <div class="acoes"><button class="btn" id="form-salvar">Salvar link</button>${FORM_URL ? `<button class="btn sec" id="form-limpar">Remover</button>` : ""}
+      <span class="nota" style="margin:0">${FORM_URL ? `Marcadores encontrados: ${achadas.length ? achadas.join(" ") : "nenhum, confira o passo 3"}` : "Sem o link, a mensagem pede a resposta pelo WhatsApp (1✅ 2⚠ 3❌)."}</span></div>`;
+  el.open = aberto;
+}
+
+// Retorno pelo WhatsApp: cada parada leva 2 links que abrem a conversa com o almoxarifado já com a resposta escrita
+let WPP_ALMOX = ler("almox-wpp", "");
+const numWpp = s => { let d = String(s || "").replace(/\D/g, ""); if (d.length === 10 || d.length === 11) d = "55" + d; return d.length >= 12 ? d : ""; };
+function linkRespWpp(o, k, st){
+  const n = numWpp(WPP_ALMOX); if (!n) return "";
+  const dt = ROTA.data ? ROTA.data.split("-").reverse().join("/").slice(0,5) : fmtD(HOJE).slice(0,5);
+  return `https://wa.me/${n}?text=${encodeURIComponent(`RETORNO ${dt} | Parada ${k+1} | ${o.forn} | ${st === "ok" ? "✅ COLETADO" : "❌ NÃO COLETADO"}`)}`;
+}
+// Lê as mensagens coladas do WhatsApp e lança o retorno de cada parada
+function lancarRetornos(txt){
+  const P = paradasDaRota(); let n = 0; const erros = [];
+  txt.split(/\n/).forEach(lin => {
+    const m = lin.match(/Parada\s*(\d+)\s*\|\s*([^|]+?)\s*\|\s*(?:✅|❌)?\s*(N[ÃA]O\s+COLETADO|COLETADO)\s*(.*)$/i);
+    let alvo = [];
+    if (m) alvo.push([+m[1], m[3].toUpperCase().startsWith("N") ? "nao" : "ok", (m[4] || "").replace(/^[\s\-–:|.]+/, "").trim(), m[2].trim()]);
+    else (lin.match(/(\d+)\s*(✅|❌)/g) || []).forEach(x => { const y = x.match(/(\d+)\s*(✅|❌)/); alvo.push([+y[1], y[2] === "✅" ? "ok" : "nao", "", ""]); });
+    const hm = lin.match(/\[(\d{1,2}:\d{2})/);
+    alvo.forEach(([k, st, obs, nome]) => {
+      let o = nome ? P.find(x => semAc(x.forn) === semAc(nome)) : null;
+      if (!o) o = P[k - 1];
+      if (!o) { erros.push(`parada ${k}`); return; }
+      const h = hm ? hm[1] : new Date().toLocaleTimeString("pt-BR", { hour:"2-digit", minute:"2-digit" });
+      ROTA.ret[o.forn] = { st, obs, h };
+      RESP.push({ id:RESP.length + 1, hora:fmtD(new Date()) + " " + h, data:ROTA.data ? ROTA.data.split("-").reverse().join("/") : fmtD(HOJE), mot:ROTA.mot || "", van:ROTA.cam || "",
+        forn:o.forn, ped:[...new Set((o.libLinhas.length ? o.libLinhas : o.linhas).map(l => l.n))].join(", "), sit:st === "ok" ? "Coletado" : "Não coletado", obs, via:"WhatsApp" });
+      n++; });
+  });
+  salvarRota(); try { localStorage.setItem("almox-form-resp", JSON.stringify(RESP)); } catch(err){}
+  return { n, erros };
+}
+
+// Urgência do item: 2 = urgente (zerado, ou abaixo do mínimo e acaba antes de chegar), 1 = abaixo do mínimo
+const urgLinha = l => { const it = l.item; if (!it) return 0; if (it.st === "zerado" || (it.st === "repor" && it.falta)) return 2; return it.st === "repor" ? 1 : 0; };
+const volLinha = l => VOLUMOSO.test(" " + l.desc.toUpperCase() + " ");
+function paradasPorFornecedor(){
+  const G = {};
+  PED.forEach(p => { const o = G[p.forn] = G[p.forn] || { forn:p.forn, cnpj:p.cnpj, cid:p.cid, tel:p.tel, hor:p.hor, frete:p.frete, linhas:[] }; o.linhas.push(p); });
+  return Object.values(G).map(o => {
+    o.lib = o.frete === "R" && o.linhas.some(l => LIB[l.n]);
+    o.libLinhas = o.linhas.filter(l => LIB[l.n]);
+    const alvo = o.libLinhas.length ? o.libLinhas : o.linhas;
+    o.urg = alvo.filter(l => urgLinha(l) === 2).length;
+    o.imp = alvo.filter(l => urgLinha(l) === 1).length;
+    o.vol = alvo.filter(volLinha).length;
+    o.tent = TENT[o.forn] || null;
+    o.score = o.urg * 10 + o.imp * 3 + (o.tent ? 5 : 0);
+    return o; });
+}
+const unid = p => p.item ? p.item.u : "";
+const tagsLinha = l => { const u = urgLinha(l); return (u === 2 ? ` <span class="tag-u urg">Urgente</span>` : u === 1 ? ` <span class="tag-u imp">Abaixo do mín.</span>` : "") + (volLinha(l) ? ` <span class="tag-u vol">Volumoso</span>` : ""); };
+const ROT_RET = { ok:["st-ok","Coletado"], parcial:["st-parcial","Parcial"], nao:["st-nao","Não coletado"] };
+
+function desenharRota(){
+  if (SEM_PED) { telaSemPedidos("v-rota"); return; }
+  const F = paradasPorFornecedor();
+  const ret = F.filter(o => o.frete === "R"), ent = F.filter(o => o.frete === "E");
+  document.getElementById("kpis-rota").innerHTML = [
+    ["Fornecedores para retirar", ret.length, `${fmt(ret.reduce((a,o)=>a+o.linhas.length,0))} itens com saldo`, "var(--blue)"],
+    ["Prontos para retirar", ret.filter(o => o.lib).length, "material liberado pelo fornecedor", "var(--accent)"],
+    ["Com item urgente", ret.filter(o => o.lib && o.urg).length, "prontos e com item zerado ou acabando", "var(--red)"],
+    ["Tentativas anteriores", Object.keys(TENT).length, "fornecedores não coletados na última rota", "#8A6A4A"],
+  ].map(([t,v,sub,cor]) => `<div class="kpi" style="--k:${cor};cursor:default"><small>${t}</small><b>${fmt(v)}</b><span>${sub}</span></div>`).join("");
+  document.getElementById("filtros-rota").innerHTML = `<label>Frete</label>` +
+    [["R","Retirada (motorista busca)"],["E","Entrega na empresa"]].map(([k,t]) => `<button class="chip" data-frete="${k}" aria-pressed="${k===freteRota}">${t}</button>`).join("") +
+    (freteRota === "R" ? `<label style="margin-left:14px">Liberação</label><button class="chip" data-lib="0" aria-pressed="${!soLiberados}">Todos</button><button class="chip" data-lib="1" aria-pressed="${soLiberados}">Só prontos para retirar</button>` : "");
+  const TR = termos(qRota);
+  const achaLinha = l => TR.length && casa(txtPed(l), TR);
+  const achaForn = o => !TR.length || casa(semAc([o.forn, o.cnpj, o.cid, o.tel].join(" ")), TR) || o.linhas.some(achaLinha);
+  const lista0 = (freteRota === "R" ? ret.filter(o => !soLiberados || o.lib) : ent).filter(achaForn);
+  const linhasDe = L => [].concat(...L.map(o => o.linhas));
+  const lu = lista0.filter(o => o.linhas.some(ehUrg));
+  cartoesModo("modo-rota", "data-modorota", modoRota, { itens:linhasDe(lu).filter(ehUrg).length, forn:lu.length }, { itens:linhasDe(lista0).length, forn:lista0.length },
+    freteRota === "R" ? "todos os fornecedores para retirar" : "todas as entregas na empresa");
+  const lista = (modoRota === "urg" ? lu : lista0).sort((a,b) => (b.lib - a.lib) || (b.score - a.score) || a.cid.localeCompare(b.cid) || a.forn.localeCompare(b.forn));
+  document.getElementById("t-paradas").textContent = freteRota === "R" ? "Retiradas disponíveis" : "Entregas na empresa";
+  document.getElementById("s-paradas").textContent = freteRota === "R" ? "Mais urgentes primeiro. Escolha quem entra na rota da van" : "O fornecedor entrega; não entram na rota da van";
+  document.getElementById("q-paradas").textContent = lista.length + " fornecedores";
+  document.getElementById("busca-rota-res").textContent = TR.length ? `${lista.length} fornecedor(es) encontrados${lista.some(o => o.linhas.some(achaLinha)) ? " · itens encontrados em destaque" : ""}` : "";
+  document.getElementById("paradas").innerHTML = lista.map(o => {
+    const na = ROTA.paradas.includes(o.forn);
+    const linhas = o.linhas.filter(l => modoRota !== "urg" || ehUrg(l)).sort((a,b) => (LIB[b.n]||0) - (LIB[a.n]||0) || urgLinha(b) - urgLinha(a) || a.n - b.n);
+    return `<article class="parada ${na ? "na-rota" : ""} ${o.urg && o.frete === "R" ? "tem-urg" : ""}">
+      <div class="parada-cab"><div class="nome">${esc(o.forn)}<small>${esc(o.cid)} · ${esc(o.tel)} · ${esc(o.hor)}</small></div>
+        ${o.frete === "R" ? `<span class="pill ${o.lib ? "p-green" : "p-amber"}">${o.lib ? "Pronto para retirar" : "Aguardando liberação"}</span>
+        <button class="btn ${na ? "na" : ""}" data-addrota="${esc(o.forn)}">${na ? "✓ Na rota" : "+ Adicionar à rota"}</button>` : `<span class="pill p-frete-e">Entrega na empresa</span>`}</div>
+      ${o.frete === "R" && (o.urg || o.imp || o.vol || o.tent) ? `<div class="parada-tags">${o.urg ? `<span class="tag-u urg">${o.urg} urgente(s)</span>` : ""}${o.imp ? `<span class="tag-u imp">${o.imp} abaixo do mín.</span>` : ""}${o.vol ? `<span class="tag-u vol">${o.vol} volumoso(s) para a van</span>` : ""}${o.tent ? `<span class="tag-u tent">Tentativa em ${o.tent.data}: ${o.tent.motivo}</span>` : ""}</div>` : ""}
+      <ul>${linhas.map(l => `<li data-ped="${l.n}" data-pcod="${esc(l.cod)}"${achaLinha(l) ? ' class="achou"' : ""}><span class="pd">Ped ${l.n}</span><span class="ds"><b>${l.cod}</b> ${esc(l.desc)}${tagsLinha(l)}</span><span class="qt">${fmt1(l.sal)} ${esc(unid(l))}${o.frete === "R" ? (LIB[l.n] ? "" : ` <span style="color:var(--amber);font-weight:500">· aguard.</span>`) : ""}</span></li>`).join("")}</ul>
+    </article>`; }).join("") || `<div class="vazio">Nenhum fornecedor com esse filtro.</div>`;
+  desenharRotaDia(F);
+}
+
+function textoRota(P, links){
+  const dt = ROTA.data ? ROTA.data.split("-").reverse().join("/") : fmtD(HOJE);
+  let tx = `*ROTA DE COLETA (VAN) – ${dt}*\n`;
+  tx += `Motorista: ${ROTA.mot || "—"} | Van: ${ROTA.cam || "—"}\n`;
+  tx += `Saída e retorno: ${ORIGEM}\n`;
+  P.forEach((o,k) => {
+    tx += `\n*${k+1}. ${o.forn}* – ${o.cid}${o.urg ? " ⚠ URGENTE" : ""}\nTel: ${o.tel} | Horário: ${o.hor}\n`;
+    (o.libLinhas.length ? o.libLinhas : o.linhas).forEach(l => { const u = urgLinha(l); tx += `• Pedido ${l.n}: ${l.cod} ${l.desc} – ${fmt1(l.sal)} ${unid(l)}${u === 2 ? " (URGENTE)" : ""}${volLinha(l) ? " (volumoso)" : ""}${l.at > 0 ? " (saldo de entrega parcial)" : ""}\n`; });
+    if (FORM_URL) tx += `👉 Retorno da parada ${k+1}: ${linkForm(o, k)}\n`;
+    else if (numWpp(WPP_ALMOX)) tx += `Retorno da parada ${k+1}:\n✅ Coletado: ${linkRespWpp(o, k, "ok")}\n❌ Não coletado: ${linkRespWpp(o, k, "nao")}\n`;
+  });
+  tx += `\nTotal: ${P.length} parada(s)`;
+  if (links.length) tx += `\nMapa: ${links.join("\n")}`;
+  tx += FORM_URL ? `\n\n*Ao sair de cada fornecedor, toque no link 👉 Retorno da parada* e marque: Coletado ou Não coletado.`
+    : numWpp(WPP_ALMOX) ? `\n\n*Ao sair de cada fornecedor, toque em ✅ Coletado ou ❌ Não coletado da parada e aperte enviar.* Se quiser, escreva uma observação no fim da mensagem.`
+    : `\n\n*Ao terminar, responda com o número da parada:*\n✅ coletado | ❌ não coletado\nEx.: 1✅ 2❌ 3✅`;
+  return tx;
+}
+
+function desenharRotaDia(F){
+  F = F || paradasPorFornecedor();
+  const MAP = Object.fromEntries(F.map(o => [o.forn, o]));
+  ROTA.paradas = ROTA.paradas.filter(f => MAP[f]);
+  const P = ROTA.paradas.map(f => MAP[f]);
+  const itens = P.reduce((a,o) => a + (o.libLinhas.length || o.linhas.length), 0);
+  const vols = P.reduce((a,o) => a + o.vol, 0), cidades = new Set(P.map(o => o.cid)).size;
+  document.getElementById("q-rota").textContent = `${P.length} parada(s) · ${itens} item(ns)`;
+  document.getElementById("rota-data").value = ROTA.data || HOJE.toISOString().slice(0,10);
+  document.getElementById("rota-mot").value = ROTA.mot || "";
+  document.getElementById("rota-cam").value = ROTA.cam || "";
+  const al = [];
+  if (vols >= 3) al.push(`<div class="alerta amber"><span><b>${vols} itens volumosos</b> (barras, chapas, tambores, tubos…). Confira se cabem na van ou se precisa de mais de uma viagem.</span></div>`);
+  document.getElementById("rota-alerta").innerHTML = al.join("");
+  document.getElementById("rota-lista").innerHTML = P.map((o,k) => { const r = ROTA.ret[o.forn];
+    return `<li><span><span class="n">${esc(o.forn)}${o.urg ? ` <span class="tag-u urg">urgente</span>` : ""}${r ? `<span class="st ${ROT_RET[r.st][0]}">${ROT_RET[r.st][1]}</span>` : ""}</span><small>${esc(o.cid)} · ${(o.libLinhas.length || o.linhas.length)} item(ns)${o.vol ? ` · ${o.vol} volumoso(s)` : ""}${o.lib ? "" : " · aguardando liberação"}</small></span>
+      <span class="mv"><button data-mv="${k}" data-d="-1" aria-label="Subir" ${k===0?"disabled":""}>↑</button><button data-mv="${k}" data-d="1" aria-label="Descer" ${k===P.length-1?"disabled":""}>↓</button><button data-rm="${k}" aria-label="Tirar da rota">✕</button></span></li>`; }).join("")
+    || `<li class="vazia">Nenhuma parada ainda. Use "★ Sugerir rota" ou "+ Adicionar à rota" nos fornecedores ao lado.</li>`;
+  // Google Maps: ida e volta à empresa; o link aceita até 9 paradas, então divide em partes
+  const local = o => `${o.forn}, ${o.cid}`;
+  const partes = [];
+  for (let k = 0; k < P.length; k += 9) partes.push(P.slice(k, k + 9));
+  const links = partes.map((g, i) => {
+    const u = new URL("https://www.google.com/maps/dir/");
+    u.searchParams.set("api", "1");
+    u.searchParams.set("origin", i === 0 ? ORIGEM : local(partes[i-1][partes[i-1].length-1]));
+    const ult = i === partes.length - 1;
+    u.searchParams.set("destination", ult ? ORIGEM : local(g[g.length-1]));
+    const wp = ult ? g : g.slice(0, -1);
+    if (wp.length) u.searchParams.set("waypoints", wp.map(local).join("|"));
+    u.searchParams.set("travelmode", "driving");
+    return u.toString();
+  });
+  const tx = textoRota(P, links);
+  document.getElementById("rota-texto").textContent = tx;
+  document.getElementById("rota-envio").innerHTML = P.length ? `
+    ${links.map((l,i) => `<a class="btn maps" href="${l}" target="_blank" rel="noopener">Abrir no Google Maps${links.length > 1 ? ` (parte ${i+1})` : ""}</a>`).join("")}
+    <a class="btn wpp" href="https://wa.me/?text=${encodeURIComponent(tx)}" target="_blank" rel="noopener">Enviar pelo WhatsApp</a>
+    <button class="btn sec" id="rota-copiar">Copiar texto</button>
+    <button class="btn sec" id="rota-motorista">📱 Abrir visão do motorista</button>
+    <p class="nota">O WhatsApp abre para você escolher o contato do motorista. ${links.length > 1 ? "O Google Maps aceita até 9 paradas por link, por isso a rota foi dividida em partes." : ""}</p>`
+    : `<p class="nota">Adicione paradas para gerar o mapa e a mensagem.</p>`;
+  desenharFormCfg();
+  desenharRetorno(P);
+}
+
+function desenharRetorno(P){
+  desenharRespostas();
+  const n = k => P.filter(o => ROTA.ret[o.forn] && ROTA.ret[o.forn].st === k).length;
+  const sem = P.filter(o => !ROTA.ret[o.forn]).length;
+  document.getElementById("retorno").innerHTML = P.length ? `
+    <div class="retorno-resumo"><div><small>Coletado</small><b style="color:var(--accent)">${n("ok")}</b></div><div><small>Não coletado</small><b style="color:var(--red)">${n("nao")}</b></div><div><small>Sem retorno</small><b>${sem}</b></div></div>
+    ${P.filter(o => ROTA.ret[o.forn] && ROTA.ret[o.forn].obs).map(o => `<div class="nota"><b>${esc(o.forn)}:</b> ${esc(ROTA.ret[o.forn].obs)}</div>`).join("")}
+    <p class="nota" style="margin:0">O motorista responde o formulário em cada parada (Coletado ou Não coletado). Ao fechar a rota, o que não foi coletado volta com aviso para a próxima.</p>
+    <div class="colar"><b>Respostas do motorista pelo WhatsApp</b>
+      <span class="nota" style="margin:0">Na conversa com o motorista, selecione as mensagens de retorno, copie e cole aqui.</span>
+      <textarea id="colar-ret" placeholder="RETORNO 27/09 | Parada 1 | CRV INDUSTRIAL PARAFUSOS LTDA | ✅ COLETADO"></textarea>
+      <div class="rota-acoes" style="padding:0"><button class="btn" id="colar-lancar">Lançar retornos</button><span class="nota" id="colar-res" style="margin:0"></span></div></div>
+    <div class="rota-acoes" style="padding:0"><button class="btn sec" id="rota-motorista2">📱 Marcar retorno</button><button class="btn" id="rota-fechar" ${sem === P.length ? "disabled" : ""}>Fechar rota do dia</button></div>`
+    : `<p class="nota">Monte a rota para registrar o retorno.</p>`;
+  const tot = HIST.reduce((a,h) => a + h.n, 0), ok = HIST.reduce((a,h) => a + h.ok, 0);
+  document.getElementById("historico").innerHTML = HIST.length ? `<div class="nota">Retiradas de primeira: <b>${tot ? Math.round(ok/tot*100) : 0}%</b> (${ok} de ${tot} paradas)</div>` +
+    HIST.slice(-6).reverse().map(h => `<div class="hist-item" data-histid="${h.id || ""}"><b>${h.data}</b><span>${esc(h.mot || "—")} · ${h.n} parada(s)</span><span><span class="st st-ok">${h.ok} ok</span>${h.parcial ? `<span class="st st-parcial">${h.parcial} parc.</span>` : ""}${h.nao ? `<span class="st st-nao">${h.nao} não</span>` : ""}</span></div>`).join("")
+    + `<div class="rota-acoes" style="padding:0"><button class="btn sec" data-histid="">Ver histórico completo (${HIST.length})</button></div>`
+    : `<p class="nota">Nenhuma rota fechada ainda.</p>`;
+  document.getElementById("n-hist").textContent = HIST.length;
+}
+
+// Sugere a rota: todos os prontos para retirar, agrupados por cidade, urgentes primeiro
+function sugerirRota(){
+  // Todos os fornecedores prontos para retirar entram, sem limite de paradas
+  const sel = paradasPorFornecedor().filter(o => o.frete === "R" && o.lib);
+  // ordena por cidade (cidade com mais urgência primeiro) e, dentro da cidade, os mais urgentes primeiro
+  const peso = {}; sel.forEach(o => peso[o.cid] = (peso[o.cid] || 0) + o.score);
+  sel.sort((a,b) => (peso[b.cid] - peso[a.cid]) || a.cid.localeCompare(b.cid) || (b.score - a.score));
+  ROTA.paradas = sel.map(o => o.forn);
+  ROTA.ret = {};
+  salvarRota(); desenharRota();
+}
+
+// Visão do motorista (celular)
+function abrirMotorista(){
+  const MAP = Object.fromEntries(paradasPorFornecedor().map(o => [o.forn, o]));
+  const P = ROTA.paradas.map(f => MAP[f]).filter(Boolean);
+  const m = document.getElementById("motorista");
+  const dt = ROTA.data ? ROTA.data.split("-").reverse().join("/") : fmtD(HOJE);
+  m.innerHTML = `<div class="mot" role="dialog" aria-label="Visão do motorista">
+    <div class="mot-topo"><div><b>Rota da van</b><span>${dt} · ${esc(ROTA.mot || "Motorista")} · ${esc(ROTA.cam || "Van")}</span></div><button data-fecharmot aria-label="Fechar">✕</button></div>
+    <div class="mot-lista">${P.map((o,k) => { const r = ROTA.ret[o.forn] || {};
+      const q = encodeURIComponent(`${o.forn}, ${o.cid}`);
+      return `<section class="mot-parada ${r.st || ""}">
+        <h3><em>${k+1}</em><span>${esc(o.forn)}${o.urg ? ` <span class="tag-u urg">urgente</span>` : ""}</span></h3>
+        <div class="mot-info"><span>${esc(o.cid)}</span><span>Tel: <a href="tel:${o.tel.replace(/\D/g,"")}">${esc(o.tel)}</a></span><span>${esc(o.hor)}</span><a href="https://www.google.com/maps/search/?api=1&query=${q}" target="_blank" rel="noopener">Ver no mapa</a></div>
+        <ul>${(o.libLinhas.length ? o.libLinhas : o.linhas).map(l => `<li><b>${fmt1(l.sal)} ${esc(unid(l))}</b> · ${esc(l.desc)} <span style="color:var(--ink-2)">(ped ${l.n})</span>${urgLinha(l) === 2 ? ` <span class="tag-u urg">urgente</span>` : ""}</li>`).join("")}</ul>
+        ${r.st ? `<div class="mot-feito ${r.st}"><span>${{ok:"✅ Coletado",parcial:"⚠ Parcial",nao:"❌ Não coletado"}[r.st]}${r.h ? ` às ${r.h}` : ""}${r.obs ? `<small>${esc(r.obs)}</small>` : ""}</span><button data-abreform="${k}">Corrigir</button></div>`
+          : FORM_URL ? `<a class="mot-form" href="${esc(linkForm(o, k))}" target="_blank" rel="noopener">📋 Responder retorno</a>`
+          : `<button class="mot-form" style="border:0;cursor:pointer;width:100%" data-abreform="${k}">📋 Responder retorno</button>`}
+      </section>`; }).join("") || `<div class="vazio">Nenhuma parada na rota.</div>`}</div>
+    <div class="mot-rodape">Ao sair de cada fornecedor, toque em <b>Responder retorno</b>. No protótipo o formulário é uma simulação; na versão final é o Microsoft Forms.</div></div>`;
+  m.hidden = false;
+}
+const motEl = document.getElementById("motorista");
+motEl.addEventListener("click", e => {
+  if (e.target === motEl || e.target.closest("[data-fecharmot]")) { motEl.hidden = true; motEl.innerHTML = ""; desenharRotaDia(); return; }
+  const af = e.target.closest("[data-abreform]"); if (af){ abrirFormSim(+af.dataset.abreform); return; }
+  const b = e.target.closest("[data-retst]");
+  if (b){ const f = b.dataset.retf, st = b.dataset.retst; const r = ROTA.ret[f] = ROTA.ret[f] || {};
+    if (r.st === st) delete r.st; else { r.st = st; r.h = new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}); }
+    if (!r.st && !r.obs) delete ROTA.ret[f];
+    salvarRota(); const sec = b.closest(".mot-parada"); sec.className = "mot-parada " + (r.st || "");
+    sec.querySelectorAll("[data-retst]").forEach(x => x.setAttribute("aria-pressed", x.dataset.retst === r.st)); }
+});
+motEl.addEventListener("change", e => {
+  const t = e.target.closest("[data-retobs]"); if (!t) return;
+  const f = t.dataset.retobs; const r = ROTA.ret[f] = ROTA.ret[f] || {}; r.obs = t.value.trim();
+  if (!r.st && !r.obs) delete ROTA.ret[f]; salvarRota();
+});
+
+// ---------- Formulário simulado (mesmo formato do Microsoft Forms) ----------
+let RESP = ler("almox-form-resp", []), fsParada = null, fsSit = null;
+const SIT_FORM = { ok:"Coletado", nao:"Não coletado" };
+const fsEl = document.getElementById("formsim");
+function paradasDaRota(){ const MAP = Object.fromEntries(paradasPorFornecedor().map(o => [o.forn, o])); return ROTA.paradas.map(f => MAP[f]).filter(Boolean); }
+function abrirFormSim(k){
+  const o = paradasDaRota()[k]; if (!o) return;
+  fsParada = k; const r = ROTA.ret[o.forn] || {}; fsSit = r.st || null;
+  const dt = ROTA.data ? ROTA.data.split("-").reverse().join("/") : fmtD(HOJE);
+  const peds = [...new Set((o.libLinhas.length ? o.libLinhas : o.linhas).map(l => l.n))].join(", ");
+  fsEl.innerHTML = `<div class="fs" role="dialog" aria-label="Formulário de retorno">
+    <div class="fs-topo"><b>Retorno da coleta</b><span>Van Goiás Verde · parada ${k+1}</span><button data-fsfechar aria-label="Fechar">✕</button></div>
+    <form class="fs-corpo" id="fs-form">
+      <div class="fs-card">
+        <dl class="fs-auto"><dt>Data</dt><dd>${dt}</dd><dt>Motorista</dt><dd>${esc(ROTA.mot || "—")}</dd><dt>Fornecedor</dt><dd>${esc(o.forn)}</dd><dt>Pedidos</dt><dd>${esc(peds)}</dd></dl>
+        <p class="fs-nota">Preenchido automaticamente pelo link da parada.</p>
+      </div>
+      <div class="fs-card"><h4>1. Como foi a coleta? <i>*</i></h4>
+        <div class="fs-op">${Object.entries(SIT_FORM).map(([key, txt]) => `<button type="button" data-fssit="${key}" aria-pressed="${fsSit === key}">${key === "ok" ? "✅" : "❌"} ${txt}</button>`).join("")}</div></div>
+      <div class="fs-card"><h4>2. Observação <span style="font-weight:400;color:#605E5C;font-size:13px">(opcional)</span></h4><textarea id="fs-obs" placeholder="Opcional. Ex.: fornecedor pediu para voltar sexta">${esc(r.obs || "")}</textarea></div>
+      <button class="fs-enviar" type="submit" ${fsSit ? "" : "disabled"}>Enviar</button>
+    </form></div>`;
+  fsEl.hidden = false;
+}
+fsEl.addEventListener("click", e => {
+  if (e.target === fsEl || e.target.closest("[data-fsfechar]")) { fsEl.hidden = true; fsEl.innerHTML = ""; return; }
+  const s = e.target.closest("[data-fssit]");
+  if (s){ fsSit = s.dataset.fssit; fsEl.querySelectorAll("[data-fssit]").forEach(x => x.setAttribute("aria-pressed", x === s)); fsEl.querySelector(".fs-enviar").disabled = false; }
+});
+fsEl.addEventListener("submit", e => {
+  e.preventDefault(); if (!fsSit) return;
+  const o = paradasDaRota()[fsParada]; if (!o) return;
+  const obs = document.getElementById("fs-obs").value.trim();
+  const h = new Date().toLocaleTimeString("pt-BR", { hour:"2-digit", minute:"2-digit" });
+  ROTA.ret[o.forn] = { st:fsSit, obs, h };
+  RESP.push({ id:RESP.length + 1, hora:fmtD(new Date()) + " " + h, data:ROTA.data ? ROTA.data.split("-").reverse().join("/") : fmtD(HOJE), mot:ROTA.mot || "", van:ROTA.cam || "",
+    forn:o.forn, ped:[...new Set((o.libLinhas.length ? o.libLinhas : o.linhas).map(l => l.n))].join(", "), sit:SIT_FORM[fsSit], obs });
+  salvarRota(); try { localStorage.setItem("almox-form-resp", JSON.stringify(RESP)); } catch(err){}
+  fsEl.querySelector(".fs").innerHTML = `<div class="fs-topo"><b>Retorno da coleta</b><span>Van Goiás Verde · parada ${fsParada+1}</span></div>
+    <div class="fs-corpo"><div class="fs-card fs-ok"><div class="ic">✅</div><h4>Retorno registrado.</h4><p class="fs-nota">Pode seguir para a próxima parada.</p>
+    <button class="fs-enviar" type="button" data-fsfechar style="width:100%">Voltar para a rota</button></div></div>`;
+  if (!motEl.hidden) abrirMotorista();
+  desenharRetorno(paradasDaRota());
+});
+function desenharRespostas(){
+  const el = document.getElementById("respostas"); if (!el) return;
+  document.getElementById("q-resp").textContent = RESP.length + " resposta(s)";
+  const cor = { "Coletado":"st-ok", "Não coletado":"st-nao" };
+  el.innerHTML = RESP.length ? `<div class="tabela-wrap" style="max-height:260px"><table class="resp-tab"><thead><tr><th>Hora</th><th>Fornecedor</th><th>Situação</th><th>Observação</th></tr></thead><tbody>
+      ${RESP.slice().reverse().map(r => `<tr style="cursor:default"><td style="white-space:nowrap;font-family:var(--mono);font-size:12px">${esc(r.hora)}</td><td>${esc(r.forn)}<small>Ped ${esc(r.ped)} · ${esc(r.mot || "—")}</small></td><td><span class="st ${cor[r.sit]}" style="white-space:nowrap">${esc(r.sit)}</span></td><td style="font-size:12.5px">${esc(r.obs || "—")}</td></tr>`).join("")}
+    </tbody></table></div>
+    <p class="nota" style="margin:0">Respostas lançadas pelo formulário ou coladas do WhatsApp. Na versão final elas ficam salvas para todo mundo ver.</p>
+    <div class="rota-acoes" style="padding:0"><button class="btn sec" id="resp-limpar">Limpar respostas de teste</button></div>`
+    : `<p class="nota">Nenhuma resposta ainda. Abra a <b>visão do motorista</b> e toque em <b>Responder retorno</b> em uma parada.</p>`;
+}
+
+// ---------- Histórico de rotas ----------
+const histEl = document.getElementById("histrotas");
+let hrBusca = "", hrPer = "todas", hrAberta = null;
+const HR_PER = [["todas","Todas"],["7","Últimos 7 dias"],["30","Últimos 30 dias"]];
+const HR_ST = { ok:["st-ok","Coletado"], parcial:["st-parcial","Parcial"], nao:["st-nao","Não coletado"], sem:["st-sem","Sem retorno"] };
+function abrirHistorico(id){
+  hrAberta = id == null ? null : String(id);
+  histEl.innerHTML = `<aside class="ficha" role="dialog" aria-label="Histórico de rotas">
+    <div class="ficha-topo sem-foto-grande"><div><div class="cod" style="font-size:22px">Histórico de rotas</div>
+      <div class="meta" style="margin-top:8px"><span id="hr-sub"></span></div></div>
+      <button class="fechar" data-hrfechar aria-label="Fechar">✕</button></div>
+    <div class="f-corpo">
+      <div class="cards-mini hr-kpis" id="hr-kpis"></div>
+      <div class="hr-filtros"><input type="search" id="hr-busca" placeholder="Buscar fornecedor, motorista ou pedido" value="${esc(hrBusca)}">
+        <div class="filtros" id="hr-per"></div></div>
+      <div id="hr-lista" style="display:flex;flex-direction:column;gap:8px"></div>
+      ${HIST.length ? `<div class="rota-acoes" style="padding:0"><button class="btn sec" id="hr-limpar">Apagar histórico de teste</button></div>` : ""}
+    </div></aside>`;
+  histEl.hidden = false;
+  desenharHistorico();
+}
+function desenharHistorico(){
+  const T = termos(hrBusca), lim = hrPer === "todas" ? null : addD(HOJE, -Number(hrPer));
+  const L = HIST.slice().reverse().filter(h => {
+    if (lim && h.iso && new Date(h.iso + "T12:00:00") < lim) return false;
+    return !T.length || casa(semAc([h.data, h.mot, h.van, ...(h.paradas || []).map(p => p.forn + " " + p.peds + " " + p.cid)].join(" ")), T); });
+  const par = L.reduce((a,h) => a + h.n, 0), ok = L.reduce((a,h) => a + h.ok, 0), nao = L.reduce((a,h) => a + h.nao + (h.parcial || 0), 0);
+  document.getElementById("hr-sub").textContent = `${HIST.length} rota(s) registrada(s)`;
+  document.getElementById("hr-kpis").innerHTML = [["Rotas", L.length], ["Paradas", par], ["Coletadas", par ? Math.round(ok / par * 100) + "%" : "—"], ["Não coletadas", nao]]
+    .map(([t, v]) => `<div class="mini"><small>${t}</small><b>${typeof v === "number" ? fmt(v) : v}</b></div>`).join("");
+  document.getElementById("hr-per").innerHTML = HR_PER.map(([k, t]) => `<button class="chip" data-hrper="${k}" aria-pressed="${k === hrPer}">${t}</button>`).join("");
+  document.getElementById("hr-lista").innerHTML = L.map(h => {
+    const tot = h.n || 1, sem = h.sem != null ? h.sem : 0, nao = h.nao - (h.sem != null ? 0 : 0);
+    const P = h.paradas || [];
+    const pendentes = P.filter(p => p.st !== "ok");
+    return `<details class="hr-rota" ${String(h.id) === hrAberta ? "open" : ""} data-hrid="${h.id || ""}">
+      <summary><span class="dt">${esc(h.data)}</span><span class="quem">${esc(h.mot || "Motorista não informado")}${h.van ? ` · ${esc(h.van)}` : ""} · ${h.n} parada(s)</span>
+        <span class="tags"><span class="st st-ok">${h.ok} coletada(s)</span>${(h.nao - sem) > 0 ? `<span class="st st-nao">${h.nao - sem} não</span>` : ""}${h.parcial ? `<span class="st st-parcial">${h.parcial} parc.</span>` : ""}${sem ? `<span class="st st-sem">${sem} sem retorno</span>` : ""}</span>
+        <span class="barra"><i style="width:${h.ok/tot*100}%;background:var(--accent)"></i><i style="width:${(h.parcial||0)/tot*100}%;background:var(--amber)"></i><i style="width:${(h.nao - sem)/tot*100}%;background:var(--red)"></i><i style="width:${sem/tot*100}%;background:var(--line)"></i></span></summary>
+      <div class="hr-det">${P.length ? `<table><thead><tr><th>#</th><th>Fornecedor</th><th>Situação</th><th>Observação</th></tr></thead><tbody>
+        ${P.map((p,k) => `<tr><td style="font-family:var(--mono)">${k+1}</td><td>${esc(p.forn)}${p.urg ? ` <span class="tag-u urg">urgente</span>` : ""}<small>${esc(p.cid)} · ${p.itens} item(ns) · Ped ${esc(p.peds)}</small></td>
+          <td><span class="st ${HR_ST[p.st][0]}" style="white-space:nowrap">${HR_ST[p.st][1]}</span>${p.h ? `<small>${esc(p.h)}</small>` : ""}</td><td>${esc(p.obs || "—")}</td></tr>`).join("")}
+        </tbody></table>
+        <div class="rota-acoes" style="padding:0">${pendentes.length ? `<button class="btn" data-hrrefazer="${h.id}">Montar nova rota com os ${pendentes.length} não coletado(s)</button>` : ""}<span class="nota" style="margin:0">Fechada em ${esc(h.fechada || "—")}</span></div>`
+        : `<p class="nota" style="margin:0">Rota fechada antes do histórico detalhado: só o resumo foi guardado.</p>`}</div>
+    </details>`; }).join("") || `<div class="vazio">${HIST.length ? "Nenhuma rota com esse filtro." : "Nenhuma rota fechada ainda. Ao clicar em <b>Fechar rota do dia</b>, ela aparece aqui."}</div>`;
+}
+histEl.addEventListener("click", e => {
+  if (e.target === histEl || e.target.closest("[data-hrfechar]")) { histEl.hidden = true; histEl.innerHTML = ""; return; }
+  const pr = e.target.closest("[data-hrper]"); if (pr){ hrPer = pr.dataset.hrper; desenharHistorico(); return; }
+  const rf = e.target.closest("[data-hrrefazer]");
+  if (rf){ const h = HIST.find(x => String(x.id) === rf.dataset.hrrefazer); if (!h) return;
+    const ativos = new Set(paradasPorFornecedor().map(o => o.forn));
+    h.paradas.filter(p => p.st !== "ok" && ativos.has(p.forn) && !ROTA.paradas.includes(p.forn)).forEach(p => ROTA.paradas.push(p.forn));
+    salvarRota(); histEl.hidden = true; histEl.innerHTML = ""; desenharRota(); document.querySelector(".rota-card").scrollIntoView({ behavior:"smooth", block:"start" }); return; }
+  if (e.target.closest("#hr-limpar")){ HIST = []; salvarRota(); desenharRotaDia(); abrirHistorico(); return; }
+});
+histEl.addEventListener("input", e => { if (e.target.id === "hr-busca"){ hrBusca = e.target.value; desenharHistorico(); } });
+
+function fecharRota(){
+  const dt = ROTA.data ? ROTA.data.split("-").reverse().join("/") : fmtD(HOJE);
+  const MAPA = Object.fromEntries(paradasPorFornecedor().map(o => [o.forn, o]));
+  const h = { id:Date.now(), data:dt, iso:ROTA.data || HOJE.toISOString().slice(0,10), mot:ROTA.mot, van:ROTA.cam || "", n:ROTA.paradas.length, ok:0, parcial:0, nao:0, sem:0,
+    fechada:new Date().toLocaleString("pt-BR", { day:"2-digit", month:"2-digit", hour:"2-digit", minute:"2-digit" }),
+    paradas:ROTA.paradas.map(f => { const o = MAPA[f] || { cid:"", linhas:[], libLinhas:[], urg:0 }, r = ROTA.ret[f] || {}, L = o.libLinhas.length ? o.libLinhas : o.linhas;
+      return { forn:f, cid:o.cid, st:r.st || "sem", obs:r.obs || "", h:r.h || "", itens:L.length, peds:[...new Set(L.map(l => l.n))].join(", "), urg:o.urg || 0 }; }) };
+  ROTA.paradas.forEach(f => { const r = ROTA.ret[f]; if (!r || !r.st) h.sem++;
+    if (r && r.st === "ok") { h.ok++; delete TENT[f]; }
+    else if (r && r.st === "parcial") { h.parcial++; TENT[f] = { data:dt.slice(0,5), motivo:"coleta parcial" + (r.obs ? ` (${r.obs})` : "") }; }
+    else { h.nao++; TENT[f] = { data:dt.slice(0,5), motivo:(r && r.st === "nao") ? "não coletado" + (r.obs ? ` (${r.obs})` : "") : "sem retorno" }; } });
+  HIST.push(h); ROTA.paradas = []; ROTA.ret = {};
+  salvarRota(); desenharRota();
+}
+
+document.getElementById("v-rota").addEventListener("click", e => {
+  const fr = e.target.closest("[data-frete]"); if (fr){ freteRota = fr.dataset.frete; desenharRota(); return; }
+  if (e.target.closest("#form-salvar")){ const v = document.getElementById("form-url").value.trim();
+    if (v && !/^https:\/\/(forms\.office\.com|forms\.microsoft\.com|forms\.cloud\.microsoft|docs\.google\.com\/forms)\//i.test(v)) { const n = document.querySelector("#form-cfg .acoes .nota"); n.innerHTML = `<b style="color:var(--red)">Esse não parece um link do Microsoft Forms.</b> Ele começa com https://forms.office.com/ ou https://forms.cloud.microsoft/.`; return; }
+    FORM_URL = v; try { localStorage.setItem("almox-form-url", JSON.stringify(v)); } catch(err){} desenharRotaDia(); return; }
+  if (e.target.closest("#colar-lancar")){ const r = lancarRetornos(document.getElementById("colar-ret").value);
+    desenharRotaDia(); const el = document.getElementById("colar-res");
+    if (el) el.innerHTML = r.n ? `<b style="color:var(--accent)">${r.n} retorno(s) lançado(s).</b>${r.erros.length ? ` Não achei: ${r.erros.join(", ")}.` : ""}` : `<b style="color:var(--red)">Nenhum retorno reconhecido.</b> Cole as mensagens que começam com "RETORNO".`; return; }
+  if (e.target.closest("#resp-limpar")){ RESP = []; try { localStorage.removeItem("almox-form-resp"); } catch(err){} desenharRespostas(); return; }
+  if (e.target.closest("#form-limpar")){ FORM_URL = ""; try { localStorage.removeItem("almox-form-url"); } catch(err){} desenharRotaDia(); return; }
+  const mr = e.target.closest("[data-modorota]"); if (mr){ modoRota = mr.dataset.modorota; desenharRota(); return; }
+  const lb = e.target.closest("[data-lib]"); if (lb){ soLiberados = lb.dataset.lib === "1"; desenharRota(); return; }
+  const ad = e.target.closest("[data-addrota]");
+  if (ad){ const f = ad.dataset.addrota; const k = ROTA.paradas.indexOf(f); if (k >= 0) { ROTA.paradas.splice(k,1); delete ROTA.ret[f]; } else ROTA.paradas.push(f); salvarRota(); desenharRota(); return; }
+  const mv = e.target.closest("[data-mv]");
+  if (mv){ const k = +mv.dataset.mv, d = +mv.dataset.d, a = ROTA.paradas; [a[k], a[k+d]] = [a[k+d], a[k]]; salvarRota(); desenharRotaDia(); return; }
+  const rm = e.target.closest("[data-rm]"); if (rm){ delete ROTA.ret[ROTA.paradas[+rm.dataset.rm]]; ROTA.paradas.splice(+rm.dataset.rm, 1); salvarRota(); desenharRota(); return; }
+  if (e.target.closest("#rota-sugerir")){ sugerirRota(); return; }
+  if (e.target.closest("#rota-ordenar")){ const F = Object.fromEntries(paradasPorFornecedor().map(o => [o.forn,o])); ROTA.paradas.sort((a,b) => F[a].cid.localeCompare(F[b].cid) || F[b].score - F[a].score); salvarRota(); desenharRotaDia(); return; }
+  if (e.target.closest("#rota-limpar")){ ROTA.paradas = []; ROTA.ret = {}; salvarRota(); desenharRota(); return; }
+  if (e.target.closest("#rota-motorista") || e.target.closest("#rota-motorista2")){ abrirMotorista(); return; }
+  if (e.target.closest("#rota-fechar")){ fecharRota(); return; }
+  if (e.target.closest("#abrir-hist")){ abrirHistorico(); return; }
+  const hi = e.target.closest("[data-histid]"); if (hi){ abrirHistorico(hi.dataset.histid || null); return; }
+  if (e.target.closest("#rota-copiar")){ const b = e.target.closest("#rota-copiar"), t = document.getElementById("rota-texto").textContent;
+    const ok = () => b.textContent = "Copiado ✓";
+    const falha = () => { const p = document.querySelector(".previa"); p.open = true; const r = document.createRange(); r.selectNodeContents(document.getElementById("rota-texto")); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); b.textContent = "Texto selecionado: Ctrl+C"; };
+    try { navigator.clipboard.writeText(t).then(ok, falha); } catch(err){ falha(); } }
+});
+document.getElementById("rota-wpp").value = WPP_ALMOX;
+document.getElementById("rota-wpp").addEventListener("change", e => { WPP_ALMOX = e.target.value.trim(); try { localStorage.setItem("almox-wpp", JSON.stringify(WPP_ALMOX)); } catch(err){} desenharRotaDia(); });
+["rota-data","rota-mot","rota-cam"].forEach(id => document.getElementById(id).addEventListener("change", e => {
+  ROTA[{ "rota-data":"data", "rota-mot":"mot", "rota-cam":"cam" }[id]] = e.target.value; salvarRota(); desenharRotaDia(); }));
+
 // ---------- Tela Prateleiras ----------
 const NOMES_ESTANTE = { B:"Rolamentos e mancais", C:"Material de consumo", "2P":"2º piso", EXT:"Área externa" };
-const FOTOS_ESTANTE = {};
-Object.entries(E.estantes || {}).forEach(([k,v]) => FOTOS_ESTANTE[k] = `fotos/estantes/${k}.jpg?v=${v}`);
+const FOTOS_ESTANTE = { B:"fotos/estantes/B.jpg" };
 function lerLocal(l){
   const [pre, pos] = l.split("-"); let est = pre;
   const m = /^([A-Z])(\d{2})$/.exec(pre);
@@ -924,7 +2111,9 @@ function desenharMapa(){
     const nr = todos.filter(S.f).length;
     return `<button class="est${largo?" largo":""}" data-est="${k}" aria-pressed="${k===estAtual}" title="${esc(NOMES_ESTANTE[k] || cap(catPrinc(EST.get(k))))}"><b>${k}</b><small>${todos.length}</small>${nr?`<em style="background:${S.cor}" title="${nr} ${S.t.toLowerCase()}">${nr}</em>`:""}</button>`;
   };
+  const nCt = contagemDoDia(new Date()).length;
   document.getElementById("mapa").innerHTML = `
+    <button class="btn-contagem" data-contagem><span>🔢 Contagem de hoje<small>inventário rotativo</small></span><em>${nCt}</em></button>
     <div class="grupo"><h3>Térreo · Estantes</h3><div class="estantes">${letras.map(k=>bt(k)).join("")}</div></div>
     <div class="grupo"><h3>Outras áreas</h3><div class="estantes">${outros.map(k=>bt(k,true)).join("")}</div></div>
     <div class="legenda">O número colorido mostra quantos itens da estante estão em <b>${(stEst === "todos" ? SIT.abaixo : SIT[stEst]).t.toLowerCase()}</b>.<br><br><code>K03-0006</code> = estante <b>K</b>, nível <b>03</b>, posição <b>6</b>.</div>`;
@@ -962,38 +2151,212 @@ function desenharEstante(){
 function etq(i){
   const st = STP[i.st];
   return `<button class="etq s-${i.parado ? "parado" : i.st}" data-cod="${i.c}">
-    <span class="thumb">${i.f ? `<img src="${fotosDe(i)[0]}" alt="" loading="lazy">${i.f > 1 ? `<em class="nft">${i.f} fotos</em>` : ""}` : IC_CAM}</span>
+    <span class="thumb">${i.f ? `<img src="fotos/${i.c}.jpg" alt="" loading="lazy">${i.f > 1 ? `<em class="nft">${i.f} fotos</em>` : ""}` : IC_CAM}</span>
     <span><span class="ecod">${i.c}${i.parado ? `<span class="pill p-parado">Parado +1 ano</span>` : i.st !== "ok" ? `<span class="pill ${st[0]}">${st[1]}</span>` : ""}</span>
     <span class="edesc">${esc(i.d)}</span>
     <span class="emeta"><span>${i.l}</span><span>SALDO <b>${fmt(i.s)}</b> ${esc(i.u)}</span><span>MÍN ${fmt(i.mn)} · MÁX ${fmt(i.mx)}</span></span></span></button>`;
 }
 function abrirEstante(k){ estAtual = k; catEst = null; desenharMapa(); desenharEstante(); window.scrollTo({top:0}); }
-document.getElementById("mapa").addEventListener("click", e => { const b = e.target.closest("[data-est]"); if (b) abrirEstante(b.dataset.est); });
+document.getElementById("mapa").addEventListener("click", e => { if (e.target.closest("[data-contagem]")) { ctDesloc = 0; mostrarTela("inventario"); return; } const b = e.target.closest("[data-est]"); if (b) abrirEstante(b.dataset.est); });
 document.getElementById("principal").addEventListener("click", e => {
   const c = e.target.closest("[data-pcat]"); if (c){ catEst = c.dataset.pcat || null; desenharEstante(); return; }
   if (e.target.closest("[data-pfoto]")){ soFoto = !soFoto; desenharEstante(); return; }
   const st = e.target.closest("[data-sit]"); if (st){ stEst = st.dataset.sit; desenharMapa(); desenharEstante(); }
 });
 
+// ---------- Painel extra: resumo do dia e contagem ----------
+const xEl = document.getElementById("extra");
+let xModo = null, ctDesloc = 0;
+function xAbrir(html){ xEl.innerHTML = `<aside class="x-pnl" role="dialog">${html}</aside>`; xEl.hidden = false; xEl.querySelector(".x-pnl").scrollTop = 0; }
+function xFechar(){ xEl.hidden = true; xEl.innerHTML = ""; xModo = null; }
+const copiar = (txt, bt) => { const ok = () => { if (bt){ const o = bt.textContent; bt.textContent = "✓ Copiado"; setTimeout(() => bt.textContent = o, 1500); } };
+  if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, () => {}); else { const a = document.createElement("textarea"); a.value = txt; document.body.appendChild(a); a.select(); try { document.execCommand("copy"); ok(); } catch(e){} a.remove(); } };
+const urgItem = i => i.st === "zerado" || (i.st === "repor" && i.falta);
+
+// Resumo do dia: o que importa hoje, pronto para mandar no grupo
+function abrirResumo(){
+  xModo = "resumo";
+  const hoje = new Date(), dt = hoje.toLocaleDateString("pt-BR", { weekday:"long", day:"2-digit", month:"2-digit" });
+  const zer = ITENS.filter(i => i.st === "zerado" && !i.parado);
+  const semNada = ITENS.filter(i => urgItem(i) && !i.parado && !i.sc && !(PED_COD[i.c] || []).length).sort((a,b) => a.s - b.s || b.base - a.base);
+  const abaixoT = ITENS.filter(i => (i.st === "repor") && !i.parado);
+  const ped30 = PED.filter(p => p.dias > 30), pedN = new Set(PED.map(p => p.n)).size;
+  const fAtr = {}; ped30.forEach(p => fAtr[p.forn] = (fAtr[p.forn] || 0) + 1);
+  const topAtr = Object.entries(fAtr).sort((a,b) => b[1] - a[1]).slice(0, 3);
+  const F = paradasPorFornecedor().filter(o => o.frete === "R");
+  const prontos = F.filter(o => o.lib), prontosUrg = prontos.filter(o => o.urg);
+  const ult = HIST[HIST.length - 1];
+  const nCt = contagemDoDia(hoje).length;
+  let tx = `*📋 RESUMO DO ALMOXARIFADO*\n_${dt.charAt(0).toUpperCase() + dt.slice(1)}_\n`;
+  tx += `\n*ESTOQUE*\n• ${zer.length} itens zerados\n• ${abaixoT.length} itens abaixo do mínimo\n• *${semNada.length} urgentes sem SC e sem pedido*\n`;
+  semNada.slice(0, 5).forEach(i => tx += `   – ${i.c} ${i.d.slice(0, 38)}${i.s === 0 ? " (zerado)" : ` (saldo ${fmt1(i.s)})`}\n`);
+  if (semNada.length > 5) tx += `   – e mais ${semNada.length - 5}\n`;
+  if (!SEM_PED) {
+  tx += `\n*PEDIDOS DE COMPRA*\n• ${fmt(PED.length)} itens aguardando entrega em ${pedN} pedidos\n• *${ped30.length} itens com mais de 30 dias*\n`;
+  topAtr.forEach(([f, n]) => tx += `   – ${f.slice(0, 34)}: ${n} item(ns)\n`);
+  tx += `\n*ROTA DA VAN*\n• ${prontos.length} fornecedores prontos para retirar (${prontosUrg.length} com item urgente)\n`;
+  tx += ROTA.paradas.length ? `• Rota de hoje montada: ${ROTA.paradas.length} parada(s)${ROTA.mot ? ` com ${ROTA.mot}` : ""}\n` : `• Rota de hoje ainda não montada\n`;
+  if (ult) tx += `• Última rota (${ult.data}): ${ult.ok} de ${ult.n} coletadas\n`;
+  }
+  tx += `\n*INVENTÁRIO*\n• Contagem de hoje: ${nCt} itens\n`;
+  tx += `\nPainel: https://geanfer10.github.io/Almoxarifado/`;
+  xAbrir(`<div class="x-cab"><b>Resumo do dia</b><span>${esc(dt)} · dados de ${fmtD(HOJE)}</span><button class="fechar" data-xfechar aria-label="Fechar">✕</button></div>
+    <div class="x-corpo">
+      <div class="x-tiles">
+        <div style="--k:var(--red)"><small>Urgentes sem SC/pedido</small><b>${semNada.length}</b></div>
+        <div style="--k:var(--red)"><small>Zerados</small><b>${zer.length}</b></div>
+        <div style="--k:var(--amber)"><small>Pedidos +30 dias</small><b>${ped30.length}</b></div>
+        <div style="--k:var(--accent)"><small>Prontos p/ retirar</small><b>${prontos.length}</b></div>
+      </div>
+      <div class="x-msg" id="x-texto">${esc(tx).replace(/\*([^*\n]+)\*/g, "<b>$1</b>").replace(/_([^_\n]+)_/g, "<i>$1</i>")}</div>
+      <div class="x-acoes">
+        <a class="btn wpp" href="https://wa.me/?text=${encodeURIComponent(tx)}" target="_blank" rel="noopener">Enviar pelo WhatsApp</a>
+        <button class="btn sec" data-xcopiar>Copiar texto</button>
+        <span class="nota" style="margin:0">O WhatsApp abre para você escolher o grupo ou o contato.</span>
+      </div>
+    </div>`);
+  xEl.dataset.texto = tx;
+}
+
+// Contagem rotativa: itens de giro alto toda semana, os demais em rodízio, em ordem de prateleira
+const mesesUso = i => i.ult12.filter(v => v > 0).length;
+const hashC = s => { let h = 7; for (const ch of String(s)) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return h; };
+const CT_A = ITENS.filter(i => i.s != null && !i.parado && mesesUso(i) >= 10).sort((a,b) => hashC(a.c) - hashC(b.c));
+const CT_B = ITENS.filter(i => i.s != null && !i.parado && !CT_A.includes(i) && i.cons12 > 0).sort((a,b) => hashC(a.c) - hashC(b.c));
+const CT_C = ITENS.filter(i => i.s != null && !CT_A.includes(i) && !CT_B.includes(i) && i.s > 0).sort((a,b) => hashC(a.c) - hashC(b.c));
+const CT_QTD = [10, 4, 1];   // por dia: giro alto (sai quase todo mês), giro baixo, sem movimento
+const diaUtil = d => { const x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); let n = 0; const ini = new Date(2026, 0, 1); for (let t = new Date(ini); t < x; t.setDate(t.getDate() + 1)) if (t.getDay() !== 0 && t.getDay() !== 6) n++; return n; };
+function contagemDoDia(d){
+  const n = diaUtil(d), out = [];
+  [[CT_A, "Giro alto", "p-red"], [CT_B, "Giro baixo", "p-amber"], [CT_C, "Sem movimento", "p-blue"]].forEach(([L, por, cls], k) => {
+    const q = Math.min(CT_QTD[k], L.length); for (let j = 0; j < q; j++) out.push({ i:L[(n * CT_QTD[k] + j) % L.length], por, cls }); });
+  return out.sort((a,b) => a.i.l.localeCompare(b.i.l));
+}
+let ctTexto = "";
+function abrirContagem(desl){ ctDesloc = desl; mostrarTela("inventario"); }
+function desenharInventario(){
+  const desl = ctDesloc;
+  const util = x => x.getDay() !== 0 && x.getDay() !== 6;
+  let d = new Date(); while (!util(d)) d.setDate(d.getDate() + 1);   // fim de semana: começa na segunda
+  let k = 0; while (k !== desl){ d.setDate(d.getDate() + Math.sign(desl)); if (util(d)) k += Math.sign(desl); }
+  const L = contagemDoDia(d), dt = d.toLocaleDateString("pt-BR", { weekday:"long", day:"2-digit", month:"2-digit" });
+  const cicloA = Math.ceil(CT_A.length / CT_QTD[0]);
+  let tx = `*🔢 CONTAGEM DO DIA – ${dt}*\nConte e anote a quantidade física de cada item:\n`;
+  L.forEach(({ i }) => tx += `\n${i.l} · ${i.c} ${i.d.slice(0, 40)}\n   Sistema: ${fmt1(i.s)} ${i.u} | Contado: ____`);
+  ctTexto = tx;
+  const nPor = p => L.filter(x => x.por === p).length;
+  document.getElementById("inv-corpo").innerHTML = `
+    <div class="inv-topo">
+      <div class="ct-dia"><button data-ctdia="${desl - 1}" aria-label="Dia anterior">‹</button><b>${esc(dt.charAt(0).toUpperCase() + dt.slice(1))}</b><button data-ctdia="${desl + 1}" aria-label="Próximo dia">›</button>${desl ? `<button data-ctdia="0" class="hoje-bt">Hoje</button>` : ""}</div>
+      <div class="inv-res"><span><b>${L.length}</b> itens</span><span class="pill p-red">${nPor("Giro alto")} giro alto</span><span class="pill p-amber">${nPor("Giro baixo")} giro baixo</span><span class="pill p-blue">${nPor("Sem movimento")} sem movimento</span></div>
+    </div>
+    <div class="tabela-wrap" style="max-height:none"><table class="ct-tab"><thead><tr><th>Local</th><th>Item</th><th style="text-align:right">Sistema</th><th class="cont">Contado</th></tr></thead><tbody>
+      ${L.map(({ i, por, cls }) => `<tr data-cod="${i.c}"><td class="loc">${esc(i.l)}</td><td><b style="font-family:var(--mono)">${i.c}</b> ${esc(i.d)}<small><span class="ct-por pill ${cls}">${por}</span>${i.zAno ? ` · zerou ${i.zAno}× em ${ANO}` : ""}</small></td><td style="text-align:right;font-family:var(--mono);white-space:nowrap"><b>${fmt1(i.s)}</b> ${esc(i.u)}</td><td class="cont"></td></tr>`).join("")}
+    </tbody></table></div>
+    <div class="inv-pe">
+      <p class="nota" style="margin:0">Todo dia útil: ${CT_QTD[0]} itens de giro alto, ${CT_QTD[1]} de giro baixo e ${CT_QTD[2]} sem movimento. Os ${fmt(CT_A.length)} itens de giro alto (saem em 10 ou mais meses do ano) são contados a cada ~${cicloA} dias úteis (cerca de ${Math.max(1, Math.round(cicloA / 21))} ${Math.round(cicloA / 21) > 1 ? "meses" : "mês"}). Se der diferença, o ajuste é lançado no sistema normalmente.</p>
+      <div class="x-acoes"><a class="btn wpp" href="https://wa.me/?text=${encodeURIComponent(tx)}" target="_blank" rel="noopener">Enviar pelo WhatsApp</a><button class="btn sec" data-ctcopiar>Copiar lista</button></div>
+    </div>`;
+}
+document.getElementById("v-inventario").addEventListener("click", e => {
+  const cd = e.target.closest("[data-ctdia]"); if (cd){ ctDesloc = +cd.dataset.ctdia; desenharInventario(); return; }
+  const cp = e.target.closest("[data-ctcopiar]"); if (cp){ copiar(ctTexto, cp); return; }
+});
+xEl.addEventListener("click", e => {
+  if (e.target === xEl || e.target.closest("[data-xfechar]")) { xFechar(); return; }
+  const cp = e.target.closest("[data-xcopiar]");
+  if (cp){ copiar(xEl.dataset.texto, cp); return; }
+  if (e.target.closest("tr[data-cod]")) xFechar();   // a ficha do item abre pelo clique geral
+});
+document.getElementById("abrir-resumo").addEventListener("click", abrirResumo);
+
+// ---------- Início ----------
+function desenharBadges(){
+  const set = (k, v, cls) => { const el = document.getElementById("bd-" + k); if (!el) return; el.hidden = !v; el.textContent = fmt(v); el.className = "bd " + (cls || ""); };
+  set("gestao", ITENS.filter(VISOES.semsc.f).length, "r");
+  set("pedidos", PED.filter(p => p.dias > 30).length);
+  set("rota", paradasPorFornecedor().filter(o => o.frete === "R" && o.lib && o.urg).length, "r");
+  set("inventario", contagemDoDia(new Date()).length);
+}
+function desenharInicio(){
+  const h = new Date(), hr = h.getHours();
+  document.getElementById("ini-sauda").textContent = (hr < 12 ? "Bom dia" : hr < 18 ? "Boa tarde" : "Boa noite") + ", equipe do almoxarifado";
+  const dt = h.toLocaleDateString("pt-BR", { weekday:"long", day:"numeric", month:"long" });
+  document.getElementById("ini-data").textContent = `${dt.charAt(0).toUpperCase() + dt.slice(1)} · dados da planilha de ${fmtD(dISO(DADOS.ultMov) || HOJE)}`;
+  const n = f => ITENS.filter(f).length;
+  const C = [
+    ["semsc", "Abaixo do mínimo sem SC", "precisam de solicitação de compra", n(VISOES.semsc.f), "var(--red)", '<path d="M12 4 2.8 19.5h18.4z"/><path d="M12 10v4.5M12 17v.5"/>'],
+    ["zerados", "Zerados agora", `${fmt(soma(ITENS.map(i => i.z26[MES_ATUAL] || 0)))} rupturas em ${MESES[MES_ATUAL].toLowerCase()}`, n(VISOES.zerados.f), "var(--red)", '<circle cx="12" cy="12" r="8.5"/><path d="m6 18 12-12"/>'],
+    ["falta", "Vão faltar antes de chegar", "o saldo acaba antes da reposição", n(VISOES.falta.f), "var(--amber)", '<path d="M4 7l6 6 3.5-3.5L20 16"/><path d="M15 16h5v-5"/>'],
+    ["atrasadas", "Acima do lead time", "SC aberta há mais que o tempo típico", n(VISOES.atrasadas.f), "var(--blue)", '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>'],
+  ];
+  document.getElementById("ini-atencao").innerHTML = C.map(([v, t, s, num, k, ic]) =>
+    `<button class="acao" data-irvisao="${v}" style="--k:${k}"><span class="topo-a"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ic}</svg></span><span class="seta">→</span></span><b>${fmt(num)}</b><span class="t">${t}</span><span class="s">${s}</span></button>`).join("");
+  const F = ITENS.filter(VISOES.prioridade.f).sort(VISOES.prioridade.o).slice(0, 8);
+  document.getElementById("ini-fila").innerHTML = F.map(i => `<li data-cod="${i.c}"><div class="it"><b>${i.c}</b> <span class="pill ${STP[i.st][0]}">${STP[i.st][1]}</span><span class="ds">${esc(i.d)}</span></div>
+    <div class="sl">${fmt1(i.s)} / ${fmt(i.mn)}<small>saldo / mínimo</small></div><div class="rp">${pillRep(i)}</div></li>`).join("");
+  const R = paradasPorFornecedor().filter(o => o.frete === "R");
+  const H = [
+    ["inventario", "Contagem do dia", `${contagemDoDia(new Date()).length} itens para contar, em ordem de prateleira`, '<rect x="4.5" y="5.5" width="15" height="15" rx="1.5"/><path d="m8.5 13.5 2.2 2.2 4.8-4.7"/>'],
+    ["rota", "Rota da van", SEM_PED ? "aguardando o relatório de pedidos" : `${R.filter(o => o.lib).length} fornecedores prontos para retirar · ${R.filter(o => o.lib && o.urg).length} com item urgente`, '<path d="M3 16.5V7.5h11v9"/><path d="M14 10.5h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17.5" cy="17.5" r="1.8"/>'],
+    ["pedidos", "Pedidos de compra", SEM_PED ? "aguardando o relatório de pedidos" : `${fmt(PED.filter(p => p.dias > 30).length)} itens em aberto há mais de 30 dias`, '<path d="M6 3.5h9l3.5 3.5v13.5H6z"/><path d="M9 12h6M9 15.5h6"/>'],
+    ["extrato", "Itens parados", `${fmt(ITENS.filter(i => i.parado).length)} sem saída há mais de um ano`, '<path d="M4 8h13l-3.5-3.5M20 16H7l3.5 3.5"/>'],
+  ];
+  document.getElementById("ini-hoje").innerHTML = H.map(([k, t, s, ic]) => `<button data-tela2="${k}"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ic}</svg></span><span><b>${t}</b><small>${s}</small></span><span class="seta">›</span></button>`).join("");
+  const cnt = k => ITENS.filter(i => !i.parado && i.s != null && i.st === k).length;
+  const D = [["Zerado", cnt("zerado"), "var(--red)"], ["Abaixo do mín.", cnt("repor"), "color-mix(in srgb,var(--red) 50%,var(--surface))"], ["Atenção", cnt("atencao"), "var(--amber)"], ["Normal", cnt("ok"), "var(--accent)"], ["Acima do máx.", cnt("acima"), "var(--blue)"], ["Parado +1 ano", ITENS.filter(i => i.parado).length, "var(--ink-3)"]];
+  const tot = soma(D.map(x => x[1]));
+  document.getElementById("ini-tot").textContent = fmt(tot) + " itens";
+  document.getElementById("ini-dist").innerHTML = `<div class="dist-barra">${D.filter(x => x[1]).map(([t, v, c]) => `<i style="width:${v/tot*100}%;background:${c}" title="${t}: ${fmt(v)}"></i>`).join("")}</div>
+    <ul>${D.map(([t, v, c]) => `<li><i style="background:${c}"></i>${t}<b>${fmt(v)}</b></li>`).join("")}</ul>`;
+  const r25 = MESES.map((_, m) => ITENS.reduce((a, i) => a + (i.z25[m] || 0), 0));
+  const r26 = MESES.map((_, m) => m > MES_ATUAL ? null : ITENS.reduce((a, i) => a + (i.z26[m] || 0), 0));
+  grafico("g-ini", { type:"bar", data:{ labels:MESES, datasets:[
+      { label:String(ANO - 1), data:r25, backgroundColor:"#D9534A", borderRadius:3, datalabels:{anchor:"end", align:"end", offset:0, font:{size:10}} },
+      { label:String(ANO), data:r26, backgroundColor:"#2E9A57", borderRadius:3, datalabels:{anchor:"end", align:"end", offset:0, font:{size:10}} } ] },
+    options: baseOpts({ layout:{padding:{top:20}}, datasets:{bar:{categoryPercentage:.8, barPercentage:.92}} }) });
+}
+document.getElementById("v-inicio").addEventListener("click", e => {
+  const v = e.target.closest("[data-irvisao]"); if (v){ visao = v.dataset.irvisao; mostrarTela("gestao"); return; }
+  const t2 = e.target.closest("[data-tela2]"); if (t2){ mostrarTela(t2.dataset.tela2); return; }
+});
+
 // ---------- Navegação entre as telas ----------
+const NOME_TELA = { inicio:"Início", prateleiras:"Prateleiras", gestao:"Gestão de estoque", pedidos:"Pedidos de compra", rota:"Rota da van", inventario:"Inventário rotativo", extrato:"Movimentação" };
 function mostrarTela(t){
+  if (!NOME_TELA[t]) t = "inicio";
   const prat = t === "prateleiras";
+  document.getElementById("v-inicio").hidden = t !== "inicio";
+  document.getElementById("v-inventario").hidden = t !== "inventario";
+  if (t === "inicio") desenharInicio();
+  if (t === "inventario") desenharInventario();
+  if (t === "gestao") setTimeout(desenhar, 0);
+  document.getElementById("trilha").innerHTML = `Almoxarifado / <b>${NOME_TELA[t]}</b>`;
+  document.getElementById("app").classList.remove("menu-aberto");
   document.getElementById("v-prat").hidden = !prat;
   document.getElementById("v-gestao").hidden = t !== "gestao";
   document.getElementById("v-extrato").hidden = t !== "extrato";
+  document.getElementById("v-pedidos").hidden = t !== "pedidos";
+  if (t === "pedidos") desenharPedidos();
+  document.getElementById("v-rota").hidden = t !== "rota";
+  if (t === "rota") desenharRota();
   if (t === "extrato") desenharParados();
   document.querySelectorAll("[data-tela]").forEach(b => b.dataset.tela === t ? b.setAttribute("aria-current","page") : b.removeAttribute("aria-current"));
   history.replaceState(null, "", "#" + t);
   if (prat && !document.getElementById("mapa").innerHTML) { desenharMapa(); desenharEstante(); }
   window.scrollTo({top:0});
 }
-document.querySelector(".abas").addEventListener("click", e => { const b = e.target.closest("[data-tela]"); if (b) mostrarTela(b.dataset.tela); });
-function medirTopo(){ document.documentElement.style.setProperty("--topo-h", document.querySelector(".topo").offsetHeight + "px"); }
+document.getElementById("nav").addEventListener("click", e => { const b = e.target.closest("[data-tela]"); if (b) mostrarTela(b.dataset.tela); });
+document.getElementById("menu-bt").addEventListener("click", () => document.getElementById("app").classList.toggle("menu-aberto"));
+function medirTopo(){ document.documentElement.style.setProperty("--topo-h", document.querySelector(".barra-topo").offsetHeight + "px"); }
 window.addEventListener("resize", medirTopo);
 
-document.getElementById("info-dados").innerHTML = `<span aria-hidden="true">ⓘ</span><div>Planilha de etiquetas: <b>${E.planilha || "—"}</b> · GESTÃO DE ESTOQUE: <b>${GG ? GG.planilha : "ainda não publicada"}</b>${GG ? ` · movimentações até <b>${fmtD(dISO(GG.ultMov))}</b>` : ""} · Valores em R$ não incluídos. Previsão de entrega = data da SC + tempo típico de chegada do item.</div>`;
-
-// Atualização automática: a cada 5 minutos confere se o robô publicou dados novos
+document.getElementById("info-dados").innerHTML = `<span aria-hidden="true">ⓘ</span><div>Planilha de etiquetas: <b>${E.planilha || "—"}</b> · GESTÃO DE ESTOQUE: <b>${GG ? GG.planilha : "ainda não publicada"}</b>${GG ? ` · movimentações até <b>${fmtD(dISO(GG.ultMov))}</b>` : ""} · Previsão de entrega = data da SC + tempo típico de chegada do item.</div>`;
+desenhar();
+medirTopo();
+document.querySelectorAll(".ult-mov2").forEach(x => x.textContent = fmtD(dISO(DADOS.ultMov)));
+const telaIni = location.hash.slice(1);
+if (!SEM_PED) document.getElementById("ped-gerado").textContent = DADOS.pedidos.gerado || "—";
 function checar(arq, atual, chave){
   const sc = document.createElement("script");
   sc.src = arq + "?t=" + Date.now();
@@ -1007,11 +2370,6 @@ setInterval(() => {
   checar("dados.js", E.gerado, "ESTOQUE");
   checar("gestao.js", GG && GG.gerado, "GESTAO");
 }, 5 * 60 * 1000);
-desenhar();
-medirTopo();
-document.querySelectorAll(".ult-mov2").forEach(x => x.textContent = fmtD(dISO(DADOS.ultMov)));
-const telaIni = location.hash.slice(1);
-mostrarTela(["prateleiras","extrato"].includes(telaIni) ? telaIni : "gestao");
+desenharBadges();
+mostrarTela(NOME_TELA[telaIni] ? telaIni : "inicio");
 </script>
-</body>
-</html>
