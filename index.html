@@ -898,8 +898,10 @@ tbody tr:hover{background:var(--surface-2)}
 <div class="fundo" id="histrotas" hidden></div>
 <div class="fundo" id="extra" hidden></div>
 
-<script src="dados.js"></script>
-<script src="gestao.js"></script>
+<script>
+// carrega sempre a versão mais nova publicada pelo robô (evita o navegador mostrar dados antigos do cache)
+document.write('<script src="dados.js?t=' + Date.now() + '"><\/script><script src="gestao.js?t=' + Date.now() + '"><\/script>');
+</script>
 <script>
 // Dados publicados pelo robô: dados.js (planilha de etiquetas) e gestao.js (GESTÃO DE ESTOQUE)
 const E = window.ESTOQUE || { itens: [] };
