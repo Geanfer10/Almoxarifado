@@ -785,7 +785,7 @@ tbody tr:hover{background:var(--surface-2)}
 
 <main class="pagina" id="v-pedidos" hidden>
   <section class="pg-cab"><div><h1>Pedidos de compra</h1><p>Itens comprados que ainda não chegaram, por pedido e fornecedor</p></div></section>
-  <div class="aviso"><span aria-hidden="true">ⓘ</span><div><b>Pedidos de compra em atendimento</b> (relatório do sistema de <span id="ped-gerado"></span>). Mostra só itens que ainda têm saldo a entregar. A data de entrega está igual à data de emissão em quase todos os pedidos, então o atraso é contado em <b>dias em aberto desde a emissão</b>.</div></div>
+  <div class="aviso"><span aria-hidden="true">ⓘ</span><div><b>Pedidos de compra pendentes</b> (planilha NOVO FOLOW UP, salva em <span id="ped-gerado"></span>). Mostra só itens com saldo a entregar. <b>Urgente</b> = item zerado e pedido acima do tempo típico de chegada do item, contado desde a data da SC.</div></div>
   <div class="modo" id="modo-ped" role="group" aria-label="Mostrar urgentes ou geral"></div>
   <section class="kpis" id="kpis-ped" aria-label="Resumo dos pedidos"></section>
   <div class="busca-linha"><div class="busca-aba"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="busca-ped" type="search" placeholder="Buscar pedido, fornecedor, CNPJ, comprador, código ou material" autocomplete="off" aria-label="Buscar nos pedidos"><button data-limpa="busca-ped" aria-label="Limpar busca" hidden>✕</button></div><p class="nota" id="busca-ped-res"></p></div>
@@ -821,7 +821,7 @@ tbody tr:hover{background:var(--surface-2)}
 
 <main class="pagina" id="v-rota" hidden>
   <section class="pg-cab"><div><h1>Rota da van</h1><p>Retiradas nos fornecedores, envio ao motorista e retorno da coleta</p></div></section>
-  <div class="aviso"><span aria-hidden="true">⚠</span><div><b>Rota do motorista (protótipo).</b> Pedidos, itens e quantidades são reais. <b>Tipo de frete, liberação para retirada, cidade, telefone e horário dos fornecedores são exemplos</b> até chegar o cadastro de vocês. O ponto de saída considerado é a Goiás Verde em Luziânia - GO.</div></div>
+  <div class="aviso"><span aria-hidden="true">⚠</span><div><b>Rota da van.</b> Pedidos, itens e quantidades vêm da planilha NOVO FOLOW UP. Critério de urgência: <b>item zerado</b> e <b>pedido acima do tempo de entrega</b>. A planilha ainda não informa frete, liberação, cidade e telefone dos fornecedores, então por enquanto todos aparecem como retirada. O ponto de saída é a Goiás Verde, Rodovia GO-010, Luziânia - GO.</div></div>
   <div class="modo" id="modo-rota" role="group" aria-label="Mostrar urgentes ou geral"></div>
   <section class="kpis" id="kpis-rota" aria-label="Resumo das retiradas"></section>
   <div class="busca-linha"><div class="busca-aba"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="busca-rota" type="search" placeholder="Buscar fornecedor, cidade, pedido, código ou material" autocomplete="off" aria-label="Buscar nas retiradas"><button data-limpa="busca-rota" aria-label="Limpar busca" hidden>✕</button></div><p class="nota" id="busca-rota-res"></p></div>
@@ -900,7 +900,7 @@ tbody tr:hover{background:var(--surface-2)}
 
 <script>
 // carrega sempre a versão mais nova publicada pelo robô (evita o navegador mostrar dados antigos do cache)
-document.write('<script src="dados.js?t=' + Date.now() + '"><\/script><script src="gestao.js?t=' + Date.now() + '"><\/script>');
+document.write('<script src="dados.js?t=' + Date.now() + '"><\/script><script src="gestao.js?t=' + Date.now() + '"><\/script><script src="pedidos.js?t=' + Date.now() + '"><\/script>');
 </script>
 <script>
 // Dados publicados pelo robô: dados.js (planilha de etiquetas) e gestao.js (GESTÃO DE ESTOQUE)
@@ -1414,10 +1414,15 @@ document.addEventListener("keydown", e => {
 const PD = DADOS.pedidos || { linhas:[], forn:[], comp:[], dep:[] };
 const EXF = (PD.exemplo && PD.exemplo.forn) || [];
 const LIB = (PD.exemplo && PD.exemplo.liberado) || {};
-const PED_ALL = PD.linhas.map(([n, em, en, f, c, cod, desc, q, at, sal, dp]) => {
-  const de = dISO(em), ex = EXF[f] || {};
+const SEM_LIB = !Object.keys(LIB).length;   // a planilha ainda não informa liberação para retirada
+const libOk = l => SEM_LIB || !!libOk(l);
+const PED_ALL = PD.linhas.map(([n, em, en, f, c, cod, desc, q, at, sal, dp, dsc, tipo]) => {
+  const de = dISO(em), ex = EXF[f] || {}, it = POR_COD.get(cod), dSc = dISO(dsc);
+  // acima do tempo: dias desde a SC (ou desde o pedido) maior que o tempo típico de chegada do item
+  const ref = dSc || de, lead = it ? it.lead : LEAD_GERAL, diasRef = Math.max(0, Math.round((HOJE - ref) / DIA));
   return { n, em:de, en:dISO(en), fi:f, forn:PD.forn[f], cnpj:(PD.cnpj||[])[f] || "", comp:PD.comp[c], cod, desc, q, at, sal, dep:PD.dep[dp],
-    dias:Math.max(0, Math.round((HOJE - de) / DIA)), item:POR_COD.get(cod), frete:ex.fr || "E", cid:ex.cid || "", tel:ex.tel || "", hor:ex.hor || "" };
+    dias:Math.max(0, Math.round((HOJE - de) / DIA)), item:it, frete:ex.fr || (EXF.length ? "E" : "R"), cid:ex.cid || "", tel:ex.tel || "", hor:ex.hor || "",
+    sc:dSc, tipo:tipo || "", lead, diasRef, atr: diasRef > lead };
 });
 const PED = PED_ALL.filter(p => p.sal > 0);   // só o que falta entregar
 const PED_COD = {};
@@ -1437,7 +1442,7 @@ let modoPed = "geral", modoRota = "geral";
 const ehUrg = l => urgLinha(l) === 2;
 function cartoesModo(id, atr, modo, U, G, oque){
   document.getElementById(id).innerHTML = [
-    ["urg", "⚠ Urgentes", "zerados ou que acabam antes de chegar", "var(--red)", U],
+    ["urg", "⚠ Urgentes", "zerados e acima do tempo de entrega", "var(--red)", U],
     ["geral", "Geral", oque, "var(--blue)", G]].map(([k, t, sub, cor, v]) =>
     `<button ${atr}="${k}" aria-pressed="${modo === k}" style="--k:${cor}"><span class="marca">✓ mostrando</span>
       <span class="t">${t} <em>${sub}</em></span>
@@ -1550,7 +1555,7 @@ function abrirPedido(n, cod){
   const ret = pos >= 0 && ROTA.ret[p0.forn], tent = (typeof TENT !== "undefined") && TENT[p0.forn];
   const rotaTxt = !fr ? "O fornecedor entrega na empresa." :
     pos >= 0 ? `Na rota de ${ROTA.data ? ROTA.data.split("-").reverse().join("/") : fmtD(HOJE)}, parada ${pos + 1}${ret ? ` · retorno: <b>${ROT_RET[ret.st][1]}</b>${ret.obs ? ` (${esc(ret.obs)})` : ""}` : ""}.` :
-    LIB[p0.n] ? "Pronto para retirar, ainda fora da rota." : "Aguardando o fornecedor liberar para retirada.";
+    libOk(p0) ? "Pronto para retirar, ainda fora da rota." : "Aguardando o fornecedor liberar para retirada.";
   // outros pedidos abertos do mesmo item
   const outros = (PED_COD[sel.cod] || []).filter(p => String(p.n) !== n);
   fundo.innerHTML = `<aside class="ficha" role="dialog" aria-label="Pedido ${n}">
@@ -1717,15 +1722,15 @@ function lancarRetornos(txt){
   return { n, erros };
 }
 
-// Urgência do item: 2 = urgente (zerado, ou abaixo do mínimo e acaba antes de chegar), 1 = abaixo do mínimo
-const urgLinha = l => { const it = l.item; if (!it) return 0; if (it.st === "zerado" || (it.st === "repor" && it.falta)) return 2; return it.st === "repor" ? 1 : 0; };
+// Critério de urgência: 2 = urgente (item zerado E pedido acima do tempo de entrega), 1 = abaixo do mínimo
+const urgLinha = l => { const it = l.item; if (l.atr && it && it.st === "zerado") return 2; return it && (it.st === "repor" || it.st === "zerado") ? 1 : 0; };
 const volLinha = l => VOLUMOSO.test(" " + l.desc.toUpperCase() + " ");
 function paradasPorFornecedor(){
   const G = {};
   PED.forEach(p => { const o = G[p.forn] = G[p.forn] || { forn:p.forn, cnpj:p.cnpj, cid:p.cid, tel:p.tel, hor:p.hor, frete:p.frete, linhas:[] }; o.linhas.push(p); });
   return Object.values(G).map(o => {
-    o.lib = o.frete === "R" && o.linhas.some(l => LIB[l.n]);
-    o.libLinhas = o.linhas.filter(l => LIB[l.n]);
+    o.lib = o.frete === "R" && o.linhas.some(l => libOk(l));
+    o.libLinhas = o.linhas.filter(l => libOk(l));
     const alvo = o.libLinhas.length ? o.libLinhas : o.linhas;
     o.urg = alvo.filter(l => urgLinha(l) === 2).length;
     o.imp = alvo.filter(l => urgLinha(l) === 1).length;
@@ -1735,7 +1740,7 @@ function paradasPorFornecedor(){
     return o; });
 }
 const unid = p => p.item ? p.item.u : "";
-const tagsLinha = l => { const u = urgLinha(l); return (u === 2 ? ` <span class="tag-u urg">Urgente</span>` : u === 1 ? ` <span class="tag-u imp">Abaixo do mín.</span>` : "") + (volLinha(l) ? ` <span class="tag-u vol">Volumoso</span>` : ""); };
+const tagsLinha = l => { const u = urgLinha(l); return (l.item && l.item.st === "zerado" ? ` <span class="tag-u urg">Zerado</span>` : "") + (l.atr ? ` <span class="tag-u urg">Acima do tempo ${l.diasRef - l.lead}d</span>` : "") + (l.item && l.item.st === "repor" ? ` <span class="tag-u imp">Abaixo do mín.</span>` : "") + (volLinha(l) ? ` <span class="tag-u vol">Volumoso</span>` : ""); };
 const ROT_RET = { ok:["st-ok","Coletado"], parcial:["st-parcial","Parcial"], nao:["st-nao","Não coletado"] };
 
 function desenharRota(){
@@ -1745,7 +1750,7 @@ function desenharRota(){
   document.getElementById("kpis-rota").innerHTML = [
     ["Fornecedores para retirar", ret.length, `${fmt(ret.reduce((a,o)=>a+o.linhas.length,0))} itens com saldo`, "var(--blue)"],
     ["Prontos para retirar", ret.filter(o => o.lib).length, "material liberado pelo fornecedor", "var(--accent)"],
-    ["Com item urgente", ret.filter(o => o.lib && o.urg).length, "prontos e com item zerado ou acabando", "var(--red)"],
+    ["Com item urgente", ret.filter(o => o.lib && o.urg).length, "com item zerado e pedido acima do tempo", "var(--red)"],
     ["Tentativas anteriores", Object.keys(TENT).length, "fornecedores não coletados na última rota", "#8A6A4A"],
   ].map(([t,v,sub,cor]) => `<div class="kpi" style="--k:${cor};cursor:default"><small>${t}</small><b>${fmt(v)}</b><span>${sub}</span></div>`).join("");
   document.getElementById("filtros-rota").innerHTML = `<label>Frete</label>` +
@@ -1766,13 +1771,13 @@ function desenharRota(){
   document.getElementById("busca-rota-res").textContent = TR.length ? `${lista.length} fornecedor(es) encontrados${lista.some(o => o.linhas.some(achaLinha)) ? " · itens encontrados em destaque" : ""}` : "";
   document.getElementById("paradas").innerHTML = lista.map(o => {
     const na = ROTA.paradas.includes(o.forn);
-    const linhas = o.linhas.filter(l => modoRota !== "urg" || ehUrg(l)).sort((a,b) => (LIB[b.n]||0) - (LIB[a.n]||0) || urgLinha(b) - urgLinha(a) || a.n - b.n);
+    const linhas = o.linhas.filter(l => modoRota !== "urg" || ehUrg(l)).sort((a,b) => (libOk(b)||0) - (libOk(a)||0) || urgLinha(b) - urgLinha(a) || a.n - b.n);
     return `<article class="parada ${na ? "na-rota" : ""} ${o.urg && o.frete === "R" ? "tem-urg" : ""}">
-      <div class="parada-cab"><div class="nome">${esc(o.forn)}<small>${esc(o.cid)} · ${esc(o.tel)} · ${esc(o.hor)}</small></div>
+      <div class="parada-cab"><div class="nome">${esc(o.forn)}<small>${[o.cid, o.tel, o.hor].filter(Boolean).map(esc).join(" · ") || (o.cnpj ? "CNPJ " + esc(o.cnpj) : "")}</small></div>
         ${o.frete === "R" ? `<span class="pill ${o.lib ? "p-green" : "p-amber"}">${o.lib ? "Pronto para retirar" : "Aguardando liberação"}</span>
         <button class="btn ${na ? "na" : ""}" data-addrota="${esc(o.forn)}">${na ? "✓ Na rota" : "+ Adicionar à rota"}</button>` : `<span class="pill p-frete-e">Entrega na empresa</span>`}</div>
       ${o.frete === "R" && (o.urg || o.imp || o.vol || o.tent) ? `<div class="parada-tags">${o.urg ? `<span class="tag-u urg">${o.urg} urgente(s)</span>` : ""}${o.imp ? `<span class="tag-u imp">${o.imp} abaixo do mín.</span>` : ""}${o.vol ? `<span class="tag-u vol">${o.vol} volumoso(s) para a van</span>` : ""}${o.tent ? `<span class="tag-u tent">Tentativa em ${o.tent.data}: ${o.tent.motivo}</span>` : ""}</div>` : ""}
-      <ul>${linhas.map(l => `<li data-ped="${l.n}" data-pcod="${esc(l.cod)}"${achaLinha(l) ? ' class="achou"' : ""}><span class="pd">Ped ${l.n}</span><span class="ds"><b>${l.cod}</b> ${esc(l.desc)}${tagsLinha(l)}</span><span class="qt">${fmt1(l.sal)} ${esc(unid(l))}${o.frete === "R" ? (LIB[l.n] ? "" : ` <span style="color:var(--amber);font-weight:500">· aguard.</span>`) : ""}</span></li>`).join("")}</ul>
+      <ul>${linhas.map(l => `<li data-ped="${l.n}" data-pcod="${esc(l.cod)}"${achaLinha(l) ? ' class="achou"' : ""}><span class="pd">Ped ${l.n}</span><span class="ds"><b>${l.cod}</b> ${esc(l.desc)}${tagsLinha(l)}</span><span class="qt">${fmt1(l.sal)} ${esc(unid(l))}${o.frete === "R" ? (libOk(l) ? "" : ` <span style="color:var(--amber);font-weight:500">· aguard.</span>`) : ""}</span></li>`).join("")}</ul>
     </article>`; }).join("") || `<div class="vazio">Nenhum fornecedor com esse filtro.</div>`;
   desenharRotaDia(F);
 }
@@ -1864,10 +1869,9 @@ function desenharRetorno(P){
   document.getElementById("n-hist").textContent = HIST.length;
 }
 
-// Sugere a rota: todos os prontos para retirar, agrupados por cidade, urgentes primeiro
+// Sugere a rota pelo critério: fornecedores com item zerado e pedido acima do tempo, agrupados por cidade
 function sugerirRota(){
-  // Todos os fornecedores prontos para retirar entram, sem limite de paradas
-  const sel = paradasPorFornecedor().filter(o => o.frete === "R" && o.lib);
+  const sel = paradasPorFornecedor().filter(o => o.frete === "R" && o.lib && o.urg > 0);
   // ordena por cidade (cidade com mais urgência primeiro) e, dentro da cidade, os mais urgentes primeiro
   const peso = {}; sel.forEach(o => peso[o.cid] = (peso[o.cid] || 0) + o.score);
   sel.sort((a,b) => (peso[b.cid] - peso[a.cid]) || a.cid.localeCompare(b.cid) || (b.score - a.score));
@@ -2358,7 +2362,7 @@ desenhar();
 medirTopo();
 document.querySelectorAll(".ult-mov2").forEach(x => x.textContent = fmtD(dISO(DADOS.ultMov)));
 const telaIni = location.hash.slice(1);
-if (!SEM_PED) document.getElementById("ped-gerado").textContent = DADOS.pedidos.gerado || "—";
+if (!SEM_PED) document.getElementById("ped-gerado").textContent = DADOS.pedidos.planilha || DADOS.pedidos.gerado || "—";
 function checar(arq, atual, chave){
   const sc = document.createElement("script");
   sc.src = arq + "?t=" + Date.now();
@@ -2371,6 +2375,7 @@ setInterval(() => {
   if (precisaRecarregar) { if (fundo.hidden && !inp.value) location.reload(); return; }
   checar("dados.js", E.gerado, "ESTOQUE");
   checar("gestao.js", GG && GG.gerado, "GESTAO");
+  checar("pedidos.js", window.PEDIDOS && window.PEDIDOS.gerado, "PEDIDOS");
 }, 5 * 60 * 1000);
 desenharBadges();
 mostrarTela(NOME_TELA[telaIni] ? telaIni : "inicio");
