@@ -288,6 +288,30 @@ td.item span{display:block;font-size:12px;color:var(--ink-2);overflow:hidden;tex
 .pd-tab .num{text-align:right;font-family:var(--mono);white-space:nowrap}
 .pd-acoes{display:flex;gap:8px;flex-wrap:wrap}
 .parada li[data-ped]{cursor:pointer}
+/* tela cheia dos quadros */
+.btn-cheia{border:1px solid var(--line);background:var(--surface);color:var(--ink-2);border-radius:6px;font:600 12px var(--sans);padding:4px 9px;cursor:pointer;white-space:nowrap;margin-left:auto;align-self:center}
+.btn-cheia:hover{color:var(--accent);border-color:var(--accent)}
+.card-cab > :is(.qt,.dir,.btn-hist) ~ .btn-cheia{margin-left:8px}
+.cab-cheia{display:flex;padding:10px 14px 0}
+.card.cheia{position:fixed;inset:0;z-index:45;border-radius:0;margin:0;overflow:auto;max-width:none;width:auto;height:auto}
+.card.cheia > .card-cab:first-of-type,.card.cheia > .cab-cheia{position:sticky;top:0;background:var(--surface);z-index:5;border-bottom:1px solid var(--line);margin-bottom:10px}
+.card.cheia .btn-cheia{background:var(--accent);color:#fff;border-color:var(--accent)}
+.card.cheia .tabela-wrap,.card.cheia .paradas,.card.cheia .forn-lista,.card.cheia .fila{max-height:none!important}
+.card.cheia .grafico{height:calc(100vh - 150px)!important;min-height:320px}
+body.tem-cheia{overflow:hidden}
+/* rota: itens agrupados por pedido */
+.parada li.grp-w{display:block}
+.grp-cab{display:grid;grid-template-columns:84px minmax(0,1fr) auto;gap:8px;align-items:center;font-size:12.5px;cursor:pointer;border-radius:4px;padding:2px 0}
+.grp-cab:hover{background:var(--muted-bg)}
+.grp-cab .pd{font:700 11.5px var(--mono);color:var(--ink);white-space:nowrap}
+.grp-cab .pd::before{content:"▸";display:inline-block;width:12px;color:var(--ink-3);transition:transform .15s}
+.grp-w.aberto > .grp-cab .pd::before{transform:rotate(90deg)}
+.grp-cab .ds{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.grp-cab .ds b{font:600 12.5px var(--sans)}
+.grp-itens{display:none!important;margin:3px 0 6px 12px!important;padding-left:10px!important;border-left:2px solid var(--line)}
+.grp-w.aberto > .grp-itens{display:flex!important}
+.grp-w.aberto > .grp-cab{background:var(--muted-bg)}
+.grp-cab .lnk{font-size:12px}
 .parada li[data-ped]:hover{background:var(--muted-bg);border-radius:4px}
 .modo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .modo button{background:var(--surface);border:2px solid transparent;border-radius:10px;box-shadow:var(--shadow);padding:12px 16px;cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:6px;color:var(--ink);position:relative;overflow:hidden}
@@ -1217,6 +1241,9 @@ inp.addEventListener("input", () => {
 });
 inp.addEventListener("keydown", e => { if (e.key === "Enter") { const b = sug.querySelector("[data-cod]"); if (b) { abrirFicha(b.dataset.cod); sug.hidden = true; } } });
 document.addEventListener("click", e => {
+  const vp0 = e.target.closest("[data-verped]"); if (vp0) { abrirPedido(vp0.dataset.verped, vp0.dataset.pcod); return; }
+  const gc = e.target.closest(".grp-cab"); if (gc) { alternarGrupo(gc.parentElement); return; }
+  const bc = e.target.closest(".btn-cheia"); if (bc) { alternarCheia(bc.closest(".card")); return; }
   const pd = e.target.closest("[data-ped]");
   if (pd && !e.target.closest("#fundo") && !e.target.closest("button")) { abrirPedido(pd.dataset.ped, pd.dataset.pcod); return; }
   const b = e.target.closest("[data-cod]");
@@ -1404,6 +1431,7 @@ document.addEventListener("keydown", e => {
   if (e.key === "Escape" && !document.getElementById("histrotas").hidden) { document.getElementById("histrotas").hidden = true; document.getElementById("histrotas").innerHTML = ""; return; }
   if (e.key === "Escape" && !document.getElementById("formsim").hidden) { document.getElementById("formsim").hidden = true; document.getElementById("formsim").innerHTML = ""; return; }
   if (e.key === "Escape" && !document.getElementById("motorista").hidden) { document.getElementById("motorista").hidden = true; document.getElementById("motorista").innerHTML = ""; desenharRotaDia(); return; }
+  if (e.key === "Escape" && fundo.hidden && document.querySelector(".card.cheia")) { alternarCheia(document.querySelector(".card.cheia")); return; }
   if (fundo.hidden) return;
   if (e.key === "Escape") { fundo.hidden = true; fundo.innerHTML = ""; }
   else if (e.key === "ArrowRight") galIr(galIdx + 1);
@@ -1742,6 +1770,24 @@ function paradasPorFornecedor(){
 const unid = p => p.item ? p.item.u : "";
 const tagsLinha = l => { const u = urgLinha(l); return (l.item && l.item.st === "zerado" ? ` <span class="tag-u urg">Zerado</span>` : "") + (l.atr ? ` <span class="tag-u urg">Acima do tempo ${l.diasRef - l.lead}d</span>` : "") + (l.item && l.item.st === "repor" ? ` <span class="tag-u imp">Abaixo do mín.</span>` : "") + (volLinha(l) ? ` <span class="tag-u vol">Volumoso</span>` : ""); };
 const ROT_RET = { ok:["st-ok","Coletado"], parcial:["st-parcial","Parcial"], nao:["st-nao","Não coletado"] };
+// Rota: itens do mesmo pedido ficam juntos. Pedido com 1 item aparece direto; com 2+ itens vira um grupo que abre e fecha.
+const GRP_ABERTO = new Set();
+function linhaRota(o, l, achaLinha, sub){
+  return `<li data-ped="${l.n}" data-pcod="${esc(l.cod)}"${achaLinha(l) ? ' class="achou"' : ""}><span class="pd">${sub ? "" : "Ped " + l.n}</span><span class="ds"><b>${l.cod}</b> ${esc(l.desc)}${tagsLinha(l)}</span><span class="qt">${fmt1(l.sal)} ${esc(unid(l))}${o.frete === "R" ? (libOk(l) ? "" : ` <span style="color:var(--amber);font-weight:500">· aguard.</span>`) : ""}</span></li>`;
+}
+function gruposPedido(o, visiveis, achaLinha){
+  const G = new Map();
+  visiveis.forEach(l => { if (!G.has(l.n)) G.set(l.n, o.linhas.filter(x => x.n === l.n).sort((a,b) => urgLinha(b) - urgLinha(a) || String(a.cod).localeCompare(String(b.cod)))); });
+  return [...G.entries()].map(([n, L]) => {
+    if (L.length === 1) return linhaRota(o, L[0], achaLinha, false);
+    const ch = o.forn + "|" + n, achou = L.some(achaLinha);
+    const z = L.filter(l => l.item && l.item.st === "zerado").length, at = L.filter(l => l.atr).length, mn = L.filter(l => l.item && l.item.st === "repor").length;
+    const tags = (z ? ` <span class="tag-u urg">${z} zerado${z > 1 ? "s" : ""}</span>` : "") + (at ? ` <span class="tag-u urg">${at} acima do tempo</span>` : "") + (mn ? ` <span class="tag-u imp">${mn} abaixo do mín.</span>` : "");
+    return `<li class="grp-w${GRP_ABERTO.has(ch) || achou ? " aberto" : ""}" data-grp="${esc(ch)}">
+      <div class="grp-cab" role="button" tabindex="0" aria-expanded="${GRP_ABERTO.has(ch) || achou}" title="Clique para ver todos os itens do pedido ${n}"><span class="pd">Ped ${n}</span><span class="ds"><b>${L.length} itens neste pedido</b>${tags}</span><span class="qt"><button class="lnk" data-verped="${n}" data-pcod="${esc(L[0].cod)}">Detalhes ↗</button></span></div>
+      <ul class="grp-itens">${L.map(l => linhaRota(o, l, achaLinha, true)).join("")}</ul></li>`;
+  }).join("");
+}
 
 function desenharRota(){
   if (SEM_PED) { telaSemPedidos("v-rota"); return; }
@@ -1777,7 +1823,7 @@ function desenharRota(){
         ${o.frete === "R" ? `<span class="pill ${o.lib ? "p-green" : "p-amber"}">${o.lib ? "Pronto para retirar" : "Aguardando liberação"}</span>
         <button class="btn ${na ? "na" : ""}" data-addrota="${esc(o.forn)}">${na ? "✓ Na rota" : "+ Adicionar à rota"}</button>` : `<span class="pill p-frete-e">Entrega na empresa</span>`}</div>
       ${o.frete === "R" && (o.urg || o.imp || o.vol || o.tent) ? `<div class="parada-tags">${o.urg ? `<span class="tag-u urg">${o.urg} urgente(s)</span>` : ""}${o.imp ? `<span class="tag-u imp">${o.imp} abaixo do mín.</span>` : ""}${o.vol ? `<span class="tag-u vol">${o.vol} volumoso(s) para a van</span>` : ""}${o.tent ? `<span class="tag-u tent">Tentativa em ${o.tent.data}: ${o.tent.motivo}</span>` : ""}</div>` : ""}
-      <ul>${linhas.map(l => `<li data-ped="${l.n}" data-pcod="${esc(l.cod)}"${achaLinha(l) ? ' class="achou"' : ""}><span class="pd">Ped ${l.n}</span><span class="ds"><b>${l.cod}</b> ${esc(l.desc)}${tagsLinha(l)}</span><span class="qt">${fmt1(l.sal)} ${esc(unid(l))}${o.frete === "R" ? (libOk(l) ? "" : ` <span style="color:var(--amber);font-weight:500">· aguard.</span>`) : ""}</span></li>`).join("")}</ul>
+      <ul>${gruposPedido(o, linhas, achaLinha)}</ul>
     </article>`; }).join("") || `<div class="vazio">Nenhum fornecedor com esse filtro.</div>`;
   desenharRotaDia(F);
 }
@@ -2330,6 +2376,7 @@ document.getElementById("v-inicio").addEventListener("click", e => {
 // ---------- Navegação entre as telas ----------
 const NOME_TELA = { inicio:"Início", prateleiras:"Prateleiras", gestao:"Gestão de estoque", pedidos:"Pedidos de compra", rota:"Rota da van", inventario:"Inventário rotativo", extrato:"Movimentação" };
 function mostrarTela(t){
+  { const c = document.querySelector(".card.cheia"); if (c) alternarCheia(c); }
   if (!NOME_TELA[t]) t = "inicio";
   const prat = t === "prateleiras";
   document.getElementById("v-inicio").hidden = t !== "inicio";
@@ -2372,11 +2419,45 @@ function checar(arq, atual, chave){
 }
 let precisaRecarregar = false;
 setInterval(() => {
-  if (precisaRecarregar) { if (fundo.hidden && !inp.value) location.reload(); return; }
+  if (precisaRecarregar) { if (fundo.hidden && !inp.value && !document.querySelector(".card.cheia")) location.reload(); return; }
   checar("dados.js", E.gerado, "ESTOQUE");
   checar("gestao.js", GG && GG.gerado, "GESTAO");
   checar("pedidos.js", window.PEDIDOS && window.PEDIDOS.gerado, "PEDIDOS");
 }, 5 * 60 * 1000);
+// ---------- Tela cheia em cada quadro ----------
+function alternarGrupo(w){
+  const ab = w.classList.toggle("aberto");
+  w.querySelector(".grp-cab").setAttribute("aria-expanded", ab);
+  if (ab) GRP_ABERTO.add(w.dataset.grp); else GRP_ABERTO.delete(w.dataset.grp);
+}
+document.addEventListener("keydown", e => {
+  const gc = e.target.closest && e.target.closest(".grp-cab");
+  if (gc && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); alternarGrupo(gc.parentElement); }
+});
+let fsNavegador = false;
+function alternarCheia(card){
+  if (!card) return;
+  const ab = !card.classList.contains("cheia");
+  document.querySelectorAll(".card.cheia").forEach(c => { c.classList.remove("cheia"); const b = c.querySelector(".btn-cheia"); b.textContent = "⛶ Tela cheia"; b.title = "Abrir este quadro em tela cheia"; });
+  document.body.classList.toggle("tem-cheia", ab);
+  if (ab){
+    card.classList.add("cheia"); card.scrollTop = 0;
+    const b = card.querySelector(".btn-cheia"); b.textContent = "✕ Fechar tela cheia"; b.title = "Voltar ao painel (Esc)";
+    if (!document.fullscreenElement && document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().then(() => fsNavegador = true).catch(() => {});
+  } else if (fsNavegador && document.fullscreenElement) { fsNavegador = false; document.exitFullscreen().catch(() => {}); }
+  setTimeout(() => window.dispatchEvent(new Event("resize")), 60);
+}
+document.addEventListener("fullscreenchange", () => {
+  if (!document.fullscreenElement && fsNavegador){ fsNavegador = false; const c = document.querySelector(".card.cheia"); if (c) alternarCheia(c); }
+});
+document.querySelectorAll("main section.card, .tela section.card, section.card").forEach(card => {
+  if (card.querySelector(":scope > .btn-cheia, :scope > .card-cab > .btn-cheia, :scope > .cab-cheia")) return;
+  const b = document.createElement("button");
+  b.type = "button"; b.className = "btn-cheia"; b.textContent = "⛶ Tela cheia"; b.title = "Abrir este quadro em tela cheia";
+  const cab = card.querySelector(":scope > .card-cab");
+  if (cab) cab.appendChild(b);
+  else { const d = document.createElement("div"); d.className = "cab-cheia"; d.appendChild(b); card.prepend(d); }
+});
 desenharBadges();
 mostrarTela(NOME_TELA[telaIni] ? telaIni : "inicio");
 </script>
