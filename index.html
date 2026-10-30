@@ -820,6 +820,7 @@ tbody tr:hover{background:var(--surface-2)}
     <div class="col">
       <section class="card">
         <div class="card-cab"><h2 id="t-ped">Itens aguardando entrega</h2><p id="s-ped">Do pedido mais antigo para o mais novo</p><span class="qt" id="q-ped"></span></div>
+        <div id="kpi-ped-ativo" style="padding:0 18px 8px"></div>
         <div class="tabela-wrap" style="max-height:720px"><table>
           <thead><tr><th>Pedido</th><th>Emissão</th><th>Em aberto</th><th>Fornecedor</th><th>Item</th><th style="text-align:right">Pedido</th><th style="text-align:right" class="col-opc">Entregue</th><th style="text-align:right">Falta</th><th>Estoque</th><th class="col-opc">Comprador</th></tr></thead>
           <tbody id="tb-ped"></tbody>
@@ -855,6 +856,7 @@ tbody tr:hover{background:var(--surface-2)}
     <div class="col">
       <section class="card">
         <div class="card-cab"><h2 id="t-ap">Pedidos de aplicação</h2><p>Do pedido mais antigo para o mais novo. Clique no pedido para ver os itens</p><span class="qt" id="q-ap"></span></div>
+        <div id="kpi-ap-ativo" style="padding:0 18px 8px"></div>
         <div class="paradas" id="lista-ap" style="padding-top:2px"></div>
       </section>
     </div>
@@ -1501,6 +1503,15 @@ const filtroPed = (p, semForn) => { const T = termos(qPed), fx = IDADES.find(x =
     && (!fx || (p.dias >= fx[2] && p.dias <= fx[3])) && (!T.length || casa(txtPed(p), T)); };
 // Cartões Urgentes x Geral
 let modoPed = "geral", modoRota = "geral";
+// Indicadores clicáveis da tela Pedidos de compra: cada um filtra a lista
+let kpiPed = null;
+const KPI_PED = {
+  m30:   { t:"Em aberto há mais de 30 dias", f:p => p.dias > 30 },
+  antigo:{ t:"Pedido mais antigo", f:(p, B) => p.dias === Math.max(...B.map(x => x.dias)) },
+  abaixo:{ t:"Abaixo do mínimo com pedido", f:p => p.item && (p.item.st === "zerado" || p.item.st === "repor") },
+  parc:  { t:"Entregas parciais", f:p => p.at > 0 },
+  ate15: { t:"Até 15 dias", f:p => p.dias <= 15 },
+};
 const ehUrg = l => urgLinha(l) === 2;
 function cartoesModo(id, atr, modo, U, G, oque){
   document.getElementById(id).innerHTML = [
@@ -1527,21 +1538,22 @@ function desenharPedidos(){
   const base0 = PED.filter(p => filtroPed(p, true));
   cartoesModo("modo-ped", "data-modoped", modoPed, contaModo(base0.filter(ehUrg)), contaModo(base0), "todos os itens aguardando entrega");
   const base = modoPed === "urg" ? base0.filter(ehUrg) : base0;
-  const L = base.filter(p => !fornPed || p.forn === fornPed).sort((a,b) => b.dias - a.dias || a.n - b.n);
+  const KF = kpiPed && KPI_PED[kpiPed], baseK = KF ? base.filter(p => KF.f(p, base)) : base;
+  const L = baseK.filter(p => !fornPed || p.forn === fornPed).sort((a,b) => b.dias - a.dias || a.n - b.n);
   const T = termos(qPed);
   document.getElementById("busca-ped-res").textContent = T.length ? `${fmt(L.length)} item(ns) em ${new Set(L.map(p=>p.n)).size} pedido(s) encontrados` : "";
   const nPed = new Set(base.map(p => p.n)).size;
   const abaixoCom = new Set(base.filter(p => p.item && (p.item.st === "zerado" || p.item.st === "repor")).map(p => p.cod)).size;
   document.getElementById("kpis-ped").innerHTML = [
-    ["Pedidos em aberto", nPed, "com item a entregar", "var(--blue)"],
-    ["Itens aguardando entrega", base.length, `${fmt(new Set(base.map(p=>p.cod)).size)} produtos diferentes`, "var(--blue)"],
-    ["Em aberto há mais de 30 dias", base.filter(p => p.dias > 30).length, "itens de pedido", "var(--red)"],
-    ["Mais antigo", base.length ? Math.max(...base.map(p=>p.dias)) : 0, "dias desde a emissão", "var(--red)"],
-    ["Fornecedores com pendência", new Set(base.map(p=>p.forn)).size, "com item a entregar", "var(--amber)"],
-    ["Abaixo do mínimo com pedido", abaixoCom, "produtos que esperam este pedido", "var(--red)"],
-    ["Entregas parciais", base.filter(p => p.at > 0).length, "já chegou uma parte", "var(--amber)"],
-    ["Até 15 dias", base.filter(p => p.dias <= 15).length, "itens de pedidos recentes", "var(--accent)"],
-  ].map(([t,v,sub,cor]) => `<div class="kpi" style="--k:${cor};cursor:default"><small>${t}</small><b>${fmt(v)}</b><span>${sub}</span></div>`).join("");
+    ["Pedidos em aberto", nPed, "com item a entregar", "var(--blue)", "todos"],
+    ["Itens aguardando entrega", base.length, `${fmt(new Set(base.map(p=>p.cod)).size)} produtos diferentes`, "var(--blue)", "todos"],
+    ["Em aberto há mais de 30 dias", base.filter(p => p.dias > 30).length, "itens de pedido", "var(--red)", "m30"],
+    ["Mais antigo", base.length ? Math.max(...base.map(p=>p.dias)) : 0, "dias desde a emissão", "var(--red)", "antigo"],
+    ["Fornecedores com pendência", new Set(base.map(p=>p.forn)).size, "com item a entregar", "var(--amber)", "forn"],
+    ["Abaixo do mínimo com pedido", abaixoCom, "produtos que esperam este pedido", "var(--red)", "abaixo"],
+    ["Entregas parciais", base.filter(p => p.at > 0).length, "já chegou uma parte", "var(--amber)", "parc"],
+    ["Até 15 dias", base.filter(p => p.dias <= 15).length, "itens de pedidos recentes", "var(--accent)", "ate15"],
+  ].map(([t,v,sub,cor,k]) => `<button class="kpi" data-kpiped="${k}" aria-pressed="${k === kpiPed}" style="--k:${cor}" title="${k === "forn" ? "Ver a lista de fornecedores" : k === "todos" ? "Mostrar todos os itens" : "Mostrar só estes itens"}"><small>${t}</small><b>${fmt(v)}</b><span>${sub}</span></button>`).join("");
   const cont = k => PED.filter(p => (k === "dep" ? true : (!depPed || p.dep === depPed)));
   document.getElementById("filtros-ped").innerHTML =
     `<label>Depósito</label><button class="chip" data-pdep="" aria-pressed="${!depPed}">Todos</button>` +
@@ -1551,7 +1563,8 @@ function desenharPedidos(){
     `<label style="margin-left:14px">Em aberto</label><button class="chip" data-pidade="" aria-pressed="${!idadePed}">Todos</button>` +
     IDADES.map(([k,t]) => `<button class="chip" data-pidade="${k}" aria-pressed="${k===idadePed}">${t}</button>`).join("") +
     (fornPed ? `<span class="filtro-ativo" style="margin-left:14px">${esc(fornPed)}<button data-pforn="" aria-label="Tirar filtro do fornecedor">✕</button></span>` : "");
-  document.getElementById("t-ped").textContent = (fornPed ? "Itens de " + fornPed : "Itens aguardando entrega") + (modoPed === "urg" ? " · só urgentes" : "");
+  document.getElementById("t-ped").textContent = (fornPed ? "Itens de " + fornPed : "Itens aguardando entrega") + (KF ? " · " + KF.t.toLowerCase() : "") + (modoPed === "urg" ? " · só urgentes" : "");
+  document.getElementById("kpi-ped-ativo").innerHTML = KF ? `<span class="filtro-ativo">${esc(KF.t)}: ${fmt(L.length)} itens<button data-kpiped="todos" aria-label="Tirar filtro do indicador">✕</button></span>` : "";
   document.getElementById("q-ped").textContent = fmt(L.length) + " itens";
   document.getElementById("tb-ped").innerHTML = L.slice(0, 400).map(p => {
     const fx = faixa(p.dias), it = p.item;
@@ -1566,7 +1579,7 @@ function desenharPedidos(){
   }).join("") || `<tr><td colspan="10" style="text-align:center;color:var(--ink-2);padding:24px">Nenhum item pendente com esse filtro.</td></tr>`;
   // fornecedores
   const F = {};
-  base.forEach(p => { const o = F[p.forn] = F[p.forn] || { n:new Set(), itens:0, a:0, b:0, c:0, max:0 }; o.n.add(p.n); o.itens++; o[faixa(p.dias)[1] === "ate15" ? "a" : faixa(p.dias)[1] === "ate30" ? "b" : "c"]++; o.max = Math.max(o.max, p.dias); });
+  baseK.forEach(p => { const o = F[p.forn] = F[p.forn] || { n:new Set(), itens:0, a:0, b:0, c:0, max:0 }; o.n.add(p.n); o.itens++; o[faixa(p.dias)[1] === "ate15" ? "a" : faixa(p.dias)[1] === "ate30" ? "b" : "c"]++; o.max = Math.max(o.max, p.dias); });
   const FL = Object.entries(F).sort((x,y) => y[1].c - x[1].c || y[1].itens - x[1].itens);
   document.getElementById("q-forn").textContent = FL.length;
   document.getElementById("forn").innerHTML = FL.map(([nome,o]) => `<button data-pforn="${esc(nome)}" aria-pressed="${nome===fornPed}">
@@ -1576,7 +1589,7 @@ function desenharPedidos(){
   desenharSitPed();
   // gráfico de faixas
   const FX = [["0–15", 0, 15], ["16–30", 16, 30], ["31–60", 31, 60], ["61–90", 61, 90], ["91–180", 91, 180], ["+180", 181, 1e9]];
-  grafico("g-aging", { type:"bar", data:{ labels: FX.map(f => f[0] + " dias"), datasets:[{ data: FX.map(f => base.filter(p => p.dias >= f[1] && p.dias <= f[2]).length),
+  grafico("g-aging", { type:"bar", data:{ labels: FX.map(f => f[0] + " dias"), datasets:[{ data: FX.map(f => baseK.filter(p => p.dias >= f[1] && p.dias <= f[2]).length),
       backgroundColor: ["#3FB36C","#E0A030","#E5574C","#E5574C","#C8372D","#A12A22"], borderRadius:4, datalabels:{anchor:"end", align:"end"} }] },
     options: baseOpts({ layout:{padding:{top:18}}, plugins:{ legend:{display:false}, datalabels:{color:CC.t, font:{family:"IBM Plex Mono", size:11, weight:"700"}} } }) });
 }
@@ -1693,6 +1706,14 @@ function desenharSitPed(){
 }
 document.getElementById("v-pedidos").addEventListener("click", e => {
   const sp = e.target.closest("[data-sitp]"); if (sp){ sitFiltro = sp.dataset.sitp; desenharSitPed(); return; }
+  const kp = e.target.closest("[data-kpiped]");
+  if (kp){
+    const k = kp.dataset.kpiped;
+    if (k === "forn") { kpiPed = null; desenharPedidos(); document.getElementById("forn").closest(".card").scrollIntoView({behavior:"smooth", block:"start"}); return; }
+    kpiPed = (k === "todos" || k === kpiPed) ? null : k; desenharPedidos();
+    if (kpiPed) document.getElementById("t-ped").scrollIntoView({behavior:"smooth", block:"start"});
+    return;
+  }
   const d = e.target.closest("[data-pdep]"); if (d){ depPed = d.dataset.pdep || null; fornPed = null; desenharPedidos(); return; }
   const mp = e.target.closest("[data-modoped]"); if (mp){ modoPed = mp.dataset.modoped; fornPed = null; desenharPedidos(); return; }
   const id = e.target.closest("[data-pidade]"); if (id){ idadePed = id.dataset.pidade || null; desenharPedidos(); return; }
@@ -1703,20 +1724,22 @@ document.getElementById("v-pedidos").addEventListener("click", e => {
 // ---------- Itens de aplicação (análise de produto = APLICAÇÃO) ----------
 const ehAplic = p => semAc(p.tipo).startsWith("aplica");
 const PED_AP = PED.filter(ehAplic);
-let compAp = null, fornAp = null, idadeAp = null, qAp = "";
+let compAp = null, fornAp = null, idadeAp = null, qAp = "", kpiAp = null;
+const KPI_AP = { m30:{ t:"Há mais de 30 dias", f:p => p.dias > 30 }, antigo:{ t:"Pedido mais antigo", f:(p, B) => p.dias === Math.max(...B.map(x => x.dias)) } };
 const GRP_AP = new Set();
 function desenharAplicacao(){
   if (SEM_PED) { telaSemPedidos("v-aplicacao"); return; }
   const T = termos(qAp), fx = IDADES.find(x => x[0] === idadeAp);
   const base = PED_AP.filter(p => (!compAp || p.comp === compAp) && (!fx || (p.dias >= fx[2] && p.dias <= fx[3])) && (!T.length || casa(txtPed(p), T)));
-  const L = base.filter(p => !fornAp || p.forn === fornAp);
+  const KA = kpiAp && KPI_AP[kpiAp];
+  const L = base.filter(p => (!fornAp || p.forn === fornAp) && (!KA || KA.f(p, PED_AP)));
   document.getElementById("busca-ap-res").textContent = T.length ? `${fmt(L.length)} item(ns) em ${new Set(L.map(p=>p.n)).size} pedido(s) encontrados` : "";
   document.getElementById("kpis-ap").innerHTML = [
-    ["Itens de aplicação", PED_AP.length, `${fmt(new Set(PED_AP.map(p=>p.n)).size)} pedidos em aberto`, "var(--blue)"],
-    ["Fornecedores", new Set(PED_AP.map(p=>p.forn)).size, "com item a entregar", "var(--amber)"],
-    ["Há mais de 30 dias", PED_AP.filter(p => p.dias > 30).length, "itens em aberto", "var(--red)"],
-    ["Mais antigo", PED_AP.length ? Math.max(...PED_AP.map(p=>p.dias)) : 0, "dias desde a emissão", "var(--red)"],
-  ].map(([t,v,sub,cor]) => `<div class="kpi" style="--k:${cor};cursor:default"><small>${t}</small><b>${fmt(v)}</b><span>${sub}</span></div>`).join("");
+    ["Itens de aplicação", PED_AP.length, `${fmt(new Set(PED_AP.map(p=>p.n)).size)} pedidos em aberto`, "var(--blue)", "todos"],
+    ["Fornecedores", new Set(PED_AP.map(p=>p.forn)).size, "com item a entregar", "var(--amber)", "forn"],
+    ["Há mais de 30 dias", PED_AP.filter(p => p.dias > 30).length, "itens em aberto", "var(--red)", "m30"],
+    ["Mais antigo", PED_AP.length ? Math.max(...PED_AP.map(p=>p.dias)) : 0, "dias desde a emissão", "var(--red)", "antigo"],
+  ].map(([t,v,sub,cor,k]) => `<button class="kpi" data-kpiap="${k}" aria-pressed="${k === kpiAp}" style="--k:${cor}" title="${k === "forn" ? "Ver a lista de fornecedores" : k === "todos" ? "Mostrar todos os itens" : "Mostrar só estes itens"}"><small>${t}</small><b>${fmt(v)}</b><span>${sub}</span></button>`).join("");
   const comps = [...new Set(PED_AP.map(p => p.comp))].sort();
   document.getElementById("filtros-ap").innerHTML =
     `<label>Comprador</label><button class="chip" data-apcomp="" aria-pressed="${!compAp}">Todos</button>` +
@@ -1724,7 +1747,8 @@ function desenharAplicacao(){
     `<label style="margin-left:14px">Em aberto</label><button class="chip" data-apidade="" aria-pressed="${!idadeAp}">Todos</button>` +
     IDADES.map(([k,t]) => `<button class="chip" data-apidade="${k}" aria-pressed="${k===idadeAp}">${t}</button>`).join("") +
     (fornAp ? `<span class="filtro-ativo" style="margin-left:14px">${esc(fornAp)}<button data-apforn="" aria-label="Tirar filtro do fornecedor">✕</button></span>` : "");
-  document.getElementById("t-ap").textContent = fornAp ? "Pedidos de " + fornAp : "Pedidos de aplicação";
+  document.getElementById("t-ap").textContent = (fornAp ? "Pedidos de " + fornAp : "Pedidos de aplicação") + (KA ? " · " + KA.t.toLowerCase() : "");
+  document.getElementById("kpi-ap-ativo").innerHTML = KA ? `<span class="filtro-ativo">${esc(KA.t)}: ${fmt(L.length)} itens<button data-kpiap="todos" aria-label="Tirar filtro do indicador">✕</button></span>` : "";
   // agrupado por pedido
   const G = new Map();
   L.forEach(p => { if (!G.has(p.n)) G.set(p.n, []); G.get(p.n).push(p); });
@@ -1758,6 +1782,14 @@ function desenharAplicacao(){
 }
 document.addEventListener("click", e => {
   if (!e.target.closest("#v-aplicacao")) return;
+  const ka = e.target.closest("[data-kpiap]");
+  if (ka){
+    const k = ka.dataset.kpiap;
+    if (k === "forn") { kpiAp = null; desenharAplicacao(); document.getElementById("forn-ap").closest(".card").scrollIntoView({behavior:"smooth", block:"start"}); return; }
+    kpiAp = (k === "todos" || k === kpiAp) ? null : k; desenharAplicacao();
+    if (kpiAp) document.getElementById("t-ap").scrollIntoView({behavior:"smooth", block:"start"});
+    return;
+  }
   const c = e.target.closest("[data-apcomp]"); if (c){ compAp = c.dataset.apcomp && c.dataset.apcomp !== compAp ? c.dataset.apcomp : null; desenharAplicacao(); return; }
   const i = e.target.closest("[data-apidade]"); if (i){ idadeAp = i.dataset.apidade || null; desenharAplicacao(); return; }
   const f = e.target.closest("[data-apforn]"); if (f){ fornAp = f.dataset.apforn && f.dataset.apforn !== fornAp ? f.dataset.apforn : null; desenharAplicacao(); document.getElementById("t-ap").scrollIntoView({behavior:"smooth", block:"start"}); }
