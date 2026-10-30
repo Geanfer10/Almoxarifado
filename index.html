@@ -293,11 +293,13 @@ td.item span{display:block;font-size:12px;color:var(--ink-2);overflow:hidden;tex
 .btn-cheia:hover{color:var(--accent);border-color:var(--accent)}
 .card-cab > :is(.qt,.dir,.btn-hist) ~ .btn-cheia{margin-left:8px}
 .cab-cheia{display:flex;padding:10px 14px 0}
-.card.cheia{position:fixed;inset:0;z-index:45;border-radius:0;margin:0;overflow:auto;max-width:none;width:auto;height:auto}
+.card.cheia{position:fixed;top:10vh;left:10vw;width:80vw;height:80vh;z-index:45;border-radius:14px;margin:0;overflow:auto;max-width:none;box-shadow:0 24px 70px rgba(0,0,0,.35)}
+body.tem-cheia::before{content:"";position:fixed;inset:0;background:rgba(10,20,15,.45);z-index:44}
+@media (max-width:760px){.card.cheia{top:4vh;left:3vw;width:94vw;height:92vh}}
 .card.cheia > .card-cab:first-of-type,.card.cheia > .cab-cheia{position:sticky;top:0;background:var(--surface);z-index:5;border-bottom:1px solid var(--line);margin-bottom:10px}
 .card.cheia .btn-cheia{background:var(--accent);color:#fff;border-color:var(--accent)}
 .card.cheia .tabela-wrap,.card.cheia .paradas,.card.cheia .forn-lista,.card.cheia .fila{max-height:none!important}
-.card.cheia .grafico{height:calc(100vh - 150px)!important;min-height:320px}
+.card.cheia .grafico{height:calc(80vh - 140px)!important;min-height:280px}
 body.tem-cheia{overflow:hidden}
 /* rota: itens agrupados por pedido */
 .parada li.grp-w{display:block}
@@ -307,7 +309,7 @@ body.tem-cheia{overflow:hidden}
 .grp-cab .pd::before{content:"▸";display:inline-block;width:12px;color:var(--ink-3);transition:transform .15s}
 .grp-w.aberto > .grp-cab .pd::before{transform:rotate(90deg)}
 .grp-cab .ds{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.grp-cab .ds b{font:600 12.5px var(--sans)}
+.parada .grp-cab .ds b{font:600 12.5px var(--sans)}
 .grp-itens{display:none!important;margin:3px 0 6px 12px!important;padding-left:10px!important;border-left:2px solid var(--line)}
 .grp-w.aberto > .grp-itens{display:flex!important}
 .grp-w.aberto > .grp-cab{background:var(--muted-bg)}
@@ -713,7 +715,7 @@ tbody tr:hover{background:var(--surface-2)}
 <div class="app" id="app">
 <aside class="side" aria-label="Menu principal">
   <div class="brand"><div class="mk">GV</div><div><b>Almoxarifado</b><small>Goiás Verde Alimentos</small></div></div>
-  <nav class="nav" id="nav"><h4>Operação</h4><button class="nav-it" data-tela="inicio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5h13V10"/></svg><span class="nm">Início</span><span class="bd" id="bd-inicio" hidden></span></button><button class="nav-it" data-tela="prateleiras"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="1.5"/><path d="M3.5 9.5h17M3.5 15h17M12 3.5v17"/></svg><span class="nm">Prateleiras</span><span class="bd" id="bd-prateleiras" hidden></span></button><button class="nav-it" data-tela="gestao"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 3.5 7.5 12 12l8.5-4.5z"/><path d="M3.5 7.5v9L12 21l8.5-4.5v-9"/><path d="M12 12v9"/></svg><span class="nm">Gestão de estoque</span><span class="bd" id="bd-gestao" hidden></span></button><h4>Compras</h4><button class="nav-it" data-tela="pedidos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h9l3.5 3.5v13.5H6z"/><path d="M14.5 3.5V7.5h4"/><path d="M9 12h6M9 15.5h6"/></svg><span class="nm">Pedidos de compra</span><span class="bd" id="bd-pedidos" hidden></span></button><button class="nav-it" data-tela="rota"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 16.5V7.5h11v9"/><path d="M14 10.5h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17.5" cy="17.5" r="1.8"/></svg><span class="nm">Rota da van</span><span class="bd" id="bd-rota" hidden></span></button><h4>Controle</h4><button class="nav-it" data-tela="inventario"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="5.5" width="15" height="15" rx="1.5"/><path d="M8.5 3.5v4M15.5 3.5v4"/><path d="m8.5 13.5 2.2 2.2 4.8-4.7"/></svg><span class="nm">Inventário rotativo</span><span class="bd" id="bd-inventario" hidden></span></button><button class="nav-it" data-tela="extrato"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h13l-3.5-3.5M20 16H7l3.5 3.5"/></svg><span class="nm">Movimentação</span><span class="bd" id="bd-extrato" hidden></span></button></nav>
+  <nav class="nav" id="nav"><h4>Operação</h4><button class="nav-it" data-tela="inicio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5h13V10"/></svg><span class="nm">Início</span><span class="bd" id="bd-inicio" hidden></span></button><button class="nav-it" data-tela="prateleiras"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="1.5"/><path d="M3.5 9.5h17M3.5 15h17M12 3.5v17"/></svg><span class="nm">Prateleiras</span><span class="bd" id="bd-prateleiras" hidden></span></button><button class="nav-it" data-tela="gestao"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 3.5 7.5 12 12l8.5-4.5z"/><path d="M3.5 7.5v9L12 21l8.5-4.5v-9"/><path d="M12 12v9"/></svg><span class="nm">Gestão de estoque</span><span class="bd" id="bd-gestao" hidden></span></button><h4>Compras</h4><button class="nav-it" data-tela="pedidos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h9l3.5 3.5v13.5H6z"/><path d="M14.5 3.5V7.5h4"/><path d="M9 12h6M9 15.5h6"/></svg><span class="nm">Pedidos de compra</span><span class="bd" id="bd-pedidos" hidden></span></button><button class="nav-it" data-tela="rota"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 16.5V7.5h11v9"/><path d="M14 10.5h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17.5" cy="17.5" r="1.8"/></svg><span class="nm">Rota da van</span><span class="bd" id="bd-rota" hidden></span></button><button class="nav-it" data-tela="aplicacao"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 6.5a4 4 0 0 0-5.3 5.3L4 17v3h3l5.2-5.2a4 4 0 0 0 5.3-5.3l-2.6 2.6-2.4-.6-.6-2.4z"/></svg><span class="nm">Itens de aplicação</span><span class="bd" id="bd-aplicacao" hidden></span></button><h4>Controle</h4><button class="nav-it" data-tela="inventario"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="5.5" width="15" height="15" rx="1.5"/><path d="M8.5 3.5v4M15.5 3.5v4"/><path d="m8.5 13.5 2.2 2.2 4.8-4.7"/></svg><span class="nm">Inventário rotativo</span><span class="bd" id="bd-inventario" hidden></span></button><button class="nav-it" data-tela="extrato"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h13l-3.5-3.5M20 16H7l3.5 3.5"/></svg><span class="nm">Movimentação</span><span class="bd" id="bd-extrato" hidden></span></button></nav>
   <a class="side-foto" href="https://www.google.com/maps/search/?api=1&query=Goi%C3%A1s+Verde+Alimentos+Rodovia+GO-010+Luzi%C3%A2nia+GO" target="_blank" rel="noopener" title="Abrir a localização da Goiás Verde no Google Maps">
     <img src="fotos/capa.jpg?v=2" alt="Vista aérea da fábrica da Goiás Verde em Luziânia">
     <span class="lg">Luziânia · GO</span><span class="mp">📍 Ver no mapa</span></a>
@@ -838,6 +840,36 @@ tbody tr:hover{background:var(--surface-2)}
       <section class="card">
         <div class="card-cab"><h2>Fornecedores</h2><p>Clique para ver só os itens do fornecedor</p><span class="qt" id="q-forn"></span></div>
         <div class="lista forn-lista" id="forn"></div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<main class="pagina" id="v-aplicacao" hidden>
+  <section class="pg-cab"><div><h1>Itens de aplicação</h1><p>Materiais comprados para aplicação direta (não entram no estoque) que ainda não chegaram</p></div></section>
+  <div class="aviso"><span aria-hidden="true">ⓘ</span><div><b>Pedidos com análise de produto = APLICAÇÃO</b> (aba BASE PEDIDO da planilha NOVO FOLOW UP). Mostra só itens com saldo a entregar. Como não têm data de SC, o tempo em aberto é contado desde a emissão do pedido.</div></div>
+  <section class="kpis" id="kpis-ap" aria-label="Resumo dos itens de aplicação"></section>
+  <div class="busca-linha"><div class="busca-aba"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="busca-ap" type="search" placeholder="Buscar pedido, fornecedor, CNPJ, comprador, código ou material" autocomplete="off" aria-label="Buscar nos itens de aplicação"><button data-limpa="busca-ap" aria-label="Limpar busca" hidden>✕</button></div><p class="nota" id="busca-ap-res"></p></div>
+  <div class="filtros" id="filtros-ap"></div>
+  <div class="grade">
+    <div class="col">
+      <section class="card">
+        <div class="card-cab"><h2 id="t-ap">Pedidos de aplicação</h2><p>Do pedido mais antigo para o mais novo. Clique no pedido para ver os itens</p><span class="qt" id="q-ap"></span></div>
+        <div class="paradas" id="lista-ap" style="padding-top:2px"></div>
+      </section>
+    </div>
+    <div class="col">
+      <section class="card">
+        <div class="card-cab"><h2>Tempo em aberto</h2><p>Itens por dias desde a emissão do pedido</p></div>
+        <div class="grafico" style="height:230px"><canvas id="g-ap" aria-label="Itens de aplicação por faixa de dias em aberto"></canvas></div>
+      </section>
+      <section class="card">
+        <div class="card-cab"><h2>Por comprador</h2><p>Clique para filtrar</p></div>
+        <div class="lista forn-lista" id="comp-ap"></div>
+      </section>
+      <section class="card">
+        <div class="card-cab"><h2>Fornecedores</h2><p>Clique para ver só os itens do fornecedor</p><span class="qt" id="q-forn-ap"></span></div>
+        <div class="lista forn-lista" id="forn-ap"></div>
       </section>
     </div>
   </div>
@@ -1244,6 +1276,8 @@ document.addEventListener("click", e => {
   const vp0 = e.target.closest("[data-verped]"); if (vp0) { abrirPedido(vp0.dataset.verped, vp0.dataset.pcod); return; }
   const gc = e.target.closest(".grp-cab"); if (gc) { alternarGrupo(gc.parentElement); return; }
   const bc = e.target.closest(".btn-cheia"); if (bc) { alternarCheia(bc.closest(".card")); return; }
+  const ch = document.querySelector(".card.cheia");
+  if (ch && !ch.contains(e.target) && fundo.hidden && !e.target.closest(".side,.barra-topo,#extra,#histrotas,#formsim,#motorista")) { alternarCheia(ch); return; }
   const pd = e.target.closest("[data-ped]");
   if (pd && !e.target.closest("#fundo") && !e.target.closest("button")) { abrirPedido(pd.dataset.ped, pd.dataset.pcod); return; }
   const b = e.target.closest("[data-cod]");
@@ -1443,7 +1477,7 @@ const PD = DADOS.pedidos || { linhas:[], forn:[], comp:[], dep:[] };
 const EXF = (PD.exemplo && PD.exemplo.forn) || [];
 const LIB = (PD.exemplo && PD.exemplo.liberado) || {};
 const SEM_LIB = !Object.keys(LIB).length;   // a planilha ainda não informa liberação para retirada
-const libOk = l => SEM_LIB || !!libOk(l);
+const libOk = l => SEM_LIB || !!LIB[l.n];
 const PED_ALL = PD.linhas.map(([n, em, en, f, c, cod, desc, q, at, sal, dp, dsc, tipo]) => {
   const de = dISO(em), ex = EXF[f] || {}, it = POR_COD.get(cod), dSc = dISO(dsc);
   // acima do tempo: dias desde a SC (ou desde o pedido) maior que o tempo típico de chegada do item
@@ -1666,6 +1700,69 @@ document.getElementById("v-pedidos").addEventListener("click", e => {
   const f = e.target.closest("[data-pforn]"); if (f){ fornPed = f.dataset.pforn && f.dataset.pforn !== fornPed ? f.dataset.pforn : null; desenharPedidos(); document.getElementById("t-ped").scrollIntoView({behavior:"smooth", block:"start"}); }
 });
 
+// ---------- Itens de aplicação (análise de produto = APLICAÇÃO) ----------
+const ehAplic = p => semAc(p.tipo).startsWith("aplica");
+const PED_AP = PED.filter(ehAplic);
+let compAp = null, fornAp = null, idadeAp = null, qAp = "";
+const GRP_AP = new Set();
+function desenharAplicacao(){
+  if (SEM_PED) { telaSemPedidos("v-aplicacao"); return; }
+  const T = termos(qAp), fx = IDADES.find(x => x[0] === idadeAp);
+  const base = PED_AP.filter(p => (!compAp || p.comp === compAp) && (!fx || (p.dias >= fx[2] && p.dias <= fx[3])) && (!T.length || casa(txtPed(p), T)));
+  const L = base.filter(p => !fornAp || p.forn === fornAp);
+  document.getElementById("busca-ap-res").textContent = T.length ? `${fmt(L.length)} item(ns) em ${new Set(L.map(p=>p.n)).size} pedido(s) encontrados` : "";
+  document.getElementById("kpis-ap").innerHTML = [
+    ["Itens de aplicação", PED_AP.length, `${fmt(new Set(PED_AP.map(p=>p.n)).size)} pedidos em aberto`, "var(--blue)"],
+    ["Fornecedores", new Set(PED_AP.map(p=>p.forn)).size, "com item a entregar", "var(--amber)"],
+    ["Há mais de 30 dias", PED_AP.filter(p => p.dias > 30).length, "itens em aberto", "var(--red)"],
+    ["Mais antigo", PED_AP.length ? Math.max(...PED_AP.map(p=>p.dias)) : 0, "dias desde a emissão", "var(--red)"],
+  ].map(([t,v,sub,cor]) => `<div class="kpi" style="--k:${cor};cursor:default"><small>${t}</small><b>${fmt(v)}</b><span>${sub}</span></div>`).join("");
+  const comps = [...new Set(PED_AP.map(p => p.comp))].sort();
+  document.getElementById("filtros-ap").innerHTML =
+    `<label>Comprador</label><button class="chip" data-apcomp="" aria-pressed="${!compAp}">Todos</button>` +
+    comps.map(c => `<button class="chip" data-apcomp="${esc(c)}" aria-pressed="${c===compAp}">${esc(c.split(" ")[0])}<span>${PED_AP.filter(p=>p.comp===c).length}</span></button>`).join("") +
+    `<label style="margin-left:14px">Em aberto</label><button class="chip" data-apidade="" aria-pressed="${!idadeAp}">Todos</button>` +
+    IDADES.map(([k,t]) => `<button class="chip" data-apidade="${k}" aria-pressed="${k===idadeAp}">${t}</button>`).join("") +
+    (fornAp ? `<span class="filtro-ativo" style="margin-left:14px">${esc(fornAp)}<button data-apforn="" aria-label="Tirar filtro do fornecedor">✕</button></span>` : "");
+  document.getElementById("t-ap").textContent = fornAp ? "Pedidos de " + fornAp : "Pedidos de aplicação";
+  // agrupado por pedido
+  const G = new Map();
+  L.forEach(p => { if (!G.has(p.n)) G.set(p.n, []); G.get(p.n).push(p); });
+  const GL = [...G.values()].sort((a,b) => b[0].dias - a[0].dias || a[0].n - b[0].n);
+  document.getElementById("q-ap").textContent = `${GL.length} pedidos · ${L.length} itens`;
+  document.getElementById("lista-ap").innerHTML = GL.map(I => {
+    const p0 = I[0], fxp = faixa(p0.dias), ab = GRP_AP.has(String(p0.n)) || (T.length > 0) || GL.length <= 3;
+    const linhas = I.map(l => `<li data-ped="${l.n}" data-pcod="${esc(l.cod)}"><span class="pd"></span><span class="ds"><b>${esc(l.cod)}</b> ${esc(l.desc)}${l.at > 0 ? ` <span class="tag-u imp">Parcial: chegou ${fmt1(l.at)} de ${fmt1(l.q)}</span>` : ""}</span><span class="qt">${fmt1(l.sal)} ${esc(unid(l)) || "UN"}</span></li>`).join("");
+    return `<article class="parada"><div class="parada-cab"><div class="nome">${esc(p0.forn)}<small>Emissão ${fmtD(p0.em)} · Comprador: ${esc(p0.comp)}${p0.cnpj ? " · CNPJ " + esc(p0.cnpj) : ""}</small></div>
+        <span class="pill ${fxp[0]}">${txtDias(p0.dias)} em aberto</span></div>
+      <ul>${I.length === 1 ? linhas.replace('<span class="pd"></span>', `<span class="pd">Ped ${p0.n}</span>`) : `<li class="grp-w${ab ? " aberto" : ""}" data-grpap="${p0.n}">
+        <div class="grp-cab" role="button" tabindex="0" aria-expanded="${ab}" title="Clique para ver todos os itens do pedido ${p0.n}"><span class="pd">Ped ${p0.n}</span><span class="ds"><b>${I.length} ${I.length === 1 ? "item" : "itens"} neste pedido</b></span><span class="qt"><button class="lnk" data-verped="${p0.n}" data-pcod="${esc(p0.cod)}">Detalhes ↗</button></span></div>
+        <ul class="grp-itens">${linhas}</ul></li>`}</ul></article>`;
+  }).join("") || `<div class="vazio">Nenhum item de aplicação pendente com esse filtro.</div>`;
+  // compradores
+  const C = {}; base.forEach(p => { const o = C[p.comp] = C[p.comp] || { itens:0, ped:new Set(), max:0 }; o.itens++; o.ped.add(p.n); o.max = Math.max(o.max, p.dias); });
+  document.getElementById("comp-ap").innerHTML = Object.entries(C).sort((a,b) => b[1].itens - a[1].itens).map(([nome,o]) => `<button data-apcomp="${esc(nome)}" aria-pressed="${nome===compAp}">
+      <span><span class="nome" style="display:block">${esc(nome)}</span><small>${o.ped.size} pedido(s) · mais antigo há ${txtDias(o.max)}</small></span>
+      <span class="v">${o.itens}<small style="display:block">itens</small></span></button>`).join("") || `<div class="vazio">Nenhum.</div>`;
+  // fornecedores
+  const F = {}; base.forEach(p => { const o = F[p.forn] = F[p.forn] || { itens:0, ped:new Set(), max:0 }; o.itens++; o.ped.add(p.n); o.max = Math.max(o.max, p.dias); });
+  const FL = Object.entries(F).sort((a,b) => b[1].max - a[1].max || b[1].itens - a[1].itens);
+  document.getElementById("q-forn-ap").textContent = FL.length;
+  document.getElementById("forn-ap").innerHTML = FL.map(([nome,o]) => `<button data-apforn="${esc(nome)}" aria-pressed="${nome===fornAp}">
+      <span><span class="nome" style="display:block">${esc(nome)}</span><small>${o.ped.size} pedido(s) · mais antigo há ${txtDias(o.max)}</small></span>
+      <span class="v">${o.itens}<small style="display:block">itens</small></span></button>`).join("") || `<div class="vazio">Nenhum.</div>`;
+  const FX = [["0–15", 0, 15], ["16–30", 16, 30], ["31–60", 31, 60], ["61–90", 61, 90], ["91–180", 91, 180], ["+180", 181, 1e9]];
+  grafico("g-ap", { type:"bar", data:{ labels: FX.map(f => f[0] + " dias"), datasets:[{ data: FX.map(f => base.filter(p => p.dias >= f[1] && p.dias <= f[2]).length),
+      backgroundColor: ["#3FB36C","#E0A030","#E5574C","#E5574C","#C8372D","#A12A22"], borderRadius:4, datalabels:{anchor:"end", align:"end"} }] },
+    options: baseOpts({ layout:{padding:{top:18}}, plugins:{ legend:{display:false}, datalabels:{color:CC.t, font:{family:"IBM Plex Mono", size:11, weight:"700"}} } }) });
+}
+document.addEventListener("click", e => {
+  if (!e.target.closest("#v-aplicacao")) return;
+  const c = e.target.closest("[data-apcomp]"); if (c){ compAp = c.dataset.apcomp && c.dataset.apcomp !== compAp ? c.dataset.apcomp : null; desenharAplicacao(); return; }
+  const i = e.target.closest("[data-apidade]"); if (i){ idadeAp = i.dataset.apidade || null; desenharAplicacao(); return; }
+  const f = e.target.closest("[data-apforn]"); if (f){ fornAp = f.dataset.apforn && f.dataset.apforn !== fornAp ? f.dataset.apforn : null; desenharAplicacao(); document.getElementById("t-ap").scrollIntoView({behavior:"smooth", block:"start"}); }
+});
+
 // Campos de busca das abas de pedidos e rota
 (function(){
   let tm = null;
@@ -1675,6 +1772,7 @@ document.getElementById("v-pedidos").addEventListener("click", e => {
     bt.addEventListener("click", () => { el.value = ""; bt.hidden = true; fn(""); el.focus(); }); };
   liga("busca-ped", v => { qPed = v; desenharPedidos(); });
   liga("busca-rota", v => { qRota = v; desenharRota(); });
+  liga("busca-ap", v => { qAp = v; desenharAplicacao(); });
 })();
 
 // ---------- Rota do motorista (van) ----------
@@ -2327,6 +2425,7 @@ function desenharBadges(){
   const set = (k, v, cls) => { const el = document.getElementById("bd-" + k); if (!el) return; el.hidden = !v; el.textContent = fmt(v); el.className = "bd " + (cls || ""); };
   set("gestao", ITENS.filter(VISOES.semsc.f).length, "r");
   set("pedidos", PED.filter(p => p.dias > 30).length);
+  set("aplicacao", PED_AP.length);
   set("rota", paradasPorFornecedor().filter(o => o.frete === "R" && o.lib && o.urg).length, "r");
   set("inventario", contagemDoDia(new Date()).length);
 }
@@ -2374,7 +2473,7 @@ document.getElementById("v-inicio").addEventListener("click", e => {
 });
 
 // ---------- Navegação entre as telas ----------
-const NOME_TELA = { inicio:"Início", prateleiras:"Prateleiras", gestao:"Gestão de estoque", pedidos:"Pedidos de compra", rota:"Rota da van", inventario:"Inventário rotativo", extrato:"Movimentação" };
+const NOME_TELA = { inicio:"Início", prateleiras:"Prateleiras", gestao:"Gestão de estoque", pedidos:"Pedidos de compra", rota:"Rota da van", aplicacao:"Itens de aplicação", inventario:"Inventário rotativo", extrato:"Movimentação" };
 function mostrarTela(t){
   { const c = document.querySelector(".card.cheia"); if (c) alternarCheia(c); }
   if (!NOME_TELA[t]) t = "inicio";
@@ -2392,6 +2491,8 @@ function mostrarTela(t){
   document.getElementById("v-pedidos").hidden = t !== "pedidos";
   if (t === "pedidos") desenharPedidos();
   document.getElementById("v-rota").hidden = t !== "rota";
+  document.getElementById("v-aplicacao").hidden = t !== "aplicacao";
+  if (t === "aplicacao") desenharAplicacao();
   if (t === "rota") desenharRota();
   if (t === "extrato") desenharParados();
   document.querySelectorAll("[data-tela]").forEach(b => b.dataset.tela === t ? b.setAttribute("aria-current","page") : b.removeAttribute("aria-current"));
@@ -2428,7 +2529,8 @@ setInterval(() => {
 function alternarGrupo(w){
   const ab = w.classList.toggle("aberto");
   w.querySelector(".grp-cab").setAttribute("aria-expanded", ab);
-  if (ab) GRP_ABERTO.add(w.dataset.grp); else GRP_ABERTO.delete(w.dataset.grp);
+  const S = w.dataset.grpap ? GRP_AP : GRP_ABERTO, k = w.dataset.grpap || w.dataset.grp;
+  if (ab) S.add(k); else S.delete(k);
 }
 document.addEventListener("keydown", e => {
   const gc = e.target.closest && e.target.closest(".grp-cab");
@@ -2443,8 +2545,7 @@ function alternarCheia(card){
   if (ab){
     card.classList.add("cheia"); card.scrollTop = 0;
     const b = card.querySelector(".btn-cheia"); b.textContent = "✕ Fechar tela cheia"; b.title = "Voltar ao painel (Esc)";
-    if (!document.fullscreenElement && document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().then(() => fsNavegador = true).catch(() => {});
-  } else if (fsNavegador && document.fullscreenElement) { fsNavegador = false; document.exitFullscreen().catch(() => {}); }
+  }
   setTimeout(() => window.dispatchEvent(new Event("resize")), 60);
 }
 document.addEventListener("fullscreenchange", () => {
